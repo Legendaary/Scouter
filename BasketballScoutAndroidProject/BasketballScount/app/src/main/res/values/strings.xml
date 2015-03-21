@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">BasketballScount</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_tournament">TournamentActivity</string>
+    <string name="title_activity_match">MatchActivity</string>
+    <string name="label_next">Next</string>
+    <string name="title_activity_competitor_choosing">CompetitorChoosingActivity</string>
+    <string name="team_a">Team A</string>
+    <string name="team_b">Team B</string>
+    <string name="title_activity_school_list">SchoolListActivity</string>
+    <string name="title_activity_player_choosing">PlayerChoosingActivity</string>
+
+</resources>

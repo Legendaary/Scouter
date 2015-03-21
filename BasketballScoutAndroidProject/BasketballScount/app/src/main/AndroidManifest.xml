@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="porcomsci.basketballscout.com.basketballscount" >
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".TournamentActivity"
+            android:label="@string/title_activity_tournament" >
+        </activity>
+        <activity
+            android:name=".MatchActivity"
+            android:label="@string/title_activity_match" >
+        </activity>
+        <activity
+            android:name=".CompetitorChoosingActivity"
+            android:label="@string/title_activity_competitor_choosing" >
+        </activity>
+        <activity
+            android:name=".SchoolListActivity"
+            android:label="@string/title_activity_school_list" >
+        </activity>
+        <activity
+            android:name=".PlayerChoosingActivity"
+            android:label="@string/title_activity_player_choosing" >
+        </activity>
+    </application>
+
+</manifest>
