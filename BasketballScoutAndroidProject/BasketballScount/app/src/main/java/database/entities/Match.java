@@ -1,4 +1,4 @@
-package porcomsci.basketballscout.com.basketballscount.database.entities;
+package database.entities;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -10,7 +10,7 @@ import java.util.Date;
  * Created by PorPaul on 17/3/2558.
  */
 
-@DatabaseTable(tableName = "Match")
+@DatabaseTable(tableName = "database.entities.Match")
 public class Match {
 
     @DatabaseField(id = true)

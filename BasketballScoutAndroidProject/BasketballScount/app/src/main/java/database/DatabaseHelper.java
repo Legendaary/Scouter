@@ -1,4 +1,4 @@
-package porcomsci.basketballscout.com.basketballscount.database;
+package database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,7 +10,8 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 
-import porcomsci.basketballscout.com.basketballscount.database.entities.Match;
+import database.entities.Match;
+
 
 /**
  * Created by PorPaul on 17/3/2558.
