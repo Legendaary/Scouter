@@ -36,6 +36,10 @@
             android:name=".PlayerChoosingActivity"
             android:label="@string/title_activity_player_choosing" >
         </activity>
+        <activity
+            android:name=".ManageSchoolInfoActivity"
+            android:label="@string/title_activity_manage_school_info" >
+        </activity>
     </application>
 
 </manifest>

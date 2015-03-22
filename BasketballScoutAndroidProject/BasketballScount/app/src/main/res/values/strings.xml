@@ -12,5 +12,7 @@
     <string name="team_b">Team B</string>
     <string name="title_activity_school_list">SchoolListActivity</string>
     <string name="title_activity_player_choosing">PlayerChoosingActivity</string>
+    <string name="title_activity_manage_school_info">ManageSchoolInfoActivity</string>
+    <string name="add">Add</string>
 
 </resources>

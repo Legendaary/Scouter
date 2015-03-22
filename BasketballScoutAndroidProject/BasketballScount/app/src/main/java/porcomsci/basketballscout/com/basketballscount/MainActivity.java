@@ -40,6 +40,11 @@ public class MainActivity extends ActionBarActivity {
                     Intent intent = new Intent(getApplicationContext(), MatchActivity.class);
                     startActivity(intent);
                 }
+                else if(position == 3)
+                {
+                    Intent intent = new Intent(getApplicationContext(), ManageSchoolInfoActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
