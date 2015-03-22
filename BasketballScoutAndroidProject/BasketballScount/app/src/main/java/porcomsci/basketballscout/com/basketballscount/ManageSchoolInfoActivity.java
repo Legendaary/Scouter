@@ -10,36 +10,38 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import java.lang.Override;
 import java.util.ArrayList;
 
 
 public class ManageSchoolInfoActivity extends ActionBarActivity {
 
     ListView listView;
+    ArrayAdapter adapter;
+    ArrayList<String> schoolNameList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_school_info);
 
-        ArrayList<String> schoolNameList = new ArrayList<>();
+        schoolNameList = new ArrayList<>();
         //query school info from database here
 
         listView = (ListView) findViewById(R.id.listView);
-//        refreshListView();
+        refreshListView();
 
         final EditText editText = (EditText) findViewById(R.id.editText);
         Button buttonAdd = (Button) findViewById(R.id.button_add);
-        buttonAdd.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                schoolNameList.add( editText.getText().toString() );
-//                refreshListView();
-                ArrayAdapter adapter = new ArrayAdapter(this,
-                        android.R.layout.simple_list_item_1, schoolNameList);
-                listView.setAdapter(adapter);
-            }
-        });
+        buttonAdd.setOnClickListener( new View.OnClickListener() );
+    }
+
+    @Override
+    public void onClick(View v) {
+        schoolNameList.add( editText.getText().toString() );
+        adapter = new ArrayAdapter(this,
+                android.R.layout.simple_list_item_1, schoolNameList);
+        listView.setAdapter(adapter);
     }
 
 
