@@ -10,7 +10,7 @@
     <EditText
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
+        android:id="@+id/manage_school_info_editText"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -21,17 +21,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add"
-        android:id="@+id/button_add"
+        android:id="@+id/manage_school_info_button_add"
         android:layout_marginLeft="15dp"
-        android:layout_alignBottom="@+id/editText"
-        android:layout_toRightOf="@+id/editText"
-        android:layout_toEndOf="@+id/editText" />
+        android:layout_alignBottom="@+id/manage_school_info_editText"
+        android:layout_toRightOf="@+id/manage_school_info_editText"
+        android:layout_toEndOf="@+id/manage_school_info_editText" />
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listView2"
-        android:layout_below="@+id/editText"
+        android:id="@+id/manage_school_info_listView"
+        android:layout_below="@+id/manage_school_info_editText"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="15dp"/>

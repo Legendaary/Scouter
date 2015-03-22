@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import java.lang.Override;
 import java.util.ArrayList;
 
 
@@ -19,6 +18,7 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
     ListView listView;
     ArrayAdapter adapter;
     ArrayList<String> schoolNameList;
+    EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,22 +26,21 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
         setContentView(R.layout.activity_manage_school_info);
 
         schoolNameList = new ArrayList<>();
-        //query school info from database here
+        //query school info from database here and add to schoolNameList
 
-        listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.manage_school_info_listView);
         refreshListView();
 
-        final EditText editText = (EditText) findViewById(R.id.editText);
-        Button buttonAdd = (Button) findViewById(R.id.button_add);
-        buttonAdd.setOnClickListener( new View.OnClickListener() );
-    }
-
-    @Override
-    public void onClick(View v) {
-        schoolNameList.add( editText.getText().toString() );
-        adapter = new ArrayAdapter(this,
-                android.R.layout.simple_list_item_1, schoolNameList);
-        listView.setAdapter(adapter);
+        editText = (EditText) findViewById(R.id.manage_school_info_editText);
+        Button buttonAdd = (Button) findViewById(R.id.manage_school_info_button_add);
+        buttonAdd.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addNewName();
+                refreshListView();
+                editText.setText("");
+            }
+        });
     }
 
 
@@ -67,7 +66,13 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void refreshListView(){
+    private void addNewName(){
+        schoolNameList.add( editText.getText().toString() );
+    }
 
+    private void refreshListView(){
+        adapter = new ArrayAdapter(this,
+                android.R.layout.simple_list_item_1, schoolNameList);
+        listView.setAdapter(adapter);
     }
 }
