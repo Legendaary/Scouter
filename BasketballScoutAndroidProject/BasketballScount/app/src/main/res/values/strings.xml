@@ -14,5 +14,7 @@
     <string name="title_activity_player_choosing">PlayerChoosingActivity</string>
     <string name="title_activity_manage_school_info">ManageSchoolInfoActivity</string>
     <string name="add">Add</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 
 </resources>

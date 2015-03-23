@@ -1,10 +1,12 @@
 package porcomsci.basketballscout.com.basketballscount;
 
+import android.app.AlertDialog;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,6 +32,7 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
 
         listView = (ListView) findViewById(R.id.manage_school_info_listView);
         refreshListView();
+        setUpListView();
 
         editText = (EditText) findViewById(R.id.manage_school_info_editText);
         Button buttonAdd = (Button) findViewById(R.id.manage_school_info_button_add);
@@ -74,5 +77,16 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
         adapter = new ArrayAdapter(this,
                 android.R.layout.simple_list_item_1, schoolNameList);
         listView.setAdapter(adapter);
+    }
+
+    private void setUpListView(){
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                EditOrDeleteDialog editOrDeleteDialog = new EditOrDeleteDialog();
+                AlertDialog dialog = (AlertDialog) editOrDeleteDialog.onCreateDialog(new Bundle());
+                dialog.show();
+            }
+        });
     }
 }
