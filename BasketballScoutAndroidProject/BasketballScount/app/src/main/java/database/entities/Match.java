@@ -13,8 +13,8 @@ import java.util.Date;
 @DatabaseTable(tableName = "database.entities.Match")
 public class Match {
 
-    @DatabaseField(id = true)
-    private Integer id;
+    @DatabaseField(id = true,generatedId = true)
+    private int id;
     @DatabaseField
     private int matchNumber;
     @DatabaseField
@@ -24,15 +24,16 @@ public class Match {
     @DatabaseField
     private String place;
 
+
     public Match(){
 
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

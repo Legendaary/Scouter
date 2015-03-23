@@ -13,19 +13,40 @@ import java.util.Date;
 @DatabaseTable(tableName = "Tournament")
 public class Tournament {
 
-    @DatabaseField(id = true)
-    private Integer id;
+    @DatabaseField(id = true,generatedId = true)
+    private int id;
     @DatabaseField
     private String competitionName;
     @DatabaseField
-    private int matchNumber;
+    private Integer matchNumber;
+
+
 
     public Tournament(){
 
     }
 
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
 
+    public String getCompetitionName() {
+        return competitionName;
+    }
 
+    public void setCompetitionName(String competitionName) {
+        this.competitionName = competitionName;
+    }
 
+    public Integer getMatchNumber() {
+        return matchNumber;
+    }
+
+    public void setMatchNumber(Integer matchNumber) {
+        this.matchNumber = matchNumber;
+    }
 }
