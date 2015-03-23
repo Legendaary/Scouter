@@ -67,7 +67,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
     }
     public void initSchool() throws SQLException {
-        insertSchoolByName("SaintDominic");
+
+        insertSchoolByName("Saint Dominic");
         insertSchoolByName("Saint Gabriel");
         insertSchoolByName("Don Bosco");
         insertSchoolByName("Saint Frunk");

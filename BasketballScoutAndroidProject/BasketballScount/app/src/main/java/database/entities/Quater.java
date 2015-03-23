@@ -9,7 +9,7 @@ import java.util.Date;
  */
 public class Quater {
 
-    @DatabaseField(id = true,generatedId = true)
+    @DatabaseField(generatedId = true)
     private int id;
     @DatabaseField
     private Integer quaterNumber;

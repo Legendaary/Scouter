@@ -7,7 +7,7 @@ import com.j256.ormlite.field.DatabaseField;
  */
 public class Player {
 
-    @DatabaseField(id = true,generatedId = true)
+    @DatabaseField(generatedId = true)
     private int id;
     @DatabaseField
     private String name;

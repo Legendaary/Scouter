@@ -13,7 +13,7 @@ import java.util.Date;
 @DatabaseTable(tableName = "database.entities.Match")
 public class Match {
 
-    @DatabaseField(id = true,generatedId = true)
+    @DatabaseField(generatedId = true)
     private int id;
     @DatabaseField
     private int matchNumber;

@@ -1,29 +1,46 @@
 package porcomsci.basketballscout.com.basketballscount;
 
-import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import database.DatabaseHelper;
+import database.entities.School;
 
 
 public class SchoolListActivity extends ActionBarActivity {
 
+    private DatabaseHelper databaseHelper = null;
+    ListView schoolListView;
+    List<String> schoolList = new ArrayList<>();
+    ArrayAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_school_list);
-
-        Button buttonNext = (Button) findViewById(R.id.button_next);
-        buttonNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),PlayerChoosingActivity.class);
-                startActivity(intent);
+        schoolListView = (ListView)findViewById(R.id.schoolListView);
+        try {
+            Dao<School,Integer> schoolDao = getHelper().getSchoolDao();
+            List<School> retrievedList  =  schoolDao.queryForAll();
+            for (School school : retrievedList) {
+                schoolList.add(school.getName());
             }
-        });
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        adapter = new ArrayAdapter(this,
+                android.R.layout.simple_list_item_1, schoolList);
+        schoolListView.setAdapter(adapter);
     }
 
 
@@ -47,5 +64,20 @@ public class SchoolListActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (databaseHelper != null) {
+            OpenHelperManager.releaseHelper();
+            databaseHelper = null;
+        }
+    }
+
+    private DatabaseHelper getHelper() {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+        }
+        return databaseHelper;
     }
 }
