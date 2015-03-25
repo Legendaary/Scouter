@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import database.DatabaseSaveHelperDTO;
+
 
 public class MatchActivity extends ActionBarActivity {
 
@@ -21,6 +23,10 @@ public class MatchActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),CompetitorChoosingActivity.class);
+                /**
+                 * set match info on Match object in save helper below here before startNewActivity;
+                 * e.g., DatabaseSaveHelperDTO.match.set();
+                 */
                 startActivity(intent);
             }
         });

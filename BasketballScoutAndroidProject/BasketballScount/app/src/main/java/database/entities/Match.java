@@ -10,7 +10,7 @@ import java.util.Date;
  * Created by PorPaul on 17/3/2558.
  */
 
-@DatabaseTable(tableName = "database.entities.Match")
+@DatabaseTable(tableName = "Match")
 public class Match {
 
     @DatabaseField(generatedId = true)
@@ -23,7 +23,16 @@ public class Match {
     private String time;
     @DatabaseField
     private String place;
-
+    @DatabaseField
+    private String referee;
+    @DatabaseField
+    private String umpire;
+    @DatabaseField
+    private School schoolA;
+    @DatabaseField
+    private School schoolB;
+    @DatabaseField
+    private School winner;
 
     public Match(){
 
@@ -68,4 +77,44 @@ public class Match {
     public void setPlace(String place) {
         this.place = place;
     }
-}
+
+    public String getReferee() {
+        return referee;
+    }
+
+    public void setReferee(String referee) {
+        this.referee = referee;
+    }
+
+    public String getUmpire() {
+        return umpire;
+    }
+
+    public void setUmpire(String umpire) {
+        this.umpire = umpire;
+    }
+
+    public School getSchoolA() {
+        return schoolA;
+    }
+
+    public void setSchoolA(School schoolA) {
+        this.schoolA = schoolA;
+    }
+
+    public School getSchoolB() {
+        return schoolB;
+    }
+
+    public void setSchoolB(School schoolB) {
+        this.schoolB = schoolB;
+    }
+
+    public School getWinner() {
+        return winner;
+    }
+
+    public void setWinner(School winner) {
+        this.winner = winner;
+    }
+}//end class

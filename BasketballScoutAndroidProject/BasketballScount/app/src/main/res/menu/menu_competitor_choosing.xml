@@ -4,4 +4,8 @@
     tools:context="porcomsci.basketballscout.com.basketballscount.CompetitorChoosingActivity">
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/button_ToNextActivity"
+        android:icon="@drawable/flame_ball_logo"
+        android:title="ActionNext"
+        app:showAsAction="always"/>
 </menu>
