@@ -1,6 +1,7 @@
 package porcomsci.basketballscout.com.basketballscount;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,6 +22,8 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
     ArrayAdapter adapter;
     ArrayList<String> schoolNameList;
     EditText editText;
+    AlertDialog editOrDeleteDialog;
+    int selectedPosition = 0; //selected position of listview (which school name is selected to edit/delete)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,17 +36,9 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
         listView = (ListView) findViewById(R.id.manage_school_info_listView);
         refreshListView();
         setUpListView();
+        setUpButtonAdd();
+        setUpEditOrDeleteDialog();
 
-        editText = (EditText) findViewById(R.id.manage_school_info_editText);
-        Button buttonAdd = (Button) findViewById(R.id.manage_school_info_button_add);
-        buttonAdd.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addNewName();
-                refreshListView();
-                editText.setText("");
-            }
-        });
     }
 
 
@@ -83,10 +78,95 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                EditOrDeleteDialog editOrDeleteDialog = new EditOrDeleteDialog();
-                AlertDialog dialog = (AlertDialog) editOrDeleteDialog.onCreateDialog(new Bundle());
-                dialog.show();
+                editOrDeleteDialog.show();
+                selectedPosition = position;
             }
         });
+    }
+
+    private void setUpEditOrDeleteDialog(){
+        /*  custom dialog
+         *
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        builder.setView(inflater.inflate(R.layout.edit_or_delete_dialog, null));
+
+        // Create the AlertDialog object and return it
+        dialog = builder.create();  */
+
+
+        String[] options = { "Edit" , "Delete" };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // The 'which' argument contains the index position
+                // of the selected item
+                if(which == 0) // edit
+                {
+                    AlertDialog editSchoolNameDialog = setUpEditSchoolNameDialog();
+                    editSchoolNameDialog.show();
+                }
+                else // delete
+                {
+                    deleteSchoolName();
+                }
+
+            }
+        });
+        editOrDeleteDialog = builder.create();
+    }
+
+    private void setUpButtonAdd(){
+        editText = (EditText) findViewById(R.id.manage_school_info_editText);
+        Button buttonAdd = (Button) findViewById(R.id.manage_school_info_button_add);
+        buttonAdd.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addNewName();
+                refreshListView();
+                editText.setText("");
+            }
+        });
+    }
+
+    private AlertDialog setUpEditSchoolNameDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final EditText schoolName = new EditText(this);
+        schoolName.setText(schoolNameList.get(selectedPosition));
+        schoolName.setWidth(250);
+        builder.setView(schoolName)
+                .setTitle("Edit School Name")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        updateSchoolName(schoolName);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+        return builder.create();
+    }
+
+    private void updateSchoolName(EditText schoolName)
+    {
+        /*
+            implement update school name on database here
+        */
+
+        schoolNameList.set(selectedPosition,schoolName.getText().toString());
+        refreshListView();
+    }
+
+    private void deleteSchoolName(){
+        /*
+            implement delete school name from database here
+         */
+        schoolNameList.remove(selectedPosition);
+        refreshListView();
     }
 }
