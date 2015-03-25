@@ -8,19 +8,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-
 public class CompetitorChoosingActivity extends ActionBarActivity {
+
+    boolean teamOneChosen = false;
+    boolean teamTwoChosen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_competitor_choosing);
+        String comeFromTeam = getIntent().getStringExtra("teamChosen");
+        if(comeFromTeam.equalsIgnoreCase("team1")){
+            teamOneChosen = true;
+        }else if(comeFromTeam.equalsIgnoreCase("team2")){
+            teamTwoChosen = true;
+        }
 
         Button buttonTeamA = (Button) findViewById(R.id.button_team_a);
         buttonTeamA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),SchoolListActivity.class);
+                intent.putExtra("team1","team1");
                 startActivity(intent);
             }
         });
@@ -30,6 +39,7 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),SchoolListActivity.class);
+                intent.putExtra("team1","team2");
                 startActivity(intent);
             }
         });
@@ -57,4 +67,4 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-}
+}///end class

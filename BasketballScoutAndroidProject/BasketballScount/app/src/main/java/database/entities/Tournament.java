@@ -13,7 +13,7 @@ import java.util.Date;
 @DatabaseTable(tableName = "Tournament")
 public class Tournament {
 
-    @DatabaseField(id = true,generatedId = true)
+    @DatabaseField(generatedId = true)
     private int id;
     @DatabaseField
     private String competitionName;

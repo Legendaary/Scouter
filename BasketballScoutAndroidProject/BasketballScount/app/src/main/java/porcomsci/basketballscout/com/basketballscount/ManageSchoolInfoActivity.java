@@ -13,15 +13,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+
+import database.DatabaseHelper;
+import database.entities.School;
 
 
 public class ManageSchoolInfoActivity extends ActionBarActivity {
 
     ListView listView;
     ArrayAdapter adapter;
-    ArrayList<String> schoolNameList;
+    List<String> schoolList = new ArrayList<>();
     EditText editText;
+    private DatabaseHelper databaseHelper = null;
+    private  Dao<School,Integer> schoolDao = null;
     AlertDialog editOrDeleteDialog;
     int selectedPosition = 0; //selected position of listview (which school name is selected to edit/delete)
 
@@ -30,9 +40,17 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_school_info);
 
-        schoolNameList = new ArrayList<>();
         //query school info from database here and add to schoolNameList
+        try {
 
+            schoolDao = getHelper().getSchoolDao();
+            List<School> retrievedList  =  schoolDao.queryForAll();
+            for (School school : retrievedList) {
+                schoolList.add(school.getName());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         listView = (ListView) findViewById(R.id.manage_school_info_listView);
         refreshListView();
         setUpListView();
@@ -64,14 +82,35 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void addNewName(){
-        schoolNameList.add( editText.getText().toString() );
+    private void addNewName() throws SQLException {
+        String newSchool =   editText.getText().toString();
+        schoolList.add(newSchool);
+        School newEntry = new School();
+        newEntry.setName(newSchool);
+        schoolDao.create(newEntry);
+
     }
 
     private void refreshListView(){
+
         adapter = new ArrayAdapter(this,
-                android.R.layout.simple_list_item_1, schoolNameList);
+                android.R.layout.simple_list_item_1, schoolList);
         listView.setAdapter(adapter);
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (databaseHelper != null) {
+            OpenHelperManager.releaseHelper();
+            databaseHelper = null;
+        }
+    }
+
+    private DatabaseHelper getHelper() {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+        }
+        return databaseHelper;
     }
 
     private void setUpListView(){

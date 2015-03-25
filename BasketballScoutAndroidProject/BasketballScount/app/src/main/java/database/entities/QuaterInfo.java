@@ -5,8 +5,9 @@ import com.j256.ormlite.field.DatabaseField;
 /**
  * Created by PorPaul on 23/3/2558.
  */
-public class QuaterInfo {
-    @DatabaseField(id = true,generatedId = true)
+public class QuaterInfo
+{
+    @DatabaseField(generatedId = true)
     private int id;
 
     public int getId() {
