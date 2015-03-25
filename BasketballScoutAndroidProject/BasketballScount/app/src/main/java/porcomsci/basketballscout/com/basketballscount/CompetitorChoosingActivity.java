@@ -17,12 +17,7 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_competitor_choosing);
-        String comeFromTeam = getIntent().getStringExtra("teamChosen");
-        if(comeFromTeam.equalsIgnoreCase("team1")){
-            teamOneChosen = true;
-        }else if(comeFromTeam.equalsIgnoreCase("team2")){
-            teamTwoChosen = true;
-        }
+        checkReadyToGo();
 
         Button buttonTeamA = (Button) findViewById(R.id.button_team_a);
         buttonTeamA.setOnClickListener(new View.OnClickListener() {
@@ -45,6 +40,18 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
         });
     }
 
+    private void checkReadyToGo() {
+        String comeFromTeam = getIntent().getStringExtra("teamChosen");
+        if(comeFromTeam!=null) {
+            if (comeFromTeam.equalsIgnoreCase("team1")) {
+                teamOneChosen = true;
+            } else if (comeFromTeam.equalsIgnoreCase("team2")) {
+                teamTwoChosen = true;
+            }
+        }
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -61,8 +68,15 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.button_ToNextActivity) {
+           // if(teamOneChosen&&teamTwoChosen){
+            /**
+             * set School 1 2 to DatabaseSaveHelper
+             */
+            Intent intent = new Intent(getApplicationContext(),PlayerChoosingActivity.class);
+            intent.putExtra("team","1");
+            startActivity(intent);
+            //}
         }
 
         return super.onOptionsItemSelected(item);

@@ -2,11 +2,6 @@ package database.entities;
 
 import com.j256.ormlite.field.DatabaseField;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
 /**
  * Created by PorPaul on 23/3/2558.
  */
@@ -15,9 +10,9 @@ public class School {
 
     @DatabaseField(generatedId = true)
     private int id;
-    @Column
+    @DatabaseField
     private String name;
-    @Column
+    @DatabaseField
     private String logoFilePath;
 
     public int getId() {
