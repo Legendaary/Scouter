@@ -1,5 +1,6 @@
 package porcomsci.basketballscout.com.basketballscount;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -43,6 +44,17 @@ public class SchoolListActivity extends ActionBarActivity {
         schoolListView.setAdapter(adapter);
     }
 
+    public void clickAtSchoolName(){
+        String teamChosen = "";
+        if(!getIntent().getStringExtra("team1").isEmpty()){
+            teamChosen = "team1";
+        }else if(!getIntent().getStringExtra("team2").isEmpty()){
+            teamChosen = "team2";
+        }
+        Intent intent = new Intent(getApplicationContext(),CompetitorChoosingActivity.class);
+        intent.putExtra("teamChosen",teamChosen);
+        startActivity(intent);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
