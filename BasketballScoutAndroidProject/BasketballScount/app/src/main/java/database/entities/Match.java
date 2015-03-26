@@ -1,8 +1,10 @@
 package database.entities;
 
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.util.Collection;
 import java.util.Date;
 
 
@@ -28,11 +30,12 @@ public class Match {
     @DatabaseField
     private String umpire;
     @DatabaseField
-    private School schoolA;
-    @DatabaseField
-    private School schoolB;
-    @DatabaseField
-    private School winner;
+    private String winner;
+    @ForeignCollectionField
+    private Collection<School> schoolA = null;
+    @ForeignCollectionField
+    private Collection<School> schoolB = null;
+
 
     public Match(){
 
@@ -94,27 +97,28 @@ public class Match {
         this.umpire = umpire;
     }
 
-    public School getSchoolA() {
-        return schoolA;
-    }
-
-    public void setSchoolA(School schoolA) {
-        this.schoolA = schoolA;
-    }
-
-    public School getSchoolB() {
-        return schoolB;
-    }
-
-    public void setSchoolB(School schoolB) {
-        this.schoolB = schoolB;
-    }
-
-    public School getWinner() {
+    public String getWinner() {
         return winner;
     }
 
-    public void setWinner(School winner) {
+    public void setWinner(String winner) {
         this.winner = winner;
     }
+
+    public Collection<School> getSchoolA() {
+        return schoolA;
+    }
+
+    public void setSchoolA(Collection<School> schoolA) {
+        this.schoolA = schoolA;
+    }
+
+    public Collection<School> getSchoolB() {
+        return schoolB;
+    }
+
+    public void setSchoolB(Collection<School> schoolB) {
+        this.schoolB = schoolB;
+    }
+
 }//end class

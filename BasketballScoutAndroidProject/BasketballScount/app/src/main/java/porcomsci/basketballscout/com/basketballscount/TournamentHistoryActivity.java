@@ -8,11 +8,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import database.DatabaseHelper;
+import database.entities.School;
+import database.entities.Tournament;
 
 
 public class TournamentHistoryActivity extends ActionBarActivity {
@@ -26,6 +30,21 @@ public class TournamentHistoryActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tournament_history);
+
+        try {
+            Dao<Tournament,Integer> tournamentDao = getHelper().getTournamentDao();
+            List<Tournament> retrievedList  =  tournamentDao.queryForAll();
+            for (Tournament tournament : retrievedList) {
+                tournamentList.add(tournament.getCompetitionName());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        adapter = new ArrayAdapter(this,
+                android.R.layout.simple_list_item_1, tournamentList);
+        tournamentListView = (ListView)findViewById(R.id.tournament_history_list);
+        tournamentListView.setAdapter(adapter);
     }
 
 

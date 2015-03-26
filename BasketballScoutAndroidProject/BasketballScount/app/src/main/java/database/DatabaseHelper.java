@@ -69,7 +69,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private void initTournament() throws SQLException {
         tournamentDao = getTournamentDao();
         Tournament casualTour = new Tournament();
-        casualTour.setId(0);
         casualTour.setCompetitionName("casual");
         tournamentDao.create(casualTour);
     }

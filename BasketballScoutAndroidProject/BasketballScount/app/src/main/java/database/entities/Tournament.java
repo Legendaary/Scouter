@@ -20,8 +20,6 @@ public class Tournament {
     @DatabaseField
     private Integer matchNumber;
 
-
-
     public Tournament(){
 
     }

@@ -14,6 +14,8 @@ public class School {
     private String name;
     @DatabaseField
     private String logoFilePath;
+    @DatabaseField (foreign = true,columnName = "match_id")
+    private Match match;
 
     public int getId() {
         return id;
@@ -37,5 +39,13 @@ public class School {
 
     public void setLogoFilePath(String logoFilePath) {
         this.logoFilePath = logoFilePath;
+    }
+
+    public Match getMatch() {
+        return match;
+    }
+
+    public void setMatch(Match match) {
+        this.match = match;
     }
 }
