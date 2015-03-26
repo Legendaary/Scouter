@@ -5,11 +5,17 @@ import java.util.List;
 
 import database.entities.Match;
 import database.entities.School;
+import database.entities.Tournament;
 
 /**
  * Created by PorPaul on 25/3/2558.
  */
 public class DatabaseSaveHelperDTO {
 
+
+    public static Tournament tournament = new Tournament();
     public static Match match = new Match();
+
+
+
 }

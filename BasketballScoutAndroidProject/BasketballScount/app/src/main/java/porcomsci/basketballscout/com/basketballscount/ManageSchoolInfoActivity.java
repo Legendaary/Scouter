@@ -162,7 +162,11 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
         buttonAdd.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addNewName();
+                try {
+                    addNewName();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 refreshListView();
                 editText.setText("");
             }
@@ -172,7 +176,7 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
     private AlertDialog setUpEditSchoolNameDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final EditText schoolName = new EditText(this);
-        schoolName.setText(schoolNameList.get(selectedPosition));
+        schoolName.setText(schoolList.get(selectedPosition));
         schoolName.setWidth(250);
         builder.setView(schoolName)
                 .setTitle("Edit School Name")
@@ -197,7 +201,7 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
             implement update school name on database here
         */
 
-        schoolNameList.set(selectedPosition,schoolName.getText().toString());
+        schoolList.set(selectedPosition,schoolName.getText().toString());
         refreshListView();
     }
 
@@ -205,7 +209,7 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
         /*
             implement delete school name from database here
          */
-        schoolNameList.remove(selectedPosition);
+        schoolList.remove(selectedPosition);
         refreshListView();
     }
 }

@@ -40,6 +40,10 @@
             android:name=".ManageSchoolInfoActivity"
             android:label="@string/title_activity_manage_school_info" >
         </activity>
+        <activity
+            android:name=".TournamentHistoryActivity"
+            android:label="@string/title_activity_tournament_history" >
+        </activity>
     </application>
 
 </manifest>

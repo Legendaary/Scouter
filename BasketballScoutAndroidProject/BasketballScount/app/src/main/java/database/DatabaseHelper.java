@@ -60,12 +60,20 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, QuaterScoreSheet.class);
             TableUtils.createTable(connectionSource, Substitution.class);
             initSchool();
-
-
+            initTournament();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    private void initTournament() throws SQLException {
+        tournamentDao = getTournamentDao();
+        Tournament casualTour = new Tournament();
+        casualTour.setId(0);
+        casualTour.setCompetitionName("casual");
+        tournamentDao.create(casualTour);
+    }
+
     public void initSchool() throws SQLException {
 
         insertSchoolByName("Saint Dominic");

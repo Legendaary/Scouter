@@ -16,5 +16,6 @@
     <string name="add">Add</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="title_activity_tournament_history">TournamentHistoryActivity</string>
 
 </resources>
