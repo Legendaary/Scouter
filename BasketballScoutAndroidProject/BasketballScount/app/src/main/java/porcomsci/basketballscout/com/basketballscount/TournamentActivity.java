@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import database.DatabaseSaveHelperDTO;
 
@@ -26,6 +27,7 @@ public class TournamentActivity extends ActionBarActivity {
                  * create new tournament object set all value the create.
                  * set this tournament to DatabaseSaveHelperDTO.tournament.setId();
                  */
+                saveData();
                 Intent intent = new Intent(getApplicationContext(),MatchActivity.class);
                 startActivity(intent);
             }
@@ -53,5 +55,17 @@ public class TournamentActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void saveData()
+    {
+        EditText tournamentTextBox = (EditText) findViewById(R.id.tournament_tournament_name_editText);
+        EditText numOfMatchesTextBox = (EditText) findViewById(R.id.tournament_number_of_matches_editText);
+        /**
+         * Implement to save Tournament Name, number of matches here
+         */
+//        Whatever TournamentName = tournamentTextBox.getText().toString();
+//        Whatever numOfMatches = numOfMatchesTextBox.getText().toString();
+
     }
 }

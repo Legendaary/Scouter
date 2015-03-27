@@ -134,7 +134,7 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
         dialog = builder.create();  */
 
 
-        String[] options = { "Edit" , "Delete" };
+        String[] options = { "Edit School Name" , "Delete School Name" , "Edit Players" };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setItems(options, new DialogInterface.OnClickListener() {
