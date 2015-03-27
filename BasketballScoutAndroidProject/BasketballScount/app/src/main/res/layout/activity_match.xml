@@ -14,4 +14,130 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/match_number"
+        android:id="@+id/match_matchNumber_label"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
+
+    <EditText
+        android:layout_marginTop="10dp"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/match_matchNumber_editText"
+        android:layout_below="@+id/match_matchNumber_label"
+        android:layout_alignLeft="@id/match_matchNumber_label"
+        android:layout_alignStart="@id/match_matchNumber_label"/>
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/date"
+        android:id="@+id/match_date_label"
+        android:layout_below="@+id/match_matchNumber_editText"
+        android:layout_alignLeft="@id/match_matchNumber_label"
+        android:layout_alignStart="@id/match_matchNumber_label"/>
+
+    <EditText
+        android:layout_marginTop="10dp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        android:ems="10"
+        android:id="@+id/match_date_editText"
+        android:layout_below="@+id/match_date_label"
+        android:layout_alignLeft="@+id/match_date_label"
+        android:layout_alignStart="@+id/match_date_label" />
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/time"
+        android:id="@+id/match_time_label"
+        android:layout_below="@+id/match_date_editText"
+        android:layout_alignLeft="@+id/match_date_editText"
+        android:layout_alignStart="@+id/match_date_editText" />
+
+    <EditText
+        android:layout_marginTop="10dp"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:inputType="time"
+        android:ems="10"
+        android:id="@+id/match_time_editText"
+        android:layout_below="@+id/match_time_label"
+        android:layout_alignLeft="@+id/match_time_label"
+        android:layout_alignStart="@+id/match_time_label" />
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/place"
+        android:id="@+id/match_place_label"
+        android:layout_below="@+id/match_time_editText"
+        android:layout_alignLeft="@+id/match_time_editText"
+        android:layout_alignStart="@+id/match_time_editText" />
+
+    <EditText
+        android:layout_marginTop="10dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:ems="10"
+        android:id="@+id/match_place_editText"
+        android:layout_below="@+id/match_place_label"
+        android:layout_alignLeft="@+id/match_place_label"
+        android:layout_alignStart="@+id/match_place_label" />
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/referee_name"
+        android:id="@+id/match_referee_label"
+        android:layout_below="@+id/match_place_editText"
+        android:layout_alignLeft="@+id/match_place_editText"
+        android:layout_alignStart="@+id/match_place_editText" />
+
+    <EditText
+        android:layout_marginTop="10dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/match_referee_editText"
+        android:layout_below="@+id/match_referee_label"
+        android:layout_alignLeft="@+id/match_referee_label"
+        android:layout_alignStart="@+id/match_referee_label" />
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/umpire_name"
+        android:id="@+id/match_umpire_label"
+        android:layout_below="@+id/match_referee_editText"
+        android:layout_alignLeft="@+id/match_referee_editText"
+        android:layout_alignStart="@+id/match_referee_editText" />
+
+    <EditText
+        android:layout_marginTop="10dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/match_umpire_editText"
+        android:layout_below="@+id/match_umpire_label"
+        android:layout_alignLeft="@+id/match_umpire_label"
+        android:layout_alignStart="@+id/match_umpire_label" />
+
+
 </RelativeLayout>

@@ -20,5 +20,11 @@
     <string name="title_activity_match_history">MatchHistoryActivity</string>
     <string name="tournament_name">Tournament Name</string>
     <string name="number_of_matches">Number of Matches</string>
+    <string name="match_number">Match Number</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="place">Place</string>
+    <string name="referee_name">Referee Name</string>
+    <string name="umpire_name">Umpire Name</string>
 
 </resources>

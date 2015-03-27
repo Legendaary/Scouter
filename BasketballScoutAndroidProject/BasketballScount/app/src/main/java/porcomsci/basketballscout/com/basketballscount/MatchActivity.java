@@ -1,5 +1,6 @@
 package porcomsci.basketballscout.com.basketballscount;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import database.DatabaseSaveHelperDTO;
 
@@ -27,7 +29,7 @@ public class MatchActivity extends ActionBarActivity {
                  * set match info on Match object in save helper below here before startNewActivity;
                  * e.g., DatabaseSaveHelperDTO.match.set();
                  */
-
+                saveData();
                 startActivity(intent);
             }
         });
@@ -56,5 +58,37 @@ public class MatchActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void saveData()
+    {
+        EditText matchNumberTextBox = (EditText) findViewById(R.id.match_matchNumber_editText);
+        EditText dateTextBox = (EditText) findViewById(R.id.match_date_editText);
+        EditText timeTextBox = (EditText) findViewById(R.id.match_time_editText);
+        EditText placeTextBox = (EditText) findViewById(R.id.match_place_editText);
+        EditText refereeTextBox = (EditText) findViewById(R.id.match_referee_editText);
+        EditText umpireTextBox = (EditText) findViewById(R.id.match_umpire_editText);
+
+        /**
+         * Implement to save data here.
+         */
+//        Whatever matchNumber = matchNumberTextBox.getText().toString();
+//        Whatever date = dateTextBox.getText().toString();
+//        Whatever time = timeTextBox.getText().toString();
+//        Whatever place = placeTextBox.getText().toString();
+//        Whatever referee = refereeTextBox.getText().toString();
+//        Whatever umpire = umpireTextBox.getText().toString();
+    }
+
+    private void setUpDateDialog()
+    {
+
+        EditText dateTextBox = (EditText) findViewById(R.id.match_date_editText);
+        dateTextBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                datePickerDialog.show();
+            }
+        });
+
+    }
 
 }
