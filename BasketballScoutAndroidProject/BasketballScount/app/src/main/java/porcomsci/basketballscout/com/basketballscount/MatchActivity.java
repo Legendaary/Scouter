@@ -8,15 +8,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+
+import database.DatabaseHelper;
 import database.DatabaseSaveHelperDTO;
 
 
 public class MatchActivity extends ActionBarActivity {
 
+    private String tournamentId;
+    private DatabaseHelper databaseHelper = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match);
+        tournamentId = getIntent().getStringExtra("tournamentId");
 
         Button buttonNext = (Button) findViewById(R.id.button_next);
         buttonNext.setOnClickListener(new View.OnClickListener() {
@@ -54,6 +61,22 @@ public class MatchActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (databaseHelper != null) {
+            OpenHelperManager.releaseHelper();
+            databaseHelper = null;
+        }
+    }
+
+    private DatabaseHelper getHelper() {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+        }
+        return databaseHelper;
     }
 
 

@@ -9,10 +9,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import database.DatabaseSaveHelperDTO;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
+
+import java.sql.SQLException;
+
+import database.DatabaseHelper;
+import database.entities.Tournament;
 
 
 public class TournamentActivity extends ActionBarActivity {
+
+    private DatabaseHelper databaseHelper = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,17 +31,14 @@ public class TournamentActivity extends ActionBarActivity {
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /**
-                 * create new tournament object set all value the create.
-                 * set this tournament to DatabaseSaveHelperDTO.tournament.setId();
-                 */
-                saveData();
-                Intent intent = new Intent(getApplicationContext(),MatchActivity.class);
-                startActivity(intent);
+                try {
+                    saveDataAndSendIdToNextActivity();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -57,15 +62,38 @@ public class TournamentActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void saveData()
-    {
+    /**
+     * create new tournament object set all value to it. then save and get Id.
+     * send the id to next activity.
+     */
+    private void saveDataAndSendIdToNextActivity() throws SQLException {
         EditText tournamentTextBox = (EditText) findViewById(R.id.tournament_tournament_name_editText);
         EditText numOfMatchesTextBox = (EditText) findViewById(R.id.tournament_number_of_matches_editText);
-        /**
-         * Implement to save Tournament Name, number of matches here
-         */
-//        Whatever TournamentName = tournamentTextBox.getText().toString();
-//        Whatever numOfMatches = numOfMatchesTextBox.getText().toString();
+        Tournament tournament  = new Tournament();
+        tournament.setCompetitionName( tournamentTextBox.getText().toString());
+        tournament.setMatchNumber(Integer.valueOf(numOfMatchesTextBox.getText().toString()));
+        //save and get id
+        Dao<Tournament,Integer> tournamentDao = getHelper().getTournamentDao();
+        tournamentDao.create(tournament);
+        tournament = tournamentDao.queryForSameId(tournament);
+        Intent intent = new Intent(getApplicationContext(),MatchActivity.class);
+        intent.putExtra("tournamentId",tournament.getId());
+        startActivity(intent);
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (databaseHelper != null) {
+            OpenHelperManager.releaseHelper();
+            databaseHelper = null;
+        }
+    }
+
+    private DatabaseHelper getHelper() {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+        }
+        return databaseHelper;
     }
 }

@@ -55,13 +55,14 @@ public class MainActivity extends ActionBarActivity {
                 }
                 else if(position == 1)
                 {
-                    try {
+                    /*try {
                         Dao<Tournament,Integer> tournamentDao = getHelper().getTournamentDao();
                         DatabaseSaveHelperDTO.tournament = tournamentDao.queryForId(0);
                     } catch (SQLException e) {
                         e.printStackTrace();
-                    }
+                    }*/
                     Intent intent = new Intent(getApplicationContext(), MatchActivity.class);
+                    intent.putExtra("tournamentId",0);
                     startActivity(intent);
                 }
                 else if(position == 2)
