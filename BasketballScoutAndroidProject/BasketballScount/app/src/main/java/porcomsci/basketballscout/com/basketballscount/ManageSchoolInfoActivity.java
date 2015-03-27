@@ -28,22 +28,32 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
 
     ListView listView;
     ArrayAdapter adapter;
-    List<String> schoolList = new ArrayList<>();
+    List<String> schoolList;
     EditText editText;
     private DatabaseHelper databaseHelper = null;
     private  Dao<School,Integer> schoolDao = null;
     AlertDialog editOrDeleteDialog;
-    int selectedPosition = 0; //selected position of listview (which school name is selected to edit/delete)
+    int selectedPosition = 0; //selected position of ListView (which school name is selected to edit/delete)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_school_info);
+        listView = (ListView) findViewById(R.id.manage_school_info_listView);
+        retrieveSchoolListFromDB();
+        refreshListView();
+        setUpListViewItemListener();
+        setUpButtonAdd();
+        setUpEditOrDeleteDialog();
+    }
 
-        //query school info from database here and add to schoolNameList
+    /**
+     *  query school info from database here and add to schoolNameList ArrayList.
+     */
+    private void retrieveSchoolListFromDB() {
         try {
-
             schoolDao = getHelper().getSchoolDao();
+            schoolList = new ArrayList<>();
             List<School> retrievedList  =  schoolDao.queryForAll();
             for (School school : retrievedList) {
                 schoolList.add(school.getName());
@@ -51,14 +61,7 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        listView = (ListView) findViewById(R.id.manage_school_info_listView);
-        refreshListView();
-        setUpListView();
-        setUpButtonAdd();
-        setUpEditOrDeleteDialog();
-
-    }
-
+    }//end query
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -82,38 +85,13 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void addNewName() throws SQLException {
-        String newSchool =   editText.getText().toString();
-        schoolList.add(newSchool);
-        School newEntry = new School();
-        newEntry.setName(newSchool);
-        schoolDao.create(newEntry);
-
-    }
-
     private void refreshListView(){
 
         adapter = new ArrayAdapter(this,
                 android.R.layout.simple_list_item_1, schoolList);
         listView.setAdapter(adapter);
     }
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (databaseHelper != null) {
-            OpenHelperManager.releaseHelper();
-            databaseHelper = null;
-        }
-    }
-
-    private DatabaseHelper getHelper() {
-        if (databaseHelper == null) {
-            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
-        }
-        return databaseHelper;
-    }
-
-    private void setUpListView(){
+    private void setUpListViewItemListener(){
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -121,6 +99,15 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
                 selectedPosition = position;
             }
         });
+    }
+
+    private void addNewName() throws SQLException {
+        String newSchoolName =   editText.getText().toString();
+        School newEntry = new School();
+        newEntry.setName(newSchoolName);
+        schoolDao.create(newEntry);
+        retrieveSchoolListFromDB();
+        refreshListView();
     }
 
     private void setUpEditOrDeleteDialog(){
@@ -131,10 +118,9 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
         builder.setView(inflater.inflate(R.layout.edit_or_delete_dialog, null));
 
         // Create the AlertDialog object and return it
-        dialog = builder.create();  */
-
-
-        String[] options = { "Edit School Name" , "Delete School Name" , "Edit Players" };
+        dialog = builder.create();
+         */
+        String[] options = { "Edit School Name" , "Delete School" , "Manage Players" };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setItems(options, new DialogInterface.OnClickListener() {
@@ -148,7 +134,11 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
                 }
                 else // delete
                 {
-                    deleteSchoolName();
+                    try {
+                        deleteSchoolName();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                 }
 
             }
@@ -167,7 +157,6 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-                refreshListView();
                 editText.setText("");
             }
         });
@@ -183,7 +172,11 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        updateSchoolName(schoolName);
+                        try {
+                            updateSchoolName(schoolName.getText().toString());
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -195,21 +188,42 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
         return builder.create();
     }
 
-    private void updateSchoolName(EditText schoolName)
-    {
+    private void updateSchoolName(String schoolName) throws SQLException {
         /*
             implement update school name on database here
         */
-
-        schoolList.set(selectedPosition,schoolName.getText().toString());
+        List<School> retrievedList = schoolDao.queryBuilder().where().
+                eq("name",schoolList.get(selectedPosition)).query();
+        School currentSchool = retrievedList.get(0);
+        currentSchool.setName(schoolName);
+        schoolDao.update(currentSchool);
+        retrieveSchoolListFromDB();
         refreshListView();
     }
 
-    private void deleteSchoolName(){
-        /*
-            implement delete school name from database here
-         */
-        schoolList.remove(selectedPosition);
+    private void deleteSchoolName() throws SQLException {
+
+        //use query for foreign.
+        List<School> retrievedList = schoolDao.queryBuilder().where().
+                eq("name",schoolList.get(selectedPosition)).query();
+        schoolDao.delete(retrievedList.get(0));
+        retrieveSchoolListFromDB();
         refreshListView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (databaseHelper != null) {
+            OpenHelperManager.releaseHelper();
+            databaseHelper = null;
+        }
+    }
+
+    private DatabaseHelper getHelper() {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+        }
+        return databaseHelper;
     }
 }
