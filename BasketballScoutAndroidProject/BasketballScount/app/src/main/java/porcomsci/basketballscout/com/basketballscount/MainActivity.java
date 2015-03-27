@@ -8,11 +8,23 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import java.util.ArrayList;
 
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import database.DatabaseHelper;
+import database.DatabaseSaveHelperDTO;
+import database.entities.Tournament;
 import porcomsci.basketballscout.com.basketballscount.TournamentActivity;
 
 public class MainActivity extends ActionBarActivity {
+
+    private DatabaseHelper databaseHelper = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +42,12 @@ public class MainActivity extends ActionBarActivity {
         menuListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                /**
+                 * 0 is tournament.
+                 * 1 is casual.
+                 * 2 is history.
+                 * 3 is manage.
+                 */
                 if(position == 0)
                 {
                     Intent intent = new Intent(getApplicationContext(), TournamentActivity.class);
@@ -37,6 +55,12 @@ public class MainActivity extends ActionBarActivity {
                 }
                 else if(position == 1)
                 {
+                    try {
+                        Dao<Tournament,Integer> tournamentDao = getHelper().getTournamentDao();
+                        DatabaseSaveHelperDTO.tournament = tournamentDao.queryForId(0);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                     Intent intent = new Intent(getApplicationContext(), MatchActivity.class);
                     startActivity(intent);
                 }
@@ -72,5 +96,20 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (databaseHelper != null) {
+            OpenHelperManager.releaseHelper();
+            databaseHelper = null;
+        }
+    }
+
+    private DatabaseHelper getHelper() {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+        }
+        return databaseHelper;
     }
 }

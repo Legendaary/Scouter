@@ -13,8 +13,8 @@ import database.entities.Tournament;
 public class DatabaseSaveHelperDTO {
 
 
-    public static Tournament tournament = new Tournament();
-    public static Match match = new Match();
+    public static Tournament tournament;
+    public static Match match;
 
 
 

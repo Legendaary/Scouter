@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import database.DatabaseSaveHelperDTO;
+
 
 public class TournamentActivity extends ActionBarActivity {
 
@@ -17,10 +19,13 @@ public class TournamentActivity extends ActionBarActivity {
         setContentView(R.layout.activity_tournament);
 
         Button buttonNext =  (Button) findViewById(R.id.button_next);
-
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /**
+                 * create new tournament object set all value the create.
+                 * set this tournament to DatabaseSaveHelperDTO.tournament.setId();
+                 */
                 Intent intent = new Intent(getApplicationContext(),MatchActivity.class);
                 startActivity(intent);
             }
