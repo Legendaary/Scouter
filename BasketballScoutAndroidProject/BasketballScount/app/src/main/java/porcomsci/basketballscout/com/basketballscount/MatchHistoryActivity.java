@@ -1,12 +1,9 @@
 package porcomsci.basketballscout.com.basketballscount;
 
-import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -18,56 +15,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 import database.DatabaseHelper;
-import database.DatabaseSaveHelperDTO;
-import database.entities.School;
+import database.entities.Match;
 import database.entities.Tournament;
 
 
-public class TournamentHistoryActivity extends ActionBarActivity {
+public class MatchHistoryActivity extends ActionBarActivity {
 
+    private String tournamentId;
     private DatabaseHelper databaseHelper = null;
-    ListView tournamentListView;
-    List<String> tournamentList = new ArrayList<>();
+    ListView matchListView;
+    List<String> matchList = new ArrayList<>();
     ArrayAdapter adapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tournament_history);
-
+        setContentView(R.layout.activity_match_history);
+        tournamentId = getIntent().getStringExtra("tournamentId");
         try {
-            Dao<Tournament, Integer> tournamentDao = getHelper().getTournamentDao();
-            List<Tournament> retrievedList = tournamentDao.queryForAll();
-            for (Tournament tournament : retrievedList) {
-                tournamentList.add(tournament.getCompetitionName());
+            Dao<Match, Integer> matchDao = getHelper().getMatchDao();
+            //use query for foreign.
+            List<Match> retrievedList = matchDao.queryBuilder().where().
+                    eq("tournament_id",tournamentId).query();
+            for (Match match : retrievedList) {
+                matchList.add(String.valueOf(match.getMatchNumber()));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         adapter = new ArrayAdapter(this,
-                android.R.layout.simple_list_item_1, tournamentList);
-        tournamentListView = (ListView) findViewById(R.id.tournament_history_list);
-        tournamentListView.setAdapter(adapter);
-        /**
-         * set onclick listener for each tournament show.
-         * when click , send position with intent (the position also imply the id of tournament.)
-         */
-        tournamentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), MatchHistoryActivity.class);
-                intent.putExtra("tournamentId", position);
-                startActivity(intent);
-            }
-        });
+                android.R.layout.simple_list_item_1, matchList);
+        matchListView = (ListView) findViewById(R.id.match_history_listview);
+        matchListView.setAdapter(adapter);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_tournament_history, menu);
+        getMenuInflater().inflate(R.menu.menu_match_history, menu);
         return true;
     }
 
@@ -85,7 +70,6 @@ public class TournamentHistoryActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -101,4 +85,4 @@ public class TournamentHistoryActivity extends ActionBarActivity {
         }
         return databaseHelper;
     }
-}//end class
+}
