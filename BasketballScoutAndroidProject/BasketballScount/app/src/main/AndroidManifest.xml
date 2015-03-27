@@ -44,6 +44,10 @@
             android:name=".TournamentHistoryActivity"
             android:label="@string/title_activity_tournament_history" >
         </activity>
+        <activity
+            android:name=".MatchHistoryActivity"
+            android:label="@string/title_activity_match_history" >
+        </activity>
     </application>
 
 </manifest>

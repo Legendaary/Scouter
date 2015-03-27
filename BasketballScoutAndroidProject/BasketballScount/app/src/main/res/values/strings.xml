@@ -17,6 +17,7 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="title_activity_tournament_history">TournamentHistoryActivity</string>
+    <string name="title_activity_match_history">MatchHistoryActivity</string>
     <string name="tournament_name">Tournament Name</string>
     <string name="number_of_matches">Number of Matches</string>
 
