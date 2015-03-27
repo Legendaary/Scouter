@@ -27,6 +27,7 @@ public class MatchActivity extends ActionBarActivity {
                  * set match info on Match object in save helper below here before startNewActivity;
                  * e.g., DatabaseSaveHelperDTO.match.set();
                  */
+
                 startActivity(intent);
             }
         });

@@ -35,6 +35,8 @@ public class Match {
     private Collection<School> schoolA = null;
     @ForeignCollectionField
     private Collection<School> schoolB = null;
+    @DatabaseField (foreign = true,columnName = "tournament_id")
+    private Tournament tournament;
 
 
     public Match(){
@@ -121,4 +123,11 @@ public class Match {
         this.schoolB = schoolB;
     }
 
+    public Tournament getTournament() {
+        return tournament;
+    }
+
+    public void setTournament(Tournament tournament) {
+        this.tournament = tournament;
+    }
 }//end class

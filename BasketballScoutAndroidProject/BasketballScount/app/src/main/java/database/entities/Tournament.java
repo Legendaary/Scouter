@@ -1,8 +1,10 @@
 package database.entities;
 
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.util.Collection;
 import java.util.Date;
 
 
@@ -19,6 +21,8 @@ public class Tournament {
     private String competitionName;
     @DatabaseField
     private Integer matchNumber;
+    @ForeignCollectionField
+    private Collection<Match> match = null;
 
     public Tournament(){
 
@@ -47,4 +51,13 @@ public class Tournament {
     public void setMatchNumber(Integer matchNumber) {
         this.matchNumber = matchNumber;
     }
+
+    public Collection<Match> getMatch() {
+        return match;
+    }
+
+    public void setMatch(Collection<Match> match) {
+        this.match = match;
+    }
+
 }
