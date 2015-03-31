@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -25,6 +27,7 @@ public class SchoolListActivity extends ActionBarActivity {
     ListView schoolListView;
     List<String> schoolList = new ArrayList<>();
     ArrayAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,17 +45,23 @@ public class SchoolListActivity extends ActionBarActivity {
         adapter = new ArrayAdapter(this,
                 android.R.layout.simple_list_item_1, schoolList);
         schoolListView.setAdapter(adapter);
+        setUpListViewItemListener();
     }
 
-    public void clickAtSchoolName(){
-        String teamChosen = "";
-        if(!getIntent().getStringExtra("team1").isEmpty()){
-            teamChosen = "team1";
-        }else if(!getIntent().getStringExtra("team2").isEmpty()){
-            teamChosen = "team2";
-        }
+    private void setUpListViewItemListener(){
+        schoolListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                clickAtSchoolName(position+1);
+            }
+        });
+    }
+
+    public void clickAtSchoolName(int schoolId){
         Intent intent = new Intent(getApplicationContext(),CompetitorChoosingActivity.class);
-        intent.putExtra("teamChosen",teamChosen);
+        intent.putExtra("teamChosen",getIntent().getStringExtra("chooseTeam"));
+        intent.putExtra("schoolId",String.valueOf(schoolId));
+        intent.putExtra("match",getIntent().getSerializableExtra("match"));
         startActivity(intent);
     }
 

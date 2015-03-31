@@ -26,9 +26,10 @@ import database.entities.Tournament;
 public class TournamentHistoryActivity extends ActionBarActivity {
 
     private DatabaseHelper databaseHelper = null;
-    ListView tournamentListView;
-    List<String> tournamentList = new ArrayList<>();
-    ArrayAdapter adapter;
+    private ListView tournamentListView;
+    private List<String> tournamentList = new ArrayList<>();
+    private Dao<Tournament, Integer> tournamentDao = null;
+    private ArrayAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class TournamentHistoryActivity extends ActionBarActivity {
         setContentView(R.layout.activity_tournament_history);
 
         try {
-            Dao<Tournament, Integer> tournamentDao = getHelper().getTournamentDao();
+            tournamentDao = getHelper().getTournamentDao();
             List<Tournament> retrievedList = tournamentDao.queryForAll();
             for (Tournament tournament : retrievedList) {
                 tournamentList.add(tournament.getCompetitionName());
@@ -57,7 +58,17 @@ public class TournamentHistoryActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), MatchHistoryActivity.class);
-                intent.putExtra("tournamentId", position);
+                String tournamentId = "";
+                try {
+                    List<Tournament> retrievedList = tournamentDao.queryBuilder().where().
+                            eq("competitionName", tournamentList.get(position)).query();
+                   tournamentId =  String.valueOf(retrievedList.get(0).getId());
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                intent.putExtra("tournamentId", tournamentId);
+                System.out.println("tournament Id = "+tournamentId);
                 startActivity(intent);
             }
         });

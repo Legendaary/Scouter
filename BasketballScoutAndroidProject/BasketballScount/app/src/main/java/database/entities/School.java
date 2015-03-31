@@ -2,11 +2,13 @@ package database.entities;
 
 import com.j256.ormlite.field.DatabaseField;
 
+import java.io.Serializable;
+
 /**
  * Created by PorPaul on 23/3/2558.
  */
 
-public class School {
+public class School implements Serializable{
 
     @DatabaseField(generatedId = true)
     private int id;

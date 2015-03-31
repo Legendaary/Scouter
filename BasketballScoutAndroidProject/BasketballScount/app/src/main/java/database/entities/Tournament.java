@@ -4,6 +4,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
@@ -13,7 +14,7 @@ import java.util.Date;
  */
 
 @DatabaseTable(tableName = "Tournament")
-public class Tournament {
+public class Tournament implements Serializable {
 
     @DatabaseField(generatedId = true)
     private int id;

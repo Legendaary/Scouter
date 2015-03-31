@@ -55,15 +55,14 @@ public class MainActivity extends ActionBarActivity {
                 }
                 else if(position == 1)
                 {
-                    /*try {
-                        Dao<Tournament,Integer> tournamentDao = getHelper().getTournamentDao();
-                        DatabaseSaveHelperDTO.tournament = tournamentDao.queryForId(0);
+                    try {
+                        Tournament casual = getHelper().getTournamentDao().queryForId(1);
+                        Intent intent = new Intent(getApplicationContext(), MatchActivity.class);
+                        intent.putExtra("tournament",casual);
+                        startActivity(intent);
                     } catch (SQLException e) {
                         e.printStackTrace();
-                    }*/
-                    Intent intent = new Intent(getApplicationContext(), MatchActivity.class);
-                    intent.putExtra("tournamentId",0);
-                    startActivity(intent);
+                    }
                 }
                 else if(position == 2)
                 {
@@ -75,8 +74,6 @@ public class MainActivity extends ActionBarActivity {
                     Intent intent = new Intent(getApplicationContext(), ManageSchoolInfoActivity.class);
                     startActivity(intent);
                 }
-
-
             }
         });
     }

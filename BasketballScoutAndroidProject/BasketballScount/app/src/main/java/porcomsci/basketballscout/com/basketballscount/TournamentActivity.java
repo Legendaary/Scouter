@@ -77,7 +77,7 @@ public class TournamentActivity extends ActionBarActivity {
         tournamentDao.create(tournament);
         tournament = tournamentDao.queryForSameId(tournament);
         Intent intent = new Intent(getApplicationContext(),MatchActivity.class);
-        intent.putExtra("tournamentId",tournament.getId());
+        intent.putExtra("tournament",tournament);
         startActivity(intent);
     }
 
