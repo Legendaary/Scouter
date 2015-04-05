@@ -12,10 +12,13 @@ import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import database.DatabaseHelper;
 import database.entities.Match;
+import database.entities.School;
 import database.entities.Tournament;
 
 
@@ -37,7 +40,13 @@ public class MatchHistoryActivity extends ActionBarActivity {
             List<Match> retrievedList = matchDao.queryBuilder().where().
                     eq("tournament_id",tournamentId).query();
             for (Match match : retrievedList) {
-                matchList.add(String.valueOf(match.getMatchNumber()));
+                matchDao.refresh(match);
+                Dao<School, Integer> schoolDao = getHelper().getSchoolDao();
+                School schoolA = match.getSchoolA();
+                School schoolB = match.getSchoolB();
+                schoolDao.refresh(schoolA);
+                schoolDao.refresh(schoolB);
+                matchList.add(schoolA.getName()+" - "+schoolB.getName());
             }
         } catch (SQLException e) {
             e.printStackTrace();

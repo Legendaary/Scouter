@@ -14,6 +14,7 @@ import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
 
+import database.DBSaveHelper;
 import database.DatabaseHelper;
 import database.entities.Match;
 import database.entities.Tournament;
@@ -27,7 +28,7 @@ public class MatchActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match);
-        tournamentId = getIntent().getStringExtra("tournamentId");
+        tournamentId = String.valueOf(DBSaveHelper.tournament.getId());
         Button buttonNext = (Button) findViewById(R.id.button_next);
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +76,12 @@ public class MatchActivity extends ActionBarActivity {
             databaseHelper = null;
         }
     }
+    private DatabaseHelper getHelper() {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+        }
+        return databaseHelper;
+    }
     private void saveDataAndGo() throws SQLException {
 
         EditText matchNumberTextBox = (EditText) findViewById(R.id.match_matchNumber_editText);
@@ -86,16 +93,16 @@ public class MatchActivity extends ActionBarActivity {
 
         //save data
         Dao<Match, Integer> matchDao =  getHelper().getMatchDao();
-        Tournament parent = (Tournament)getIntent().getSerializableExtra("tournament");
+        Tournament parent = DBSaveHelper.tournament;
         Match childMatch = new Match();
         childMatch.setMatchNumber(Integer.valueOf(matchNumberTextBox.getText().toString()));
-        childMatch.setPlace(placeTextBox.getText().toString());
-        childMatch.setReferee(refereeTextBox.getText().toString());
+       // childMatch.setPlace(placeTextBox.getText().toString());
+       // childMatch.setReferee(refereeTextBox.getText().toString());
         childMatch.setTournament(parent);
         matchDao.create(childMatch);
         matchDao.refresh(childMatch);
+        DBSaveHelper.match = childMatch;
         Intent intent = new Intent(getApplicationContext(),CompetitorChoosingActivity.class);
-        intent.putExtra("match",childMatch);
         startActivity(intent);
     }
 
@@ -111,13 +118,5 @@ public class MatchActivity extends ActionBarActivity {
         });
 
     }
-
-    private DatabaseHelper getHelper() {
-        if (databaseHelper == null) {
-            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
-        }
-        return databaseHelper;
-    }
-
 
 }

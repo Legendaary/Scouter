@@ -61,7 +61,6 @@ public class SchoolListActivity extends ActionBarActivity {
         Intent intent = new Intent(getApplicationContext(),CompetitorChoosingActivity.class);
         intent.putExtra("teamChosen",getIntent().getStringExtra("chooseTeam"));
         intent.putExtra("schoolId",String.valueOf(schoolId));
-        intent.putExtra("match",getIntent().getSerializableExtra("match"));
         startActivity(intent);
     }
 

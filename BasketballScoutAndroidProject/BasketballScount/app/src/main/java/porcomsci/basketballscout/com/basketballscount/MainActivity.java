@@ -16,8 +16,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import database.DBSaveHelper;
 import database.DatabaseHelper;
-import database.DatabaseSaveHelperDTO;
 import database.entities.Tournament;
 import porcomsci.basketballscout.com.basketballscount.TournamentActivity;
 
@@ -57,8 +57,8 @@ public class MainActivity extends ActionBarActivity {
                 {
                     try {
                         Tournament casual = getHelper().getTournamentDao().queryForId(1);
+                        DBSaveHelper.tournament = casual;
                         Intent intent = new Intent(getApplicationContext(), MatchActivity.class);
-                        intent.putExtra("tournament",casual);
                         startActivity(intent);
                     } catch (SQLException e) {
                         e.printStackTrace();

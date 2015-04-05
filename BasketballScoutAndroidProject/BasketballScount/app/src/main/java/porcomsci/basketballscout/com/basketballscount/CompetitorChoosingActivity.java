@@ -10,17 +10,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import database.SchoolChoosingHelper;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import database.DBSaveHelper;
+import database.DatabaseHelper;
 import database.entities.Match;
+import database.entities.School;
 
 public class CompetitorChoosingActivity extends ActionBarActivity {
 
-    private Match match;
+    private Match match = DBSaveHelper.match;
+    private DatabaseHelper databaseHelper = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_competitor_choosing);
-        initMatch();
         checkReadyToGo();
         Button buttonTeamA = (Button) findViewById(R.id.button_team_a);
         buttonTeamA.setOnClickListener(new View.OnClickListener() {
@@ -28,7 +36,6 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),SchoolListActivity.class);
                 intent.putExtra("chooseTeam","team1");
-                intent.putExtra("match",match);
                 startActivity(intent);
             }
         });
@@ -39,24 +46,29 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),SchoolListActivity.class);
                 intent.putExtra("chooseTeam","team2");
-                intent.putExtra("match",match);
                 startActivity(intent);
             }
         });
     }
 
-    private void initMatch() {
-           match = (Match)getIntent().getSerializableExtra("match");
-    }
-
     private void checkReadyToGo() {
         String comeFromTeam = getIntent().getStringExtra("teamChosen");
+        try {
         if(comeFromTeam!=null) {
             if (comeFromTeam.equalsIgnoreCase("team1")) {
-                SchoolChoosingHelper.team1Chosen = true;
+                DBSaveHelper.team1Chosen = true;
+                School school1 = getHelper().getSchoolDao().queryForId(Integer.valueOf(getIntent().getStringExtra("schoolId")));
+                match.setSchoolA(school1);
+                getHelper().getMatchDao().update(match);
             } else if (comeFromTeam.equalsIgnoreCase("team2")) {
-                SchoolChoosingHelper.team2Chosen = true;
+                DBSaveHelper.team2Chosen = true;
+                School school2 = getHelper().getSchoolDao().queryForId(Integer.valueOf(getIntent().getStringExtra("schoolId")));
+                match.setSchoolB(school2);
+                getHelper().getMatchDao().update(match);
             }
+                }//end check not null
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
     }
@@ -78,9 +90,12 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.button_ToNextActivity) {
-            if(SchoolChoosingHelper.team1Chosen&&SchoolChoosingHelper.team2Chosen){
+            if(DBSaveHelper.team1Chosen&& DBSaveHelper.team2Chosen){
             Intent intent = new Intent(getApplicationContext(),PlayerChoosingActivity.class);
             intent.putExtra("team","1");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            DBSaveHelper.team1Chosen = false;
+            DBSaveHelper.team2Chosen = false;
             startActivity(intent);
             }else{
                 new AlertDialog.Builder(this)
@@ -95,5 +110,20 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (databaseHelper != null) {
+            OpenHelperManager.releaseHelper();
+            databaseHelper = null;
+        }
+    }
+    private DatabaseHelper getHelper() {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+        }
+        return databaseHelper;
     }
 }///end class

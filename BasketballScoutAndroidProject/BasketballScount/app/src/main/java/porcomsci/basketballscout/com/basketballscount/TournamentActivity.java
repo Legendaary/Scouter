@@ -14,6 +14,7 @@ import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
 
+import database.DBSaveHelper;
 import database.DatabaseHelper;
 import database.entities.Tournament;
 
@@ -77,7 +78,7 @@ public class TournamentActivity extends ActionBarActivity {
         tournamentDao.create(tournament);
         tournament = tournamentDao.queryForSameId(tournament);
         Intent intent = new Intent(getApplicationContext(),MatchActivity.class);
-        intent.putExtra("tournament",tournament);
+        DBSaveHelper.tournament = tournament;
         startActivity(intent);
     }
 

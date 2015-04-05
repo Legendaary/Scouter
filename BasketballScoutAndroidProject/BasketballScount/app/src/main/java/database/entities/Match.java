@@ -32,10 +32,10 @@ public class Match implements Serializable {
     private String umpire;
     @DatabaseField
     private String winner;
-    @ForeignCollectionField
-    private Collection<School> schoolA = null;
-    @ForeignCollectionField
-    private Collection<School> schoolB = null;
+    @DatabaseField(foreign = true)
+    private School schoolA;
+    @DatabaseField(foreign = true)
+    private School schoolB;
     @DatabaseField (foreign = true,columnName = "tournament_id")
     private Tournament tournament;
 
@@ -108,19 +108,19 @@ public class Match implements Serializable {
         this.winner = winner;
     }
 
-    public Collection<School> getSchoolA() {
+    public School getSchoolA() {
         return schoolA;
     }
 
-    public void setSchoolA(Collection<School> schoolA) {
+    public void setSchoolA(School schoolA) {
         this.schoolA = schoolA;
     }
 
-    public Collection<School> getSchoolB() {
+    public School getSchoolB() {
         return schoolB;
     }
 
-    public void setSchoolB(Collection<School> schoolB) {
+    public void setSchoolB(School schoolB) {
         this.schoolB = schoolB;
     }
 

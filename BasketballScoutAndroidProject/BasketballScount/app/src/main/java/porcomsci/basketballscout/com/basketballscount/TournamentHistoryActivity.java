@@ -1,8 +1,8 @@
 package porcomsci.basketballscout.com.basketballscount;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import database.DatabaseHelper;
-import database.DatabaseSaveHelperDTO;
-import database.entities.School;
 import database.entities.Tournament;
 
 
@@ -68,7 +66,6 @@ public class TournamentHistoryActivity extends ActionBarActivity {
                     e.printStackTrace();
                 }
                 intent.putExtra("tournamentId", tournamentId);
-                System.out.println("tournament Id = "+tournamentId);
                 startActivity(intent);
             }
         });
