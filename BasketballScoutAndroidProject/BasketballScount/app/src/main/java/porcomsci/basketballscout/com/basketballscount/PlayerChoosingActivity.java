@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -18,8 +17,7 @@ import java.util.ArrayList;
 public class PlayerChoosingActivity extends ActionBarActivity {
 
     ListView listView;
-    ArrayAdapter adapter;
-    ArrayList playerList;
+    ArrayList<PlayerChoosingItem> itemList;
     EditText editText;
 
     @Override
@@ -28,7 +26,11 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         setContentView(R.layout.activity_player_choosing);
 
         listView = (ListView) findViewById(R.id.player_choosing_listView);
-        playerList = new ArrayList();
+        /**
+         * remove retrieveDataFromDB(); when you've implemented DB code
+         */
+        retrieveDataFromDB();
+        refreshListView();
         setUpButtonAdd();
 
     }
@@ -56,6 +58,20 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void retrieveDataFromDB(){
+        itemList = new ArrayList<>();
+        /**
+         * retrieve player name and number here
+         */
+//        String[] playerNameFromDB = ;
+//        String[] playerNumberFromDB = ;
+//        for( int i=0; i<playerNameFromDB.length; i++)
+//        {
+//            itemList.add( new PlayerChoosingItem( playerNameFromDB[i], playerNumberFromDB[i] ) );
+//        }
+        itemList.add( new PlayerChoosingItem( "example", "111" ) ); // uncomment this line
+    }
+
     private void setUpButtonAdd(){
         editText = (EditText) findViewById(R.id.player_choosing_editText);
         Button buttonAdd = (Button) findViewById(R.id.player_choosing_button_add);
@@ -74,23 +90,20 @@ public class PlayerChoosingActivity extends ActionBarActivity {
 
     private void addNewName() throws SQLException {
         String newPlayerName =   editText.getText().toString();
-
-
+        itemList.add( new PlayerChoosingItem( newPlayerName, "" ) );
         /**
          * implement Insert player name here
          */
-//        Player newEntry = new Player();
-//        newEntry.setName(newPlayerName);
-//        PlayerDao.create(newEntry);
-//        retrievePlayerListFromDB();
+//        Whatever playerNameDB = newPlayerName;
         refreshListView();
     }
 
     private void refreshListView(){
-
-        adapter = new ArrayAdapter(this,
-                android.R.layout.simple_list_item_1, playerList);
-        listView.setAdapter(adapter);
+        /**
+         * uncomment retrieveDataFromDB(); when you've implemented DB code
+         */
+//        retrieveDataFromDB();
+        listView.setAdapter(new PlayerChoosingListAdapter(this, itemList));
     }
 
 }
