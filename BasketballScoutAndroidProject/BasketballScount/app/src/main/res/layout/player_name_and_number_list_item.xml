@@ -4,14 +4,17 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:layout_width="250dp"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:text=""
+        android:textSize="10pt"
+        android:paddingTop="9dp"
         android:id="@+id/player_name_and_number_list_item_player_name_textView" />
 
     <EditText
-        android:layout_width="15dp"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:id="@+id/player_name_and_number_list_item_player_number_editText"
         android:layout_gravity="right" />
+
 </LinearLayout>

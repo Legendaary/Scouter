@@ -4,48 +4,37 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 /**
  * Created by Opal on 4/1/15 AD.
  */
-public class PlayerChoosingListAdapter extends BaseAdapter {
+public class PlayerChoosingListAdapter extends ArrayAdapter<PlayerChoosingItem> {
 
     Context context;
-    String playerName;
-    String playerNumber;
+    ArrayList<PlayerChoosingItem> listItem;
+
     private static LayoutInflater inflater = null;
 
-    PlayerChoosingListAdapter(Context context, String playerName)
+    PlayerChoosingListAdapter(Context context, ArrayList<PlayerChoosingItem> listItem)
     {
+        super(context, R.layout.player_name_and_number_list_item, listItem);
         this.context = context;
-        this.playerName = playerName;
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
-
-
-    @Override
-    public int getCount() {
-        return 0;
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return null;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return 0;
+        this.listItem = listItem;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = convertView;
-        if(view == null)
-        {
-            view = inflater.inflate(R.layout.player_name_and_number_list_item, null);
-
-        }
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.player_name_and_number_list_item, parent, false);
+        TextView playerNameTextView = (TextView) view.findViewById(R.id.player_name_and_number_list_item_player_name_textView);
+        EditText playerNumberEditText = (EditText) view.findViewById(R.id.player_name_and_number_list_item_player_number_editText);
+        playerNameTextView.setText(this.listItem.get(position).getPlayerName());
+        playerNumberEditText.setText(this.listItem.get(position).playerNumber());
+        return view;
     }
 }
