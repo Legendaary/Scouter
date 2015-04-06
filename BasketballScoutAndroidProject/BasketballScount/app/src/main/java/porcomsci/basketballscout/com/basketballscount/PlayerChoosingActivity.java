@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -26,6 +27,7 @@ public class PlayerChoosingActivity extends ActionBarActivity {
 
     ListView listView;
     ArrayList<PlayerChoosingItem> itemList;
+    List<Integer> selectedPosition;
     EditText editText;
     private DatabaseHelper databaseHelper = null;
     private int schoolId;
@@ -37,6 +39,7 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         listView = (ListView) findViewById(R.id.player_choosing_listView);
         try {
             retrieveDataFromDB();
+            setListViewOnItemClick();
             refreshListView();
             setUpButtonAdd();
         } catch (SQLException e) {
@@ -123,6 +126,25 @@ public class PlayerChoosingActivity extends ActionBarActivity {
     private void refreshListView() throws SQLException {
         retrieveDataFromDB();
         listView.setAdapter(new PlayerChoosingListAdapter(this, itemList));
+    }
+
+    private void setListViewOnItemClick(){
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if( !view.isSelected() )
+                {
+                    view.setSelected(true);
+                    selectedPosition.add(position);
+                }
+                else
+                {
+                    view.setSelected(false);
+                    selectedPosition.remove(selectedPosition.indexOf(position));
+                }
+            }
+        });
+
     }
 
     @Override
