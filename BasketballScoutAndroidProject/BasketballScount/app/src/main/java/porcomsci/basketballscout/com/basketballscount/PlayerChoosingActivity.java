@@ -19,6 +19,7 @@ import java.util.List;
 import database.DBSaveHelper;
 import database.DatabaseHelper;
 import database.entities.Player;
+import database.entities.School;
 
 
 public class PlayerChoosingActivity extends ActionBarActivity {
@@ -33,18 +34,14 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_choosing);
         determineSchoolId();
-
         listView = (ListView) findViewById(R.id.player_choosing_listView);
-        /**
-         * remove retrieveDataFromDB(); when you've implemented DB code
-         */
         try {
             retrieveDataFromDB();
+            refreshListView();
+            setUpButtonAdd();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        refreshListView();
-        setUpButtonAdd();
 
     }
 
@@ -112,20 +109,19 @@ public class PlayerChoosingActivity extends ActionBarActivity {
     }
 
     private void addNewName() throws SQLException {
+
         String newPlayerName =   editText.getText().toString();
-        itemList.add( new PlayerChoosingItem( newPlayerName, "" ) );
-        /**
-         * implement Insert player name here
-         */
-//        Whatever playerNameDB = newPlayerName;
+        School school = new School();
+        school.setId(schoolId);
+        Player newPlayer = new Player();
+        newPlayer.setName(newPlayerName);
+        newPlayer.setSchool(school);
+        getHelper().getPlayerDao().create(newPlayer);
         refreshListView();
     }
 
-    private void refreshListView(){
-        /**
-         * uncomment retrieveDataFromDB(); when you've implemented DB code
-         */
-//        retrieveDataFromDB();
+    private void refreshListView() throws SQLException {
+        retrieveDataFromDB();
         listView.setAdapter(new PlayerChoosingListAdapter(this, itemList));
     }
 
