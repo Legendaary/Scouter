@@ -26,5 +26,7 @@
     <string name="place">Place</string>
     <string name="referee_name">Referee Name</string>
     <string name="umpire_name">Umpire Name</string>
+    <string name="title_activity_quater_choosing">QuaterChoosingActivity</string>
+    <string name="title_activity_quater_menu">QuaterMenuActivity</string>
 
 </resources>

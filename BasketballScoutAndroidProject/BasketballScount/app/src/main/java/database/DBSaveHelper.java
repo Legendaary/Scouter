@@ -10,6 +10,8 @@ public class DBSaveHelper {
 
     public static boolean team1Chosen = false;
     public static boolean team2Chosen = false;
+    public static int school1Id;
+    public static int school2Id;
     public static Match match;
     public static Tournament tournament;
     public static int playerChoosingSequence;

@@ -133,14 +133,18 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
                     AlertDialog editSchoolNameDialog = setUpEditSchoolNameDialog();
                     editSchoolNameDialog.show();
                 }
-                else // delete
+                else if(which==1) // delete
                 {
                     try {
                         deleteSchoolName();
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
-                }
+                }else{
+
+
+
+                }//manage player
 
             }
         });

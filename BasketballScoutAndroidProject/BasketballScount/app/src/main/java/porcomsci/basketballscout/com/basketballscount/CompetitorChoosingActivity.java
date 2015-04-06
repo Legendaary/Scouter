@@ -35,7 +35,7 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),SchoolListActivity.class);
-                intent.putExtra("chooseTeam","team1");
+                intent.putExtra("chooseTeam","1");
                 startActivity(intent);
             }
         });
@@ -45,7 +45,7 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),SchoolListActivity.class);
-                intent.putExtra("chooseTeam","team2");
+                intent.putExtra("chooseTeam","2");
                 startActivity(intent);
             }
         });
@@ -55,14 +55,14 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
         String comeFromTeam = getIntent().getStringExtra("teamChosen");
         try {
         if(comeFromTeam!=null) {
-            if (comeFromTeam.equalsIgnoreCase("team1")) {
+            if (comeFromTeam.equalsIgnoreCase("1")) {
                 DBSaveHelper.team1Chosen = true;
-                School school1 = getHelper().getSchoolDao().queryForId(Integer.valueOf(getIntent().getStringExtra("schoolId")));
+                School school1 = getHelper().getSchoolDao().queryForId(Integer.valueOf( DBSaveHelper.school1Id));
                 match.setSchoolA(school1);
                 getHelper().getMatchDao().update(match);
-            } else if (comeFromTeam.equalsIgnoreCase("team2")) {
+            } else if (comeFromTeam.equalsIgnoreCase("2")) {
                 DBSaveHelper.team2Chosen = true;
-                School school2 = getHelper().getSchoolDao().queryForId(Integer.valueOf(getIntent().getStringExtra("schoolId")));
+                School school2 = getHelper().getSchoolDao().queryForId(Integer.valueOf( DBSaveHelper.school2Id));
                 match.setSchoolB(school2);
                 getHelper().getMatchDao().update(match);
             }
@@ -92,7 +92,7 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
         if (id == R.id.button_ToNextActivity) {
             if(DBSaveHelper.team1Chosen&& DBSaveHelper.team2Chosen){
             Intent intent = new Intent(getApplicationContext(),PlayerChoosingActivity.class);
-            intent.putExtra("team","1");
+            DBSaveHelper.playerChoosingSequence = 1;
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             DBSaveHelper.team1Chosen = false;
             DBSaveHelper.team2Chosen = false;

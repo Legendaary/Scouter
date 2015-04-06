@@ -9,9 +9,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
+import database.DBSaveHelper;
+import database.DatabaseHelper;
+import database.entities.Player;
 
 
 public class PlayerChoosingActivity extends ActionBarActivity {
@@ -19,20 +26,34 @@ public class PlayerChoosingActivity extends ActionBarActivity {
     ListView listView;
     ArrayList<PlayerChoosingItem> itemList;
     EditText editText;
-
+    private DatabaseHelper databaseHelper = null;
+    private int schoolId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_choosing);
+        determineSchoolId();
 
         listView = (ListView) findViewById(R.id.player_choosing_listView);
         /**
          * remove retrieveDataFromDB(); when you've implemented DB code
          */
-        retrieveDataFromDB();
+        try {
+            retrieveDataFromDB();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         refreshListView();
         setUpButtonAdd();
 
+    }
+
+    private void determineSchoolId() {
+        if(DBSaveHelper.playerChoosingSequence==1){
+            schoolId = DBSaveHelper.school1Id;
+        }else if(DBSaveHelper.playerChoosingSequence==2){
+            schoolId = DBSaveHelper.school2Id;
+        }
     }
 
 
@@ -58,18 +79,20 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void retrieveDataFromDB(){
+    private void retrieveDataFromDB() throws SQLException {
         itemList = new ArrayList<>();
         /**
          * retrieve player name and number here
          */
-//        String[] playerNameFromDB = ;
-//        String[] playerNumberFromDB = ;
-//        for( int i=0; i<playerNameFromDB.length; i++)
-//        {
-//            itemList.add( new PlayerChoosingItem( playerNameFromDB[i], playerNumberFromDB[i] ) );
-//        }
-        itemList.add( new PlayerChoosingItem( "example", "111" ) ); // uncomment this line
+        Dao<Player,Integer> playerDao = getHelper().getPlayerDao();
+        System.out.println("*********************schoolId for saint do : "+schoolId);
+        List<Player> retrievedList = playerDao.queryBuilder().where().
+                eq("school_id",schoolId).query();
+        List<String> playerNameFromDB = new ArrayList<>();
+        for (Player player : retrievedList) {
+            playerNameFromDB.add(player.getName());
+            itemList.add(new PlayerChoosingItem(player.getName(),""));
+        }   
     }
 
     private void setUpButtonAdd(){
@@ -104,6 +127,22 @@ public class PlayerChoosingActivity extends ActionBarActivity {
          */
 //        retrieveDataFromDB();
         listView.setAdapter(new PlayerChoosingListAdapter(this, itemList));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (databaseHelper != null) {
+            OpenHelperManager.releaseHelper();
+            databaseHelper = null;
+        }
+    }
+
+    private DatabaseHelper getHelper() {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+        }
+        return databaseHelper;
     }
 
 }

@@ -9,6 +9,8 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import database.entities.Match;
 import database.entities.MatchPlayer;
@@ -60,10 +62,28 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, QuaterScoreSheet.class);
             TableUtils.createTable(connectionSource, Substitution.class);
             initSchool();
+            initSaintDominicPlayer();
             initTournament();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void initSaintDominicPlayer() throws SQLException {
+        School saintDominic = new School();
+        saintDominic.setId(1);
+        Player one = new Player();
+        one.setName("อาชัญ เอี่ยมจุ้ย");
+        one.setSchool(saintDominic);
+        Player two = new Player();
+        two.setName("ธนธัช บุญอนุวัฒน์");
+        two.setSchool(saintDominic);
+        Player three = new Player();
+        three.setName("เจตนิพัธท์  พบสุข์");
+        three.setSchool(saintDominic);
+        getPlayerDao().create(one);
+        getPlayerDao().create(two);
+        getPlayerDao().create(three);
     }
 
     private void initTournament() throws SQLException {
@@ -74,12 +94,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     }
 
     public void initSchool() throws SQLException {
-
-        insertSchoolByName("Saint Dominic");
-        insertSchoolByName("Saint Gabriel");
-        insertSchoolByName("Don Bosco");
-        insertSchoolByName("Saint Frunk");
-        insertSchoolByName("Suan gularb");
+        insertSchoolByName("เซนต์ดอมินิก");
+        insertSchoolByName("วัดสุวรรณ");
+        insertSchoolByName("อัสสัมชัญกรุงเทพ");
+        insertSchoolByName("กรุงเทพคริสเตียน");
+        insertSchoolByName("สุเหร่า คลองจั่น");
+        insertSchoolByName("ศึกษานารี");
+        insertSchoolByName("ทิวไผ่งาม");
     }
 
     public void insertSchoolByName(String schoolName) throws SQLException {

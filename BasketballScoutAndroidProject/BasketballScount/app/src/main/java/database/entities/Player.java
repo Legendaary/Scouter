@@ -13,6 +13,16 @@ public class Player {
     private String name;
     @DatabaseField
     private String position;
+    @DatabaseField(foreign = true,columnName = "school_id")
+    private School school;
+
+    public School getSchool() {
+        return school;
+    }
+
+    public void setSchool(School school) {
+        this.school = school;
+    }
 
     public int getId() {
         return id;

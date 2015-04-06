@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import database.DBSaveHelper;
 import database.DatabaseHelper;
 import database.entities.School;
 
@@ -59,8 +60,14 @@ public class SchoolListActivity extends ActionBarActivity {
 
     public void clickAtSchoolName(int schoolId){
         Intent intent = new Intent(getApplicationContext(),CompetitorChoosingActivity.class);
+        if(getIntent().getStringExtra("chooseTeam").equalsIgnoreCase("1")){
+            DBSaveHelper.school1Id = schoolId;
+            System.out.println("*********************schoolId for 1 : "+schoolId);
+        }else if(getIntent().getStringExtra("chooseTeam").equalsIgnoreCase("2")){
+            DBSaveHelper.school2Id = schoolId;
+            System.out.println("*********************schoolId for 2 : "+schoolId);
+        }
         intent.putExtra("teamChosen",getIntent().getStringExtra("chooseTeam"));
-        intent.putExtra("schoolId",String.valueOf(schoolId));
         startActivity(intent);
     }
 
