@@ -27,29 +27,15 @@ public class MatchActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle("รายละเอียดการแข่งขัน");
         setContentView(R.layout.activity_match);
         tournamentId = String.valueOf(DBSaveHelper.tournament.getId());
-        Button buttonNext = (Button) findViewById(R.id.button_next);
-        buttonNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /**
-                 * set match info on Match object in save helper below here before startNewActivity;
-                 * e.g., DatabaseSaveHelperDTO.match.set();
-                 */
-                try {
-                    saveDataAndGo();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }//end on create
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_match, menu);
+        getMenuInflater().inflate(R.menu.menu_competitor_choosing, menu);
         return true;
     }
 
@@ -61,8 +47,12 @@ public class MatchActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.button_ToNextActivity) {
+            try {
+                saveDataAndGo();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         return super.onOptionsItemSelected(item);

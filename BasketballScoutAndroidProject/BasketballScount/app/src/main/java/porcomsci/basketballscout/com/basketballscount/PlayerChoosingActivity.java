@@ -1,5 +1,8 @@
 package porcomsci.basketballscout.com.basketballscount;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -51,13 +54,25 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         }else if(DBSaveHelper.playerChoosingSequence==2){
             schoolId = DBSaveHelper.school2Id;
         }
+        setTitleFromSchoolId();
+
+    }
+
+    private void setTitleFromSchoolId() {
+        School school = null;
+        try {
+            school = getHelper().getSchoolDao().queryForId(schoolId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        getSupportActionBar().setTitle(school.getName());
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_player_choosing, menu);
+        getMenuInflater().inflate(R.menu.menu_competitor_choosing, menu);
         return true;
     }
 
@@ -69,8 +84,15 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.button_ToNextActivity) {
+            DBSaveHelper.playerChoosingSequence = DBSaveHelper.playerChoosingSequence+1;
+            if(DBSaveHelper.playerChoosingSequence==2) {
+                Intent intent = new Intent(getApplicationContext(), PlayerChoosingActivity.class);
+                startActivity(intent);
+            }else{
+                Intent intent = new Intent(getApplicationContext(), QuarterChoosingActivity.class);
+                startActivity(intent);
+            }
         }
 
         return super.onOptionsItemSelected(item);

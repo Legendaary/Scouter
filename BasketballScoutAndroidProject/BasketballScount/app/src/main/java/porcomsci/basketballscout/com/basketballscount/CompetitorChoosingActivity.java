@@ -28,6 +28,7 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle("เลือกทีมแข่งขัน");
         setContentView(R.layout.activity_competitor_choosing);
         checkReadyToGo();
         Button buttonTeamA = (Button) findViewById(R.id.button_team_a);
@@ -100,7 +101,7 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
             }else{
                 new AlertDialog.Builder(this)
                         .setTitle("Alert")
-                        .setMessage("Please choose both school before click!").setNegativeButton("ok", new DialogInterface.OnClickListener() {
+                        .setMessage("โปรดเลือกทั้ง 2 ทีมก่อน!").setNegativeButton("ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
                     }
