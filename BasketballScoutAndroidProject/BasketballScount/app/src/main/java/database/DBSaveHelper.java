@@ -15,6 +15,7 @@ public class DBSaveHelper {
     public static Match match;
     public static Tournament tournament;
     public static int playerChoosingSequence;
+    public static int quarterNumber;
 
 
 }

@@ -54,11 +54,11 @@ public class PlayerChoosingActivity extends ActionBarActivity {
     private void determineSchoolId() {
         if(DBSaveHelper.playerChoosingSequence==1){
             schoolId = DBSaveHelper.school1Id;
+            setTitleFromSchoolId();
         }else if(DBSaveHelper.playerChoosingSequence==2){
             schoolId = DBSaveHelper.school2Id;
+            setTitleFromSchoolId();
         }
-        setTitleFromSchoolId();
-
     }
 
     private void setTitleFromSchoolId() {
@@ -92,7 +92,7 @@ public class PlayerChoosingActivity extends ActionBarActivity {
             if(DBSaveHelper.playerChoosingSequence==2) {
                 Intent intent = new Intent(getApplicationContext(), PlayerChoosingActivity.class);
                 startActivity(intent);
-            }else{
+            }else if(DBSaveHelper.playerChoosingSequence>2){
                 Intent intent = new Intent(getApplicationContext(), QuarterChoosingActivity.class);
                 startActivity(intent);
             }

@@ -24,6 +24,7 @@ public class MatchActivity extends ActionBarActivity {
 
     private String tournamentId;
     private DatabaseHelper databaseHelper = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,12 +67,14 @@ public class MatchActivity extends ActionBarActivity {
             databaseHelper = null;
         }
     }
+
     private DatabaseHelper getHelper() {
         if (databaseHelper == null) {
             databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
         }
         return databaseHelper;
     }
+
     private void saveDataAndGo() throws SQLException {
 
         EditText matchNumberTextBox = (EditText) findViewById(R.id.match_matchNumber_editText);
@@ -82,22 +85,21 @@ public class MatchActivity extends ActionBarActivity {
         EditText umpireTextBox = (EditText) findViewById(R.id.match_umpire_editText);
 
         //save data
-        Dao<Match, Integer> matchDao =  getHelper().getMatchDao();
+        Dao<Match, Integer> matchDao = getHelper().getMatchDao();
         Tournament parent = DBSaveHelper.tournament;
         Match childMatch = new Match();
         childMatch.setMatchNumber(Integer.valueOf(matchNumberTextBox.getText().toString()));
-       // childMatch.setPlace(placeTextBox.getText().toString());
-       // childMatch.setReferee(refereeTextBox.getText().toString());
+        // childMatch.setPlace(placeTextBox.getText().toString());
+        // childMatch.setReferee(refereeTextBox.getText().toString());
         childMatch.setTournament(parent);
         matchDao.create(childMatch);
         matchDao.refresh(childMatch);
         DBSaveHelper.match = childMatch;
-        Intent intent = new Intent(getApplicationContext(),CompetitorChoosingActivity.class);
+        Intent intent = new Intent(getApplicationContext(), CompetitorChoosingActivity.class);
         startActivity(intent);
     }
 
-    private void setUpDateDialog()
-    {
+    private void setUpDateDialog() {
 
         EditText dateTextBox = (EditText) findViewById(R.id.match_date_editText);
         dateTextBox.setOnClickListener(new View.OnClickListener() {

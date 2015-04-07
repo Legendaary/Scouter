@@ -33,6 +33,7 @@ public class SchoolListActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_school_list);
+        getSupportActionBar().setTitle("รายชื่อโรงเรียน");
         schoolListView = (ListView)findViewById(R.id.schoolListView);
         try {
             Dao<School,Integer> schoolDao = getHelper().getSchoolDao();

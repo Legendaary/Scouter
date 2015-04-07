@@ -12,12 +12,10 @@ import android.widget.ListView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import database.DBSaveHelper;
 import database.DatabaseHelper;
-import database.entities.Tournament;
 
 
 public class QuarterMenuActivity extends ActionBarActivity {
@@ -27,9 +25,10 @@ public class QuarterMenuActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle("Quarter Number " + DBSaveHelper.quarterNumber);
         setContentView(R.layout.activity_quater_menu);
-        final ListView menuListView = (ListView) findViewById(R.id.listView);
-        String[] menu = {"Start Record", "Action record", "Quarter Information", "Substitution Information", "Score Information", "Back to menu"};
+        ListView menuListView = (ListView) findViewById(R.id.quaterListViewMenu);
+        String[] menu = {"เริ่มบันทึกการแข่งขัน", "เก็บข้อมูลความสามารถ", "สรุปข้อมูล Quarter", "ข้อมูลการเปลี่ยนตัว", "ตารางการทำเเต้ม", "กลับสู่หน้าเลือก Quarter"};
         ArrayList<String> stringArrayList = new ArrayList<>();
         for( int i = 0; i < menu.length ; i++ )
         {

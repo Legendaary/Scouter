@@ -30,7 +30,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final ListView menuListView = (ListView) findViewById(R.id.listView);
-        String[] menu = {"Tournament", "Casual", "History", "Manage School & Players", "Option"};
+        String[] menu = {"ทัวร์นาเม้นท์", "แมทช์", "ประวัติ", "จัดการข้อมูล โรงเรียน&ผู้เล่น", "ตั้งค่า"};
         ArrayList<String> stringArrayList = new ArrayList<>();
         for( int i = 0; i < menu.length ; i++ )
         {
