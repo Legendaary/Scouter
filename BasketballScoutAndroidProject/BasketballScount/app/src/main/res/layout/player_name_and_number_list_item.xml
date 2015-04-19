@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
     android:layout_height="match_parent">
 
-    <TextView
+    <CheckBox
         android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:text=""
         android:textSize="10pt"
-        android:paddingTop="9dp"
-        android:id="@+id/player_name_and_number_list_item_player_name_textView" />
+        android:id="@+id/player_name_and_number_list_item_checkBox" />
 
     <EditText
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:inputType="numberDecimal"
-        android:layout_marginBottom="10dp"
         android:id="@+id/player_name_and_number_list_item_player_number_editText"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"/>

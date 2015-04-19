@@ -31,9 +31,9 @@ public class PlayerChoosingListAdapter extends ArrayAdapter<PlayerChoosingItem> 
     public View getView(int position, View convertView, ViewGroup parent) {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.player_name_and_number_list_item, parent, false);
-        TextView playerNameTextView = (TextView) view.findViewById(R.id.player_name_and_number_list_item_player_name_textView);
+        TextView playerNameCheckbox = (TextView) view.findViewById(R.id.player_name_and_number_list_item_checkBox);
         EditText playerNumberEditText = (EditText) view.findViewById(R.id.player_name_and_number_list_item_player_number_editText);
-        playerNameTextView.setText(this.listItem.get(position).getPlayerName());
+        playerNameCheckbox.setText(this.listItem.get(position).getPlayerName());
         playerNumberEditText.setText(this.listItem.get(position).playerNumber());
         return view;
     }

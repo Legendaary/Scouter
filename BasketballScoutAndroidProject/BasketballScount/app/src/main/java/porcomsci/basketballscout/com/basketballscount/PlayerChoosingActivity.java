@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -154,14 +155,15 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if( !view.isSelected() )
+                CheckBox listItemCheckBox = (CheckBox) view.findViewById(R.id.player_name_and_number_list_item_checkBox);
+                if( !listItemCheckBox.isChecked() )
                 {
-                    view.setSelected(true);
+                    listItemCheckBox.setChecked(true);
                     selectedPosition.add(position);
                 }
                 else
                 {
-                    view.setSelected(false);
+                    listItemCheckBox.setChecked(false);
                     selectedPosition.remove(selectedPosition.indexOf(position));
                 }
             }
