@@ -31,7 +31,7 @@ public class PlayerChoosingActivity extends ActionBarActivity {
 
     ListView listView;
     ArrayList<PlayerChoosingItem> itemList;
-    List<Integer> selectedPosition;
+    List<Integer> selectedPosition, playerIdFromDB;
     EditText editText;
     private DatabaseHelper databaseHelper = null;
     private int schoolId;
@@ -89,13 +89,22 @@ public class PlayerChoosingActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.button_ToNextActivity) {
+            // I don't understand this if condition
+            // what is the playerChoosingSequence mean?
             DBSaveHelper.playerChoosingSequence = DBSaveHelper.playerChoosingSequence+1;
             if(DBSaveHelper.playerChoosingSequence==2) {
                 Intent intent = new Intent(getApplicationContext(), PlayerChoosingActivity.class);
                 startActivity(intent);
             }else if(DBSaveHelper.playerChoosingSequence>2){
-                Intent intent = new Intent(getApplicationContext(), QuarterChoosingActivity.class);
-                startActivity(intent);
+                // the next activity is QuarterChoosingActivity right?
+                // so, I put this code to check conditions and save data
+                // before go to the next activity
+                if(isPassAllConditions())
+                {
+                    saveData();
+                    Intent intent = new Intent(getApplicationContext(), QuarterChoosingActivity.class);
+                    startActivity(intent);
+                }
             }
         }
 
@@ -104,16 +113,19 @@ public class PlayerChoosingActivity extends ActionBarActivity {
 
     private void retrieveDataFromDB() throws SQLException {
         itemList = new ArrayList<>();
-        /**
-         * retrieve player name and number here
-         */
+
         Dao<Player,Integer> playerDao = getHelper().getPlayerDao();
         System.out.println("*********************schoolId for saint do : "+schoolId);
         List<Player> retrievedList = playerDao.queryBuilder().where().
                 eq("school_id",schoolId).query();
         List<String> playerNameFromDB = new ArrayList<>();
+        playerIdFromDB = new ArrayList<>();
         for (Player player : retrievedList) {
             playerNameFromDB.add(player.getName());
+            /**
+             * retrieve player id or PK here
+             */
+//            playerIdFromDB.add(ID);
             itemList.add(new PlayerChoosingItem(player.getName(),""));
         }   
     }
@@ -169,6 +181,75 @@ public class PlayerChoosingActivity extends ActionBarActivity {
             }
         });
 
+    }
+
+    private boolean isPassAllConditions(){
+        if(selectedPosition.size() < 5)
+        {
+            showAlertDialog("กรุณาเลือกผู้เล่นตัวจริงให้ครบ 5 คน");
+            return false;
+        }
+        else if(selectedPosition.size() > 5)
+        {
+            showAlertDialog("กรุณาเลือกผู้เล่นตัวจริงเพียง 5 คนเท่านั้น");
+            return false;
+        }
+        else
+        {
+            for(int listPosition : selectedPosition )
+            {
+                String playerNumberText = String.valueOf( listView.getChildAt(listPosition).findViewById(R.id.player_name_and_number_list_item_player_number_editText) );
+                if(playerNumberText.length() == 0)
+                {
+                    showAlertDialog("กรุณากรอกหมายเลขของผู้เล่นตัวจริงให้ครบ 5 คน");
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void saveData()
+    {
+        for(int i=0; i<listView.getCount(); i++)
+        {
+            // save players number
+            String playerNumberText = String.valueOf( listView.getChildAt(i).findViewById(R.id.player_name_and_number_list_item_player_number_editText) );
+            if(playerNumberText.length() == 0)
+            {
+                int playerId = playerIdFromDB.get(i);
+                int playerNumber = Integer.parseInt( playerNumberText );
+                /**
+                 * implement to save player number here
+                 */
+                //add playerNumber at playerId
+            }
+
+            //save 5 selected players ID
+            for(int position : selectedPosition)
+            {
+                int playerId = playerIdFromDB.get(position);
+                /**
+                 * implement to 5 selected players ID here
+                 */
+                // set flag y at playerId
+            }
+        }
+    }
+
+    private void showAlertDialog(String message)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(message);
+        builder.setPositiveButton("ตกลง",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
