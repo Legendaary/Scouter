@@ -16,6 +16,6 @@ public class DBSaveHelper {
     public static Tournament tournament;
     public static int playerChoosingSequence;
     public static int quarterNumber;
-
+    public static String historyTournamentId;
 
 }

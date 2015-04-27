@@ -10,16 +10,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 import database.DBSaveHelper;
 import database.DatabaseHelper;
 import database.entities.Tournament;
-import porcomsci.basketballscout.com.basketballscount.TournamentActivity;
+import porcomsci.basketballscout.com.basketballscount.history.TournamentHistoryActivity;
 
 public class MainActivity extends ActionBarActivity {
 

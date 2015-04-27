@@ -52,6 +52,9 @@ public class PlayerChoosingActivity extends ActionBarActivity {
 
     }
 
+    /**
+     * find school id from application flow then set the school name to title bar.
+     */
     private void determineSchoolId() {
         if(DBSaveHelper.playerChoosingSequence==1){
             schoolId = DBSaveHelper.school1Id;
@@ -113,7 +116,7 @@ public class PlayerChoosingActivity extends ActionBarActivity {
                 eq("school_id",schoolId).query();
         List<String> playerNameFromDB = new ArrayList<>();
         for (Player player : retrievedList) {
-            playerNameFromDB.add(player.getName());
+            playerNameFromDB.add(player.getName()); 
             itemList.add(new PlayerChoosingItem(player.getName(),""));
         }   
     }

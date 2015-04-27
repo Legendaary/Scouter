@@ -1,4 +1,4 @@
-package porcomsci.basketballscout.com.basketballscount;
+package porcomsci.basketballscout.com.basketballscount.history;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,8 +17,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import database.DBSaveHelper;
 import database.DatabaseHelper;
 import database.entities.Tournament;
+import porcomsci.basketballscout.com.basketballscount.R;
 
 
 public class TournamentHistoryActivity extends ActionBarActivity {
@@ -61,11 +63,11 @@ public class TournamentHistoryActivity extends ActionBarActivity {
                     List<Tournament> retrievedList = tournamentDao.queryBuilder().where().
                             eq("competitionName", tournamentList.get(position)).query();
                    tournamentId =  String.valueOf(retrievedList.get(0).getId());
+                    DBSaveHelper.historyTournamentId = tournamentId;
 
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-                intent.putExtra("tournamentId", tournamentId);
                 startActivity(intent);
             }
         });

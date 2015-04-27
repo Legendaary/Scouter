@@ -1,4 +1,4 @@
-package porcomsci.basketballscout.com.basketballscount;
+package porcomsci.basketballscout.com.basketballscount.history;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -16,10 +16,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+import database.DBSaveHelper;
 import database.DatabaseHelper;
 import database.entities.Match;
 import database.entities.School;
 import database.entities.Tournament;
+import porcomsci.basketballscout.com.basketballscount.R;
 
 
 public class MatchHistoryActivity extends ActionBarActivity {
@@ -33,7 +35,7 @@ public class MatchHistoryActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match_history);
-        tournamentId = getIntent().getStringExtra("tournamentId");
+        tournamentId = DBSaveHelper.historyTournamentId;
         try {
             Dao<Match, Integer> matchDao = getHelper().getMatchDao();
             //use query for foreign.
@@ -55,6 +57,8 @@ public class MatchHistoryActivity extends ActionBarActivity {
                 android.R.layout.simple_list_item_1, matchList);
         matchListView = (ListView) findViewById(R.id.match_history_listview);
         matchListView.setAdapter(adapter);
+
+
     }
 
 
