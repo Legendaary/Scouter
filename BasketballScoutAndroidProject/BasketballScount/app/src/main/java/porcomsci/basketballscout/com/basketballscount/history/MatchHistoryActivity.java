@@ -30,6 +30,7 @@ public class MatchHistoryActivity extends ActionBarActivity {
     private DatabaseHelper databaseHelper = null;
     ListView matchListView;
     List<String> matchList = new ArrayList<>();
+    List<Integer> matchIdList = new ArrayList<>();
     ArrayAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class MatchHistoryActivity extends ActionBarActivity {
                 School schoolB = match.getSchoolB();
                 schoolDao.refresh(schoolA);
                 schoolDao.refresh(schoolB);
+                matchIdList.add(match.getId());
                 matchList.add(schoolA.getName()+" - "+schoolB.getName());
             }
         } catch (SQLException e) {

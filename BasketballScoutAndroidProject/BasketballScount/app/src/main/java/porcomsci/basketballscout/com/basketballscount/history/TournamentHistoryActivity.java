@@ -31,6 +31,8 @@ public class TournamentHistoryActivity extends ActionBarActivity {
     private Dao<Tournament, Integer> tournamentDao = null;
     private ArrayAdapter adapter;
 
+    private List<Integer> tournamentIdList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +43,7 @@ public class TournamentHistoryActivity extends ActionBarActivity {
             List<Tournament> retrievedList = tournamentDao.queryForAll();
             for (Tournament tournament : retrievedList) {
                 tournamentList.add(tournament.getCompetitionName());
+                tournamentIdList.add(tournament.getId());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -60,13 +63,14 @@ public class TournamentHistoryActivity extends ActionBarActivity {
                 Intent intent = new Intent(getApplicationContext(), MatchHistoryActivity.class);
                 String tournamentId = "";
                 try {
-                    List<Tournament> retrievedList = tournamentDao.queryBuilder().where().
+                    /*List<Tournament> retrievedList = tournamentDao.queryBuilder().where().
                             eq("competitionName", tournamentList.get(position)).query();
-                   tournamentId =  String.valueOf(retrievedList.get(0).getId());
+                    tournamentId =  String.valueOf(retrievedList.get(0).getId());*/
+                    tournamentId = String.valueOf(tournamentIdList.get(position));
                     DBSaveHelper.historyTournamentId = tournamentId;
 
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
                 }
                 startActivity(intent);
             }
