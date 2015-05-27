@@ -54,7 +54,6 @@ public class PlayerChoosingActivity extends ActionBarActivity {
             retrieveDataFromDB();
             refreshListView();
             setUpButtonAdd();
-            setListViewOnItemClick();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -110,11 +109,10 @@ public class PlayerChoosingActivity extends ActionBarActivity {
                     System.out.println(e.getMessage());
                 }
                 DBSaveHelper.playerChoosingSequence = DBSaveHelper.playerChoosingSequence+1;
-//                if(DBSaveHelper.playerChoosingSequence==2) {
-//                    Intent intent = new Intent(getApplicationContext(), PlayerChoosingActivity.class);
-//                    startActivity(intent);
-//                }else if(DBSaveHelper.playerChoosingSequence>2){
-                if(DBSaveHelper.playerChoosingSequence>2){
+                if(DBSaveHelper.playerChoosingSequence==2) {
+                    Intent intent = new Intent(getApplicationContext(), PlayerChoosingActivity.class);
+                    startActivity(intent);
+                }else if(DBSaveHelper.playerChoosingSequence>2){
                     Intent intent = new Intent(getApplicationContext(), QuarterChoosingActivity.class);
                     startActivity(intent);
                 }
@@ -173,38 +171,9 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         selectedPosition.clear();
     }
 
-    private void setListViewOnItemClick(){
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                /*CheckBox listItemCheckBox = (CheckBox) view.findViewById(R.id.player_name_and_number_list_item_checkBox);
-                if( !listItemCheckBox.isChecked() )
-                {
-                    listItemCheckBox.setChecked(true);
-                    selectedPosition.add(position);
-                }
-                else
-                {
-                    listItemCheckBox.setChecked(false);
-                    selectedPosition.remove(selectedPosition.indexOf(position));
-                }*/
-                setClickablePlayerNumBox(position);
-
-            }
-        });
-
-    }
-
-    private void setClickablePlayerNumBox(int position)
-    {
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View itemView = inflater.inflate(R.layout.player_name_and_number_list_item, (ViewGroup) listView.getChildAt(position).getParent(), false);
-        EditText playerNumberEditText = (EditText) itemView.findViewById(R.id.player_name_and_number_list_item_player_number_editText);
-        playerNumberEditText.setClickable(true);
-    }
 
     private boolean isPassAllConditions(){
+        selectedPosition.clear();
         for(int i=0; i<listView.getCount(); i++)
         {
             CheckBox checkBox = (CheckBox) listView.getChildAt(i).findViewById(R.id.player_name_and_number_list_item_checkBox);
@@ -213,7 +182,6 @@ public class PlayerChoosingActivity extends ActionBarActivity {
                 selectedPosition.add(i);
             }
         }
-        Log.v("", selectedPosition.size() + " player(s) is selected");
         if(selectedPosition.size() < 5)
         {
             showAlertDialog("กรุณาเลือกผู้เล่นตั้งแต่ 5 คนขึ้นไป");
@@ -249,13 +217,6 @@ public class PlayerChoosingActivity extends ActionBarActivity {
                 getHelper().getMatchPlayerDao().create(matchPlayer);
             }
 
-/*            //save 5 selected players ID
-            for(int position : selectedPosition) {
-                int playerId = playerListFromDB.get(position);
-                *//**
-                 * implement to save 5 selected players ID here
-                 *//*
-            }*/
         }
     }
 
@@ -275,9 +236,7 @@ public class PlayerChoosingActivity extends ActionBarActivity {
     }
 
     private String getPlayerNumberAtListPosition (int position) {
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.player_name_and_number_list_item, (ViewGroup) listView.getChildAt(position).getParent(), false);
-        EditText playerNumberEditText = (EditText) view.findViewById(R.id.player_name_and_number_list_item_player_number_editText);
+        EditText playerNumberEditText = (EditText) listView.getChildAt(position).findViewById(R.id.player_name_and_number_list_item_player_number_editText);
         return playerNumberEditText.getText().toString();
     }
 
