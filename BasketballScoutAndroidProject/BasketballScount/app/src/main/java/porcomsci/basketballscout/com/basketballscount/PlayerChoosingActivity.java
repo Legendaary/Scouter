@@ -1,18 +1,23 @@
 package porcomsci.basketballscout.com.basketballscount;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
@@ -20,9 +25,12 @@ import com.j256.ormlite.dao.Dao;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import database.DBSaveHelper;
 import database.DatabaseHelper;
+import database.entities.MatchPlayer;
 import database.entities.Player;
 import database.entities.School;
 
@@ -31,10 +39,11 @@ public class PlayerChoosingActivity extends ActionBarActivity {
 
     ListView listView;
     ArrayList<PlayerChoosingItem> itemList;
-    List<Integer> selectedPosition, playerIdFromDB;
+    List<Integer> selectedPosition = new ArrayList<>();
+    List<Player> playerListFromDB;
     EditText editText;
     private DatabaseHelper databaseHelper = null;
-    private int schoolId;
+    private int schoolId, matchId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,12 +52,13 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         listView = (ListView) findViewById(R.id.player_choosing_listView);
         try {
             retrieveDataFromDB();
-            setListViewOnItemClick();
             refreshListView();
             setUpButtonAdd();
+            setListViewOnItemClick();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
 
     }
 
@@ -92,19 +102,19 @@ public class PlayerChoosingActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.button_ToNextActivity) {
-            // I don't understand this if condition
-            // what is the playerChoosingSequence mean?
-            DBSaveHelper.playerChoosingSequence = DBSaveHelper.playerChoosingSequence+1;
-            if(DBSaveHelper.playerChoosingSequence==2) {
-                Intent intent = new Intent(getApplicationContext(), PlayerChoosingActivity.class);
-                startActivity(intent);
-            }else if(DBSaveHelper.playerChoosingSequence>2){
-                // the next activity is QuarterChoosingActivity right?
-                // so, I put this code to check conditions and save data
-                // before go to the next activity
-                if(isPassAllConditions())
-                {
+            if(isPassAllConditions())
+            {
+                try {
                     saveData();
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+                DBSaveHelper.playerChoosingSequence = DBSaveHelper.playerChoosingSequence+1;
+//                if(DBSaveHelper.playerChoosingSequence==2) {
+//                    Intent intent = new Intent(getApplicationContext(), PlayerChoosingActivity.class);
+//                    startActivity(intent);
+//                }else if(DBSaveHelper.playerChoosingSequence>2){
+                if(DBSaveHelper.playerChoosingSequence>2){
                     Intent intent = new Intent(getApplicationContext(), QuarterChoosingActivity.class);
                     startActivity(intent);
                 }
@@ -115,20 +125,14 @@ public class PlayerChoosingActivity extends ActionBarActivity {
     }
 
     private void retrieveDataFromDB() throws SQLException {
-        itemList = new ArrayList<>();
+        matchId = DBSaveHelper.match.getId();
 
+        itemList = new ArrayList<>();
         Dao<Player,Integer> playerDao = getHelper().getPlayerDao();
         System.out.println("*********************schoolId for saint do : "+schoolId);
-        List<Player> retrievedList = playerDao.queryBuilder().where().
+        playerListFromDB = playerDao.queryBuilder().where().
                 eq("school_id",schoolId).query();
-        List<String> playerNameFromDB = new ArrayList<>();
-        playerIdFromDB = new ArrayList<>();
-        for (Player player : retrievedList) {
-            playerNameFromDB.add(player.getName()); 
-            /**
-             * retrieve player id or PK here
-             */
-//            playerIdFromDB.add(ID);
+        for (Player player : playerListFromDB) {
             itemList.add(new PlayerChoosingItem(player.getName(),""));
         }   
     }
@@ -150,27 +154,31 @@ public class PlayerChoosingActivity extends ActionBarActivity {
     }
 
     private void addNewName() throws SQLException {
-
-        String newPlayerName =   editText.getText().toString();
-        School school = new School();
-        school.setId(schoolId);
-        Player newPlayer = new Player();
-        newPlayer.setName(newPlayerName);
-        newPlayer.setSchool(school);
-        getHelper().getPlayerDao().create(newPlayer);
-        refreshListView();
+        String newPlayerName = editText.getText().toString();
+        if(newPlayerName.length() > 0)
+        {
+            School school = new School();
+            school.setId(schoolId);
+            Player newPlayer = new Player();
+            newPlayer.setName(newPlayerName);
+            newPlayer.setSchool(school);
+            getHelper().getPlayerDao().create(newPlayer);
+            refreshListView();
+        }
     }
 
     private void refreshListView() throws SQLException {
         retrieveDataFromDB();
         listView.setAdapter(new PlayerChoosingListAdapter(this, itemList));
+        selectedPosition.clear();
     }
 
     private void setListViewOnItemClick(){
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CheckBox listItemCheckBox = (CheckBox) view.findViewById(R.id.player_name_and_number_list_item_checkBox);
+                /*CheckBox listItemCheckBox = (CheckBox) view.findViewById(R.id.player_name_and_number_list_item_checkBox);
                 if( !listItemCheckBox.isChecked() )
                 {
                     listItemCheckBox.setChecked(true);
@@ -180,31 +188,45 @@ public class PlayerChoosingActivity extends ActionBarActivity {
                 {
                     listItemCheckBox.setChecked(false);
                     selectedPosition.remove(selectedPosition.indexOf(position));
-                }
+                }*/
+                setClickablePlayerNumBox(position);
+
             }
         });
 
     }
 
+    private void setClickablePlayerNumBox(int position)
+    {
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View itemView = inflater.inflate(R.layout.player_name_and_number_list_item, (ViewGroup) listView.getChildAt(position).getParent(), false);
+        EditText playerNumberEditText = (EditText) itemView.findViewById(R.id.player_name_and_number_list_item_player_number_editText);
+        playerNumberEditText.setClickable(true);
+    }
+
     private boolean isPassAllConditions(){
+        for(int i=0; i<listView.getCount(); i++)
+        {
+            CheckBox checkBox = (CheckBox) listView.getChildAt(i).findViewById(R.id.player_name_and_number_list_item_checkBox);
+            if(checkBox.isChecked())
+            {
+                selectedPosition.add(i);
+            }
+        }
+        Log.v("", selectedPosition.size() + " player(s) is selected");
         if(selectedPosition.size() < 5)
         {
-            showAlertDialog("กรุณาเลือกผู้เล่นตัวจริงให้ครบ 5 คน");
-            return false;
-        }
-        else if(selectedPosition.size() > 5)
-        {
-            showAlertDialog("กรุณาเลือกผู้เล่นตัวจริงเพียง 5 คนเท่านั้น");
+            showAlertDialog("กรุณาเลือกผู้เล่นตั้งแต่ 5 คนขึ้นไป");
             return false;
         }
         else
         {
-            for(int listPosition : selectedPosition )
+            for( int listPosition : selectedPosition )
             {
-                String playerNumberText = String.valueOf( listView.getChildAt(listPosition).findViewById(R.id.player_name_and_number_list_item_player_number_editText) );
+                String playerNumberText = getPlayerNumberAtListPosition(listPosition);
                 if(playerNumberText.length() == 0)
                 {
-                    showAlertDialog("กรุณากรอกหมายเลขของผู้เล่นตัวจริงให้ครบ 5 คน");
+                    showAlertDialog("กรุณากรอกหมายเลขผู้เล่นที่ถูกเลือกให้ครบ");
                     return false;
                 }
             }
@@ -212,31 +234,28 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         return true;
     }
 
-    private void saveData()
-    {
-        for(int i=0; i<listView.getCount(); i++)
+    private void saveData() throws SQLException {
+        for( int listPosition : selectedPosition)
         {
             // save players number
-            String playerNumberText = String.valueOf( listView.getChildAt(i).findViewById(R.id.player_name_and_number_list_item_player_number_editText) );
-            if(playerNumberText.length() == 0)
+            String playerNumberText = getPlayerNumberAtListPosition(listPosition);
+            if(playerNumberText.length() != 0)
             {
-                int playerId = playerIdFromDB.get(i);
-                int playerNumber = Integer.parseInt( playerNumberText );
-                /**
-                 * implement to save player number here
-                 */
-                //add playerNumber at playerId
+                Player player = playerListFromDB.get(listPosition);
+                Integer playerNumber = Integer.parseInt( playerNumberText );
+                MatchPlayer matchPlayer = new MatchPlayer();
+                matchPlayer.setPlayer(player);
+                matchPlayer.setPlayer_number(playerNumber);
+                getHelper().getMatchPlayerDao().create(matchPlayer);
             }
 
-            //save 5 selected players ID
-            for(int position : selectedPosition)
-            {
-                int playerId = playerIdFromDB.get(position);
-                /**
-                 * implement to 5 selected players ID here
-                 */
-                // set flag y at playerId
-            }
+/*            //save 5 selected players ID
+            for(int position : selectedPosition) {
+                int playerId = playerListFromDB.get(position);
+                *//**
+                 * implement to save 5 selected players ID here
+                 *//*
+            }*/
         }
     }
 
@@ -253,6 +272,13 @@ public class PlayerChoosingActivity extends ActionBarActivity {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private String getPlayerNumberAtListPosition (int position) {
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.player_name_and_number_list_item, (ViewGroup) listView.getChildAt(position).getParent(), false);
+        EditText playerNumberEditText = (EditText) view.findViewById(R.id.player_name_and_number_list_item_player_number_editText);
+        return playerNumberEditText.getText().toString();
     }
 
     @Override
