@@ -41,11 +41,11 @@
             android:label="@string/title_activity_manage_school_info" >
         </activity>
         <activity
-            android:name=".TournamentHistoryActivity"
+            android:name=".history.TournamentHistoryActivity"
             android:label="@string/title_activity_tournament_history" >
         </activity>
         <activity
-            android:name=".MatchHistoryActivity"
+            android:name=".history.MatchHistoryActivity"
             android:label="@string/title_activity_match_history" >
         </activity>
         <activity

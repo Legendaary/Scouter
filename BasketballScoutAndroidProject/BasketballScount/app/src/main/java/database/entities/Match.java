@@ -10,7 +10,7 @@ import java.util.Date;
 
 
 /**
- * Created by PorPaul on 17/3/2558.
+ * Created by PorPaul on 17/3./2558.
  */
 
 @DatabaseTable(tableName = "Match")
@@ -38,6 +38,8 @@ public class Match implements Serializable {
     private School schoolB;
     @DatabaseField (foreign = true,columnName = "tournament_id")
     private Tournament tournament;
+    @ForeignCollectionField
+    private Collection<Quater> quater = null;
 
 
     public Match(){
@@ -130,5 +132,13 @@ public class Match implements Serializable {
 
     public void setTournament(Tournament tournament) {
         this.tournament = tournament;
+    }
+
+    public Collection<Quater> getQuater() {
+        return quater;
+    }
+
+    public void setQuater(Collection<Quater> quater) {
+        this.quater = quater;
     }
 }//end class

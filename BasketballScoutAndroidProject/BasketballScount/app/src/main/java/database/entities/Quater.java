@@ -25,6 +25,9 @@ public class Quater {
     private Integer foulA;
     @DatabaseField
     private Integer foulB;
+    @DatabaseField (foreign = true,columnName = "match_id")
+    private Match match;
+
 
     public int getId() {
         return id;
@@ -90,6 +93,11 @@ public class Quater {
         this.foulB = foulB;
     }
 
+    public Match getMatch() {
+        return match;
+    }
 
-
+    public void setMatch(Match match) {
+        this.match = match;
+    }
 }
