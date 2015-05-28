@@ -17,7 +17,7 @@ public class PlayerChoosingItem {
         return this.playerName;
     }
 
-    String playerNumber(){
+    String getPlayerNumber(){
         return this.playerNumber;
     }
 
