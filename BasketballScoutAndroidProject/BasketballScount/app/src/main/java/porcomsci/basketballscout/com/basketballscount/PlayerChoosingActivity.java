@@ -213,7 +213,7 @@ public class PlayerChoosingActivity extends ActionBarActivity {
                 Integer playerNumber = Integer.parseInt( playerNumberText );
                 MatchPlayer matchPlayer = new MatchPlayer();
                 matchPlayer.setPlayer(player);
-                matchPlayer.setPlayer_number(playerNumber);
+//                matchPlayer.setPlayer_number(playerNumber);
                 getHelper().getMatchPlayerDao().create(matchPlayer);
             }
 
