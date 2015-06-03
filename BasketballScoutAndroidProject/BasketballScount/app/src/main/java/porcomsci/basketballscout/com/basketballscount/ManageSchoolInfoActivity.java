@@ -33,7 +33,7 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
     private DatabaseHelper databaseHelper = null;
     private  Dao<School,Integer> schoolDao = null;
 
-    AlertDialog editOrDeleteDialog;
+    AlertDialog editOrDeleteDialog; // dialog options to edit/delete school name, manage players
     int selectedPosition = 0; //selected position of ListView (which school name is selected to edit/delete)
 
     @Override
@@ -112,39 +112,27 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
     }
 
     private void setUpEditOrDeleteDialog(){
-        /*  custom dialog
-         *
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = this.getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.edit_or_delete_dialog, null));
 
-        // Create the AlertDialog object and return it
-        dialog = builder.create();
-         */
-        String[] options = { "Edit School Name" , "Delete School" , "Manage Players" };
+        String[] options = { "แก้ไขชื่อโรงเรียน" , "ลบชื่อโรงเรียน" , "แก้ไขรายชื่อผู้เล่น" };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setItems(options, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 // The 'which' argument contains the index position
                 // of the selected item
-                if(which == 0) // edit
+                if(which == 0) // edit school name
                 {
-                    AlertDialog editSchoolNameDialog = setUpEditSchoolNameDialog();
-                    editSchoolNameDialog.show();
+                    showEditSchoolNameDialog();
                 }
-                else if(which==1) // delete
+                else if(which==1) // delete school name
                 {
-                    try {
-                        deleteSchoolName();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }else{
+                    showDeleteSchoolNameDialog();
+                }
+                else //manage player
+                {
 
 
-
-                }//manage player
+                }
 
             }
         });
@@ -167,14 +155,14 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
         });
     }
 
-    private AlertDialog setUpEditSchoolNameDialog(){
+    private void showEditSchoolNameDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final EditText schoolName = new EditText(this);
         schoolName.setText(schoolList.get(selectedPosition));
         schoolName.setWidth(250);
         builder.setView(schoolName)
-                .setTitle("Edit School Name")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.edit_school_name)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
@@ -184,13 +172,13 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
                         }
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
                     }
                 });
-        return builder.create();
+        builder.create().show();
     }
 
     private void updateSchoolName(String schoolName) throws SQLException {
@@ -214,6 +202,28 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
         schoolDao.delete(retrievedList.get(0));
         retrieveSchoolListFromDB();
         refreshListView();
+    }
+
+    private void showDeleteSchoolNameDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.delete_school_name)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            deleteSchoolName();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+        builder.create().show();
     }
 
     @Override

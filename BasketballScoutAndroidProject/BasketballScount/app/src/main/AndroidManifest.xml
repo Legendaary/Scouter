@@ -34,7 +34,8 @@
         </activity>
         <activity
             android:name=".PlayerChoosingActivity"
-            android:label="@string/title_activity_player_choosing" >
+            android:label="@string/title_activity_player_choosing"
+            android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
             android:name=".ManageSchoolInfoActivity"
