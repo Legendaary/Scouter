@@ -70,6 +70,15 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         DeleteBuilder<MatchPlayer, Integer> deleteBuilder = matchPlayerDao.deleteBuilder();
         deleteBuilder.where().eq("match_id",DBSaveHelper.match).and().eq("schoolId", schoolId);
         deleteBuilder.delete();
+
+        System.out.println("count : "+getHelper().getMatchPlayerDao().countOf());
+        List<MatchPlayer> matchPlayerList = getHelper().getMatchPlayerDao().queryForAll();
+        for (MatchPlayer matchPlayer : matchPlayerList) {
+            System.out.println("match  id : "+matchPlayer.getMatch().getId());
+            System.out.println("player name : "+matchPlayer.getPlayer().getName());
+            System.out.println("school id : "+matchPlayer.getSchoolId());
+        }
+
     }
 
     /**
