@@ -1,4 +1,4 @@
-package porcomsci.basketballscout.com.basketballscount;
+package porcomsci.basketballscout.com.basketballscount.menu;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -17,6 +17,10 @@ import java.util.ArrayList;
 import database.DBSaveHelper;
 import database.DatabaseHelper;
 import database.entities.Tournament;
+import porcomsci.basketballscout.com.basketballscount.ManageSchoolInfoActivity;
+import porcomsci.basketballscout.com.basketballscount.MatchActivity;
+import porcomsci.basketballscout.com.basketballscount.R;
+import porcomsci.basketballscout.com.basketballscount.TournamentActivity;
 import porcomsci.basketballscout.com.basketballscount.history.TournamentHistoryActivity;
 
 public class MainActivity extends ActionBarActivity {

@@ -44,7 +44,7 @@ public class SchoolListActivity extends ActionBarActivity {
                 schoolIdList.add(school.getId());
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         adapter = new ArrayAdapter(this,
                 android.R.layout.simple_list_item_1, schoolList);

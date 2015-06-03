@@ -5,7 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.InputType;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.ListView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.DeleteBuilder;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ import database.DatabaseHelper;
 import database.entities.MatchPlayer;
 import database.entities.Player;
 import database.entities.School;
+import porcomsci.basketballscout.com.basketballscount.utility.SegueHelper;
 
 
 public class PlayerChoosingActivity extends ActionBarActivity {
@@ -42,6 +45,7 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_choosing);
         determineSchoolId();
+        clearAllPreviousSaveForMatchSchoolPlayer();
         listView = (ListView) findViewById(R.id.player_choosing_listView);
         try {
             retrieveDataFromDB();
@@ -50,33 +54,43 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
 
+    /**
+     * clear all previous saved regarding inconsistency or error that might be caused by onBackPressed.
+     * clear all data to prepare to save new one.
+     */
+    private void clearAllPreviousSaveForMatchSchoolPlayer() throws SQLException {
 
+        Dao<MatchPlayer, Integer> matchPlayerDao = getHelper().getMatchPlayerDao();
+        DeleteBuilder<MatchPlayer, Integer> deleteBuilder = matchPlayerDao.deleteBuilder();
+        deleteBuilder.where().eq("match_id",DBSaveHelper.match).and().eq("schoolId",schoolId);
+        deleteBuilder.delete();
+    }
+
+    /**
+     * overide hardware back button
+     */
+    public void onBackPressed(){
+        SegueHelper.playerChoosingSequence--;
     }
 
     /**
      * find school id from application flow then set the school name to title bar.
      */
     private void determineSchoolId() {
-        if(DBSaveHelper.playerChoosingSequence==1){
+        if(SegueHelper.playerChoosingSequence==1){
+
+            getSupportActionBar().setTitle(DBSaveHelper.school1.getName());
             schoolId = DBSaveHelper.school1Id;
-            setTitleFromSchoolId();
-        }else if(DBSaveHelper.playerChoosingSequence==2){
+
+        }else if(SegueHelper.playerChoosingSequence==2){
+
+            getSupportActionBar().setTitle(DBSaveHelper.school2.getName());
             schoolId = DBSaveHelper.school2Id;
-            setTitleFromSchoolId();
+
         }
     }
-
-    private void setTitleFromSchoolId() {
-        School school = null;
-        try {
-            school = getHelper().getSchoolDao().queryForId(schoolId);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        getSupportActionBar().setTitle(school.getName());
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -101,11 +115,11 @@ public class PlayerChoosingActivity extends ActionBarActivity {
                 } catch (SQLException e) {
                     System.out.println(e.getMessage());
                 }
-                DBSaveHelper.playerChoosingSequence = DBSaveHelper.playerChoosingSequence+1;
-                if(DBSaveHelper.playerChoosingSequence==2) {
+                SegueHelper.playerChoosingSequence++;
+                if(SegueHelper.playerChoosingSequence==2) {
                     Intent intent = new Intent(getApplicationContext(), PlayerChoosingActivity.class);
                     startActivity(intent);
-                }else if(DBSaveHelper.playerChoosingSequence>2){
+                }else if(SegueHelper.playerChoosingSequence>2){
                     Intent intent = new Intent(getApplicationContext(), QuarterChoosingActivity.class);
                     startActivity(intent);
                 }

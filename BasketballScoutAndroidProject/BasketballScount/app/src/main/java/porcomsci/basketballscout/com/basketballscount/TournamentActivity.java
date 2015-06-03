@@ -68,11 +68,9 @@ public class TournamentActivity extends ActionBarActivity {
      * send the id to next activity.
      */
     private void saveDataAndSendIdToNextActivity() throws SQLException {
-        EditText tournamentTextBox = (EditText) findViewById(R.id.tournament_tournament_name_editText);
-        EditText numOfMatchesTextBox = (EditText) findViewById(R.id.tournament_number_of_matches_editText);
+
         Tournament tournament  = new Tournament();
-        tournament.setCompetitionName( tournamentTextBox.getText().toString());
-        tournament.setMatchNumber(Integer.valueOf(numOfMatchesTextBox.getText().toString()));
+        setValueAndCheckNull(tournament);
         //save and get id
         Dao<Tournament,Integer> tournamentDao = getHelper().getTournamentDao();
         tournamentDao.create(tournament);
@@ -80,6 +78,18 @@ public class TournamentActivity extends ActionBarActivity {
         Intent intent = new Intent(getApplicationContext(),MatchActivity.class);
         DBSaveHelper.tournament = tournament;
         startActivity(intent);
+    }
+
+    private void setValueAndCheckNull(Tournament tournament) {
+        EditText tournamentTextBox = (EditText) findViewById(R.id.tournament_tournament_name_editText);
+        EditText numOfMatchesTextBox = (EditText) findViewById(R.id.tournament_number_of_matches_editText);
+
+        if(tournamentTextBox.getText()!=null){
+            tournament.setCompetitionName( tournamentTextBox.getText().toString());
+        }
+        if(numOfMatchesTextBox.getText()!=null) {
+            tournament.setMatchNumber(Integer.valueOf(numOfMatchesTextBox.getText().toString()));
+        }
     }
 
     @Override
