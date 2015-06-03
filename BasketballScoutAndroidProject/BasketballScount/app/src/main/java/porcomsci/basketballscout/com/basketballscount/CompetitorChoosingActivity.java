@@ -20,17 +20,19 @@ import database.DBSaveHelper;
 import database.DatabaseHelper;
 import database.entities.Match;
 import database.entities.School;
+import porcomsci.basketballscout.com.basketballscount.utility.SegueHelper;
 
 public class CompetitorChoosingActivity extends ActionBarActivity {
 
     private Match match = DBSaveHelper.match;
     private DatabaseHelper databaseHelper = null;
+    private School school1 = DBSaveHelper.school1;
+    private School school2 = DBSaveHelper.school2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("เลือกทีมแข่งขัน");
         setContentView(R.layout.activity_competitor_choosing);
-        checkReadyToGo();
         Button buttonTeamA = (Button) findViewById(R.id.button_team_a);
         buttonTeamA.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,26 +52,36 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
+        checkReadyToGo();
     }
 
-    private void checkReadyToGo() {
+    private void checkReadyToGo()  {
         String comeFromTeam = getIntent().getStringExtra("teamChosen");
         try {
         if(comeFromTeam!=null) {
             if (comeFromTeam.equalsIgnoreCase("1")) {
-                DBSaveHelper.team1Chosen = true;
-                School school1 = getHelper().getSchoolDao().queryForId(Integer.valueOf( DBSaveHelper.school1Id));
+                SegueHelper.team1Chosen = true;
+                school1 = getHelper().getSchoolDao().queryForId(Integer.valueOf( DBSaveHelper.school1Id));
                 match.setSchoolA(school1);
-                getHelper().getMatchDao().update(match);
+                int rowUpdated = getHelper().getMatchDao().update(match);
+                getHelper().getMatchDao().refresh(match);
+                if( 1 != rowUpdated){
+                    new Exception("Update School in Match Error");
+                }
+
             } else if (comeFromTeam.equalsIgnoreCase("2")) {
-                DBSaveHelper.team2Chosen = true;
-                School school2 = getHelper().getSchoolDao().queryForId(Integer.valueOf( DBSaveHelper.school2Id));
+                SegueHelper.team2Chosen = true;
+                school2 = getHelper().getSchoolDao().queryForId(Integer.valueOf( DBSaveHelper.school2Id));
                 match.setSchoolB(school2);
-                getHelper().getMatchDao().update(match);
+                int rowUpdated = getHelper().getMatchDao().update(match);
+                if( 1 != rowUpdated){
+                    new Exception("Update School in Match Error");
+                }
+                getHelper().getMatchDao().refresh(match);
             }
                 }//end check not null
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
 
     }
@@ -91,14 +103,18 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.button_ToNextActivity) {
-            if(DBSaveHelper.team1Chosen&& DBSaveHelper.team2Chosen){
-            Intent intent = new Intent(getApplicationContext(),PlayerChoosingActivity.class);
-            DBSaveHelper.playerChoosingSequence = 1;
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            DBSaveHelper.team1Chosen = false;
-            DBSaveHelper.team2Chosen = false;
-            startActivity(intent);
-            }else{
+
+            if(SegueHelper.team1Chosen&& SegueHelper.team2Chosen){
+
+                Intent intent = new Intent(getApplicationContext(),PlayerChoosingActivity.class);
+                SegueHelper.playerChoosingSequence = 1;
+                //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                SegueHelper.team1Chosen = false;
+                SegueHelper.team2Chosen = false;
+                startActivity(intent);
+
+            }else
+               {
                 new AlertDialog.Builder(this)
                         .setTitle("Alert")
                         .setMessage("โปรดเลือกทั้ง 2 ทีมก่อน!").setNegativeButton("ok", new DialogInterface.OnClickListener() {
@@ -108,6 +124,8 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
                 })
                         .show();
             }
+
+
         }
 
         return super.onOptionsItemSelected(item);

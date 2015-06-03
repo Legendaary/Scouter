@@ -78,26 +78,42 @@ public class MatchActivity extends ActionBarActivity {
 
     private void saveDataAndGo() throws SQLException {
 
-        EditText matchNumberTextBox = (EditText) findViewById(R.id.match_matchNumber_editText);
-        EditText dateTextBox = (EditText) findViewById(R.id.match_date_editText);
-        EditText timeTextBox = (EditText) findViewById(R.id.match_time_editText);
-        EditText placeTextBox = (EditText) findViewById(R.id.match_place_editText);
-        EditText refereeTextBox = (EditText) findViewById(R.id.match_referee_editText);
-        EditText umpireTextBox = (EditText) findViewById(R.id.match_umpire_editText);
-
         //save data
         Dao<Match, Integer> matchDao = getHelper().getMatchDao();
         Tournament parent = DBSaveHelper.tournament;
         Match childMatch = new Match();
-        childMatch.setMatchNumber(Integer.valueOf(matchNumberTextBox.getText().toString()));
-        // childMatch.setPlace(placeTextBox.getText().toString());
-        // childMatch.setReferee(refereeTextBox.getText().toString());
+        saveValueAndCheckNull(childMatch);
         childMatch.setTournament(parent);
         matchDao.create(childMatch);
         matchDao.refresh(childMatch);
         DBSaveHelper.match = childMatch;
         Intent intent = new Intent(getApplicationContext(), CompetitorChoosingActivity.class);
         startActivity(intent);
+    }
+
+    private void saveValueAndCheckNull(Match childMatch) {
+
+        EditText matchNumberTextBox = (EditText) findViewById(R.id.match_matchNumber_editText);
+        EditText placeTextBox = (EditText) findViewById(R.id.match_place_editText);
+        EditText refereeTextBox = (EditText) findViewById(R.id.match_referee_editText);
+        EditText umpireTextBox = (EditText) findViewById(R.id.match_umpire_editText);
+
+        if(null != matchNumberTextBox.getText()) {
+            childMatch.setMatchNumber(Integer.valueOf(matchNumberTextBox.getText().toString()));
+        }
+        if(null != placeTextBox.getText()) {
+            childMatch.setPlace(placeTextBox.getText().toString());
+        }
+        if(null != refereeTextBox.getText()) {
+            childMatch.setReferee(refereeTextBox.getText().toString());
+        }
+        if(null != umpireTextBox.getText()) {
+            childMatch.setUmpire(umpireTextBox.getText().toString());
+        }
+
+        EditText dateTextBox = (EditText) findViewById(R.id.match_date_editText);
+        EditText timeTextBox = (EditText) findViewById(R.id.match_time_editText);
+
     }
 
     private void setUpDateDialog() {
