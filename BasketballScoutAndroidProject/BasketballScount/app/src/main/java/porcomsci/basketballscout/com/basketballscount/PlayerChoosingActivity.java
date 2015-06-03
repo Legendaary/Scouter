@@ -1,7 +1,6 @@
 package porcomsci.basketballscout.com.basketballscount;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -11,13 +10,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
@@ -26,8 +23,6 @@ import com.j256.ormlite.stmt.DeleteBuilder;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import database.DBSaveHelper;
 import database.DatabaseHelper;
@@ -43,7 +38,6 @@ public class PlayerChoosingActivity extends ActionBarActivity {
     ArrayList<PlayerChoosingItem> itemList;
     List<Integer> selectedPosition = new ArrayList<>();
     List<Player> playerListFromDB;
-    EditText editText;
     private DatabaseHelper databaseHelper = null;
     private int schoolId, matchId;
     @Override
@@ -149,23 +143,41 @@ public class PlayerChoosingActivity extends ActionBarActivity {
     }
 
     private void setUpButtonAdd(){
-        editText = (EditText) findViewById(R.id.player_choosing_editText);
         Button buttonAdd = (Button) findViewById(R.id.player_choosing_button_add);
         buttonAdd.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    addNewName();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                editText.setText("");
+                showAddPlayerNameDialog();
             }
         });
     }
 
-    private void addNewName() throws SQLException {
-        String newPlayerName = editText.getText().toString();
+    private void showAddPlayerNameDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final EditText playerName = new EditText(this);
+        playerName.setWidth(250);
+        builder.setView(playerName)
+                .setTitle(R.string.add_new_player_name)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            addNewName(playerName.getText().toString());
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+        builder.create().show();
+    }
+
+    private void addNewName(String newPlayerName) throws SQLException {
         if(newPlayerName.length() > 0)
         {
             School school = new School();
@@ -183,7 +195,6 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         listView.setAdapter(new PlayerChoosingListAdapter(this, itemList));
         selectedPosition.clear();
     }
-
 
     private boolean isPassAllConditions(){
         selectedPosition.clear();
@@ -226,7 +237,7 @@ public class PlayerChoosingActivity extends ActionBarActivity {
                 Integer playerNumber = Integer.parseInt( playerNumberText );
                 MatchPlayer matchPlayer = new MatchPlayer();
                 matchPlayer.setPlayer(player);
-               // matchPlayer.setPlayer_number(playerNumber);
+//                matchPlayer.setPlayer_number(playerNumber);
                 getHelper().getMatchPlayerDao().create(matchPlayer);
             }
 
@@ -237,7 +248,7 @@ public class PlayerChoosingActivity extends ActionBarActivity {
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(message);
-        builder.setPositiveButton("ตกลง",
+        builder.setPositiveButton(R.string.ok,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
