@@ -45,7 +45,11 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_choosing);
         determineSchoolId();
-        clearAllPreviousSaveForMatchSchoolPlayer();
+        try {
+            clearAllPreviousSaveForMatchSchoolPlayer();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
         listView = (ListView) findViewById(R.id.player_choosing_listView);
         try {
             retrieveDataFromDB();
@@ -64,8 +68,17 @@ public class PlayerChoosingActivity extends ActionBarActivity {
 
         Dao<MatchPlayer, Integer> matchPlayerDao = getHelper().getMatchPlayerDao();
         DeleteBuilder<MatchPlayer, Integer> deleteBuilder = matchPlayerDao.deleteBuilder();
-        deleteBuilder.where().eq("match_id",DBSaveHelper.match).and().eq("schoolId",schoolId);
+        deleteBuilder.where().eq("match_id",DBSaveHelper.match).and().eq("schoolId", schoolId);
         deleteBuilder.delete();
+
+        System.out.println("count : "+getHelper().getMatchPlayerDao().countOf());
+        List<MatchPlayer> matchPlayerList = getHelper().getMatchPlayerDao().queryForAll();
+        for (MatchPlayer matchPlayer : matchPlayerList) {
+            System.out.println("match  id : "+matchPlayer.getMatch().getId());
+            System.out.println("player name : "+matchPlayer.getPlayer().getName());
+            System.out.println("school id : "+matchPlayer.getSchoolId());
+        }
+
     }
 
     /**
