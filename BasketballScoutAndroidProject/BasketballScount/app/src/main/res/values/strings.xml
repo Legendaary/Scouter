@@ -40,5 +40,6 @@
     <!--PlayerChoosingActivity-->
     <string name="add_new_player_name">เพิ่มผู้เล่น</string>
     <string name="add_new_player_number">ป้อนหมายเลขผู้เล่น</string>
+    <string name="title_activity_match_record">MatchRecordActivity</string>
 
 </resources>
