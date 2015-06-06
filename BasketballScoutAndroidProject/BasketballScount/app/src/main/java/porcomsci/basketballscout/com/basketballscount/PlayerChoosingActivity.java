@@ -43,7 +43,7 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         setContentView(R.layout.activity_player_choosing);
         determineSchoolId();
         try {
-            clearAllPreviousSaveForMatchSchoolPlayer();
+            debugMatchPlayerValue();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -61,18 +61,13 @@ public class PlayerChoosingActivity extends ActionBarActivity {
      * clear all previous saved regarding inconsistency or error that might be caused by onBackPressed.
      * clear all data to prepare to save new one.
      */
-    private void clearAllPreviousSaveForMatchSchoolPlayer() throws SQLException {
-
-        Dao<MatchPlayer, Integer> matchPlayerDao = getHelper().getMatchPlayerDao();
-        DeleteBuilder<MatchPlayer, Integer> deleteBuilder = matchPlayerDao.deleteBuilder();
-        deleteBuilder.where().eq("match_id",DBSaveHelper.match).and().eq("schoolId", schoolId);
-        deleteBuilder.delete();
+    private void debugMatchPlayerValue() throws SQLException {
 
         System.out.println("count : "+getHelper().getMatchPlayerDao().countOf());
         List<MatchPlayer> matchPlayerList = getHelper().getMatchPlayerDao().queryForAll();
         for (MatchPlayer matchPlayer : matchPlayerList) {
             System.out.println("match  id : "+matchPlayer.getMatch().getId());
-            System.out.println("player name : "+matchPlayer.getPlayer().getName());
+            System.out.println("player id : "+matchPlayer.getPlayer().getId());
             System.out.println("school id : "+matchPlayer.getSchoolId());
         }
 
@@ -81,8 +76,24 @@ public class PlayerChoosingActivity extends ActionBarActivity {
     /**
      * overide hardware back button
      */
+    @Override
     public void onBackPressed(){
+        super.onBackPressed();
+        deleteExistingRecords();
         SegueHelper.playerChoosingSequence--;
+    }
+
+
+    public void deleteExistingRecords(){
+        Dao<MatchPlayer, Integer> matchPlayerDao = null;
+        try {
+            matchPlayerDao = getHelper().getMatchPlayerDao();
+            DeleteBuilder<MatchPlayer, Integer> deleteBuilder = matchPlayerDao.deleteBuilder();
+            deleteBuilder.where().eq("match_id",DBSaveHelper.match).and().eq("schoolId", schoolId);
+            deleteBuilder.delete();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     /**
@@ -241,6 +252,8 @@ public class PlayerChoosingActivity extends ActionBarActivity {
                 MatchPlayer matchPlayer = new MatchPlayer();
                 matchPlayer.setPlayer(player);
                 matchPlayer.setPlayerNumber(playerNumber);
+                matchPlayer.setSchoolId(schoolId);
+                matchPlayer.setMatch(DBSaveHelper.match);
                 getHelper().getMatchPlayerDao().create(matchPlayer);
             }
 
@@ -341,6 +354,39 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         List<MatchPlayer> selectedPlayerList = getSelectedPlayerList();
 
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.button_ToNextActivity) {
+            if(isPassAllConditions())
+            {
+                try {
+                    deleteExistingRecords();
+                    saveData();
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+                SegueHelper.playerChoosingSequence++;
+                if(SegueHelper.playerChoosingSequence==2) {
+                    Intent intent = new Intent(getApplicationContext(), PlayerChoosingActivity.class);
+                    startActivity(intent);
+                }else if(SegueHelper.playerChoosingSequence>2){
+                    Intent intent = new Intent(getApplicationContext(), QuarterChoosingActivity.class);
+                    startActivity(intent);
+                }
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
 
     @Override
