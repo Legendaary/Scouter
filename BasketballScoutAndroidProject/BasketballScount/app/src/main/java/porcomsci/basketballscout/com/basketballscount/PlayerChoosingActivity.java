@@ -3,14 +3,11 @@ package porcomsci.basketballscout.com.basketballscount;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -125,16 +122,9 @@ public class PlayerChoosingActivity extends ActionBarActivity {
             {
                 try {
                     saveData();
+                    showStartUpPlayerPopUp();
                 } catch (SQLException e) {
                     System.out.println(e.getMessage());
-                }
-                SegueHelper.playerChoosingSequence++;
-                if(SegueHelper.playerChoosingSequence==2) {
-                    Intent intent = new Intent(getApplicationContext(), PlayerChoosingActivity.class);
-                    startActivity(intent);
-                }else if(SegueHelper.playerChoosingSequence>2){
-                    Intent intent = new Intent(getApplicationContext(), QuarterChoosingActivity.class);
-                    startActivity(intent);
                 }
             }
         }
@@ -157,7 +147,7 @@ public class PlayerChoosingActivity extends ActionBarActivity {
 
     private void setUpButtonAdd(){
         Button buttonAdd = (Button) findViewById(R.id.player_choosing_button_add);
-        buttonAdd.setOnClickListener( new View.OnClickListener() {
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showAddPlayerNameDialog();
@@ -250,7 +240,7 @@ public class PlayerChoosingActivity extends ActionBarActivity {
                 Integer playerNumber = Integer.parseInt( playerNumberText );
                 MatchPlayer matchPlayer = new MatchPlayer();
                 matchPlayer.setPlayer(player);
-//                matchPlayer.setPlayer_number(playerNumber);
+                matchPlayer.setPlayerNumber(playerNumber);
                 getHelper().getMatchPlayerDao().create(matchPlayer);
             }
 
@@ -264,7 +254,7 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         builder.setPositiveButton(R.string.ok,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
+                        dialog.dismiss();
                     }
                 });
 
@@ -276,6 +266,82 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         EditText playerNumberEditText = (EditText) listView.getChildAt(position).findViewById(R.id.player_name_and_number_list_item_player_number_editText);
         return playerNumberEditText.getText().toString();
     }
+
+    private void showStartUpPlayerPopUp()
+    {
+        String[] playerName =  getSelectedPlayerName();
+        final ArrayList<Integer> selectedItems = new ArrayList();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("เลือก 5 ผู้เล่นตัวจริง")
+                .setMultiChoiceItems( playerName, null, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                        if( isChecked )
+                        {
+                            selectedItems.add( which );
+                        }
+                        else
+                        {
+                            selectedItems.remove( which );
+                        }
+                    }
+                })
+                .setPositiveButton(R.string.ok,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                saveStartUpPlayer( selectedItems );
+                                //go to next activity
+                                SegueHelper.playerChoosingSequence++;
+                                if(SegueHelper.playerChoosingSequence==2) {
+                                    Intent intent = new Intent(getApplicationContext(), PlayerChoosingActivity.class);
+                                    startActivity(intent);
+                                }else if(SegueHelper.playerChoosingSequence>2){
+                                    Intent intent = new Intent(getApplicationContext(), QuarterChoosingActivity.class);
+                                    startActivity(intent);
+                                }
+                            }
+                        })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+
+    private String[] getSelectedPlayerName()
+    {
+//        List<MatchPlayer> selectedPlayerList = getSelectedPlayerList();
+//        String[] playerName = new String[selectedPlayerList.size()];
+//        for(int i=0; i<selectedPlayerList.size(); i++)
+//        {
+//            playerName[i] = selectedPlayerList.get(i).getPlayer().getName();
+//        }
+//        return playerName;
+        return new String[1];
+    }
+
+
+    private List<MatchPlayer> getSelectedPlayerList()
+    {
+        /**
+         * Retrieve selected player of this match
+         */
+//        List<MatchPlayer> selectedPlayerList = //Retrieve MatchPlayer here// ;
+//        return selectedPlayerList;
+        return new ArrayList<>();
+    }
+
+    private void saveStartUpPlayer( ArrayList<Integer> selectedItems )
+    {
+        List<MatchPlayer> selectedPlayerList = getSelectedPlayerList();
+
+    }
+
 
     @Override
     protected void onDestroy() {
