@@ -27,7 +27,7 @@ public class SchoolListActivity extends ActionBarActivity {
     private DatabaseHelper databaseHelper = null;
     ListView schoolListView;
     List<String> schoolList = new ArrayList<>();
-    List<Integer> schoolIdList = new ArrayList<>();
+    List<School> schoolIdList = new ArrayList<>();
     ArrayAdapter adapter;
 
     @Override
@@ -41,7 +41,7 @@ public class SchoolListActivity extends ActionBarActivity {
             List<School> retrievedList  =  schoolDao.queryForAll();
             for (School school : retrievedList) {
                 schoolList.add(school.getName());
-                schoolIdList.add(school.getId());
+                schoolIdList.add(school);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -62,13 +62,15 @@ public class SchoolListActivity extends ActionBarActivity {
     }
 
     public void clickAtSchoolName(int pos){
-        int schoolId = schoolIdList.get(pos);
+        int schoolId = schoolIdList.get(pos).getId();
         Intent intent = new Intent(getApplicationContext(),CompetitorChoosingActivity.class);
         if(getIntent().getStringExtra("chooseTeam").equalsIgnoreCase("1")){
             DBSaveHelper.school1Id = schoolId;
+            DBSaveHelper.school1 = schoolIdList.get(pos);
             System.out.println("*********************schoolId for 1 : "+schoolId);
         }else if(getIntent().getStringExtra("chooseTeam").equalsIgnoreCase("2")){
             DBSaveHelper.school2Id = schoolId;
+            DBSaveHelper.school2 = schoolIdList.get(pos);
             System.out.println("*********************schoolId for 2 : "+schoolId);
         }
         intent.putExtra("teamChosen",getIntent().getStringExtra("chooseTeam"));

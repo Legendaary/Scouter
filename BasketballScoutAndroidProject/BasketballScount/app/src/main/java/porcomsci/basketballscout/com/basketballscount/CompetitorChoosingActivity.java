@@ -61,8 +61,7 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
         if(comeFromTeam!=null) {
             if (comeFromTeam.equalsIgnoreCase("1")) {
                 SegueHelper.team1Chosen = true;
-                school1 = getHelper().getSchoolDao().queryForId(Integer.valueOf( DBSaveHelper.school1Id));
-                match.setSchoolA(school1);
+                match.setSchoolA(DBSaveHelper.school1);
                 int rowUpdated = getHelper().getMatchDao().update(match);
                 getHelper().getMatchDao().refresh(match);
                 if( 1 != rowUpdated){
@@ -71,8 +70,7 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
 
             } else if (comeFromTeam.equalsIgnoreCase("2")) {
                 SegueHelper.team2Chosen = true;
-                school2 = getHelper().getSchoolDao().queryForId(Integer.valueOf( DBSaveHelper.school2Id));
-                match.setSchoolB(school2);
+                match.setSchoolB(DBSaveHelper.school2);
                 int rowUpdated = getHelper().getMatchDao().update(match);
                 if( 1 != rowUpdated){
                     new Exception("Update School in Match Error");
