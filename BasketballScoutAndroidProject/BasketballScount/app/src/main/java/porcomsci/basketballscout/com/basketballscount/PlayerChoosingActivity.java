@@ -24,6 +24,7 @@ import java.util.List;
 
 import database.DBSaveHelper;
 import database.DatabaseHelper;
+import database.entities.Match;
 import database.entities.MatchPlayer;
 import database.entities.Player;
 import database.entities.School;
@@ -36,6 +37,7 @@ public class PlayerChoosingActivity extends ActionBarActivity {
     ArrayList<PlayerChoosingItem> itemList;
     List<Integer> selectedPosition = new ArrayList<>();
     List<Player> playerListFromDB;
+    Dao<MatchPlayer, Integer> matchPlayerDao = null;
     private DatabaseHelper databaseHelper = null;
     private int schoolId, matchId;
 
@@ -43,12 +45,12 @@ public class PlayerChoosingActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_choosing);
-        determineSchoolId();
         try {
-            debugMatchPlayerValue();
+            matchPlayerDao = getHelper().getMatchPlayerDao();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        determineSchoolId();
         listView = (ListView) findViewById(R.id.player_choosing_listView);
         try {
             retrieveDataFromDB();
@@ -57,22 +59,6 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * clear all previous saved regarding inconsistency or error that might be caused by onBackPressed.
-     * clear all data to prepare to save new one.
-     */
-    private void debugMatchPlayerValue() throws SQLException {
-
-        System.out.println("count : " + getHelper().getMatchPlayerDao().countOf());
-        List<MatchPlayer> matchPlayerList = getHelper().getMatchPlayerDao().queryForAll();
-        for (MatchPlayer matchPlayer : matchPlayerList) {
-            System.out.println("match  id : " + matchPlayer.getMatch().getId());
-            System.out.println("player id : " + matchPlayer.getPlayer().getId());
-            System.out.println("school id : " + matchPlayer.getSchoolId());
-        }
-
     }
 
     /**
@@ -87,12 +73,15 @@ public class PlayerChoosingActivity extends ActionBarActivity {
 
 
     public void deleteExistingRecords() {
-        Dao<MatchPlayer, Integer> matchPlayerDao = null;
+
         try {
-            matchPlayerDao = getHelper().getMatchPlayerDao();
             DeleteBuilder<MatchPlayer, Integer> deleteBuilder = matchPlayerDao.deleteBuilder();
-            deleteBuilder.where().eq("match_id", DBSaveHelper.match).and().eq("schoolId", schoolId);
+            deleteBuilder.where().eq("match_id", DBSaveHelper.match.getId()).and().eq("schoolId", schoolId);
             deleteBuilder.delete();
+
+            //debug purpose
+            List<MatchPlayer> match_id = matchPlayerDao.queryForEq("match_id", matchId);
+            System.out.println("PlayerChoosingActivity --> deleteExisting method --> matchPlayer record count for this match and school : " + match_id.size());
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -146,10 +135,8 @@ public class PlayerChoosingActivity extends ActionBarActivity {
 
     private void retrieveDataFromDB() throws SQLException {
         matchId = DBSaveHelper.match.getId();
-
         itemList = new ArrayList<>();
         Dao<Player, Integer> playerDao = getHelper().getPlayerDao();
-        System.out.println("*********************schoolId for saint do : " + schoolId);
         playerListFromDB = playerDao.queryBuilder().where().
                 eq("school_id", schoolId).query();
         for (Player player : playerListFromDB) {
@@ -211,6 +198,7 @@ public class PlayerChoosingActivity extends ActionBarActivity {
     }
 
     private boolean isPassAllConditions() {
+        selectedPosition.clear();
         for (int i = 0; i < listView.getCount(); i++)
 
         {
@@ -238,6 +226,8 @@ public class PlayerChoosingActivity extends ActionBarActivity {
     }
 
     private void saveData() throws SQLException {
+
+        deleteExistingRecords();
         for (int listPosition : selectedPosition) {
             // save players number
             String playerNumberText = getPlayerNumberAtListPosition(listPosition);
@@ -249,10 +239,12 @@ public class PlayerChoosingActivity extends ActionBarActivity {
                 matchPlayer.setPlayerNumber(playerNumber);
                 matchPlayer.setSchoolId(schoolId);
                 matchPlayer.setMatch(DBSaveHelper.match);
-                getHelper().getMatchPlayerDao().create(matchPlayer);
+                 matchPlayerDao.create(matchPlayer);
             }
-
         }
+        //debug purpose
+        List<MatchPlayer> match_id = matchPlayerDao.queryForEq("match_id", matchId);
+        System.out.println("PlayerChoosingActivity --> savedata method --> matchPlayer record count for this match and school : " + match_id.size());
     }
 
 
@@ -281,7 +273,6 @@ public class PlayerChoosingActivity extends ActionBarActivity {
                             public void onClick(DialogInterface dialog, int id) {
                                 if (selectedItems.size() == 5) {
                                     saveStartUpPlayer(selectedItems);
-                                    printListOfThisSetAfterSetStartUp();
                                     //go to next activity
                                     SegueHelper.playerChoosingSequence++;
                                     if (SegueHelper.playerChoosingSequence == 2) {
@@ -318,18 +309,14 @@ public class PlayerChoosingActivity extends ActionBarActivity {
 
 
     private List<MatchPlayer> getSelectedPlayerList() {
-        /**
-         * Retrieve selected player of this match
-         */
+
         List<MatchPlayer> selectedPlayerList = null;
         try {
-            Dao<MatchPlayer, Integer> matchPlayerDao = getHelper().getMatchPlayerDao();
             QueryBuilder<MatchPlayer, Integer> matchPlayerIntegerQueryBuilder = matchPlayerDao.queryBuilder();
             matchPlayerIntegerQueryBuilder.where().eq("match_id", DBSaveHelper.match).and().eq("schoolId", schoolId);
             selectedPlayerList = matchPlayerIntegerQueryBuilder.query();
-            for (MatchPlayer matchPlayer : selectedPlayerList) {
-                matchPlayerDao.refresh(matchPlayer);
-            }
+            refreshAllDataOfMatchPlayer(selectedPlayerList);
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -337,18 +324,23 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         return selectedPlayerList;
     }
 
-    /**
-     * Todo
-     *
-     * @param selectedItems
-     */
+    private void refreshAllDataOfMatchPlayer(List<MatchPlayer> selectedPlayerList) throws SQLException {
+        for (MatchPlayer matchPlayer : selectedPlayerList) {
+            matchPlayerDao.refresh(matchPlayer);
+            Match match = matchPlayer.getMatch();
+            Player player = matchPlayer.getPlayer();
+            getHelper().getMatchDao().refresh(match);
+            getHelper().getPlayerDao().refresh(player);
+        }
+    }
+
     private void saveStartUpPlayer(ArrayList<Integer> selectedItems) {
         List<MatchPlayer> selectedPlayerList = getSelectedPlayerList();
         for (Integer selectedItem : selectedItems) {
             selectedPlayerList.get(selectedItem).setIsStartPlayer(true);
         }
         try {
-            Dao<MatchPlayer, Integer> matchPlayerDao = getHelper().getMatchPlayerDao();
+
             for (MatchPlayer matchPlayer : selectedPlayerList) {
                     matchPlayerDao.update(matchPlayer);
             }
@@ -388,15 +380,7 @@ public class PlayerChoosingActivity extends ActionBarActivity {
     }
 
 
-    private void printListOfThisSetAfterSetStartUp() {
 
-        List<MatchPlayer> selectedPlayerList = getSelectedPlayerList();
-        for (MatchPlayer matchPlayer : selectedPlayerList) {
-            System.out.println("After start up id : "+matchPlayer.getId());
-            System.out.println("After start up isStartup : "+matchPlayer.getIsStartPlayer().toString());
-
-        }
-    }
 
 
 }
