@@ -323,12 +323,17 @@ public class PlayerChoosingActivity extends ActionBarActivity {
          */
         List<MatchPlayer> selectedPlayerList = null;
         try {
-            QueryBuilder<MatchPlayer, Integer> matchPlayerIntegerQueryBuilder = getHelper().getMatchPlayerDao().queryBuilder();
+            Dao<MatchPlayer, Integer> matchPlayerDao = getHelper().getMatchPlayerDao();
+            QueryBuilder<MatchPlayer, Integer> matchPlayerIntegerQueryBuilder = matchPlayerDao.queryBuilder();
             matchPlayerIntegerQueryBuilder.where().eq("match_id", DBSaveHelper.match).and().eq("schoolId", schoolId);
             selectedPlayerList = matchPlayerIntegerQueryBuilder.query();
+            for (MatchPlayer matchPlayer : selectedPlayerList) {
+                matchPlayerDao.refresh(matchPlayer);
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
         return selectedPlayerList;
     }
 
