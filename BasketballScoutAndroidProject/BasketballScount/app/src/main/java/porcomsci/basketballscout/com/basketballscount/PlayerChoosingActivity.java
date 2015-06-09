@@ -228,7 +228,7 @@ public class PlayerChoosingActivity extends ActionBarActivity {
             for (int listPosition : selectedPosition) {
                 String playerNumberText = getPlayerNumberAtListPosition(listPosition);
                 if (playerNumberText.length() == 0) {
-                    showAlertDialog("กรุณากรอกหมายเลขผู้เล่นที่ถูกเลือกให้ครบ");
+                    showAlertDialog("กรุณากรอกหมายเลขผู้เล่นที่เลือกให้ครบ");
                     selectedPosition.clear();
                     return false;
                 }
