@@ -52,10 +52,14 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
-        checkReadyToGo();
+        try {
+            checkReadyToGo();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
-    private void checkReadyToGo()  {
+    private void checkReadyToGo() throws Exception {
         String comeFromTeam = getIntent().getStringExtra("teamChosen");
         try {
         if(comeFromTeam!=null) {
@@ -65,7 +69,7 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
                 int rowUpdated = getHelper().getMatchDao().update(match);
                 getHelper().getMatchDao().refresh(match);
                 if( 1 != rowUpdated){
-                    new Exception("Update School in Match Error");
+                    throw new Exception("Update School in Match Error");
                 }
 
             } else if (comeFromTeam.equalsIgnoreCase("2")) {
@@ -73,7 +77,7 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
                 match.setSchoolB(DBSaveHelper.school2);
                 int rowUpdated = getHelper().getMatchDao().update(match);
                 if( 1 != rowUpdated){
-                    new Exception("Update School in Match Error");
+                    throw new Exception("Update School in Match Error");
                 }
                 getHelper().getMatchDao().refresh(match);
             }
