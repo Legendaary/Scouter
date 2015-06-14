@@ -9,15 +9,13 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import database.entities.Match;
 import database.entities.MatchPlayer;
 import database.entities.Player;
-import database.entities.Quater;
-import database.entities.QuaterInfo;
-import database.entities.QuaterScoreSheet;
+import database.entities.Quarter;
+import database.entities.QuarterPlayerInfo;
+import database.entities.QuarterScoreSheet;
 import database.entities.School;
 import database.entities.Substitution;
 import database.entities.Tournament;
@@ -35,9 +33,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<MatchPlayer, Integer> matchPlayersDao = null;
     private Dao<School, Integer>  schoolDao = null;
     private Dao<Player, Integer> playerDao = null;
-    private Dao<Quater, Integer> quatersDao = null;
-    private Dao<QuaterInfo, Integer> quaterInfoDao = null;
-    private Dao<QuaterScoreSheet, Integer> quaterScoreSheetDao = null;
+    private Dao<Quarter, Integer> quatersDao = null;
+    private Dao<QuarterPlayerInfo, Integer> quaterInfoDao = null;
+    private Dao<QuarterScoreSheet, Integer> quaterScoreSheetDao = null;
     private Dao<Substitution, Integer> substitutionDao = null;
 
 
@@ -57,9 +55,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, MatchPlayer.class);
             TableUtils.createTable(connectionSource, School.class);
             TableUtils.createTable(connectionSource, Player.class);
-            TableUtils.createTable(connectionSource, Quater.class);
-            TableUtils.createTable(connectionSource, QuaterInfo.class);
-            TableUtils.createTable(connectionSource, QuaterScoreSheet.class);
+            TableUtils.createTable(connectionSource, Quarter.class);
+            TableUtils.createTable(connectionSource, QuarterPlayerInfo.class);
+            TableUtils.createTable(connectionSource, QuarterScoreSheet.class);
             TableUtils.createTable(connectionSource, Substitution.class);
             initSchool();
             initSaintDominicPlayer();
@@ -81,9 +79,17 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         Player three = new Player();
         three.setName("เจตนิพัธท์  พบสุข์");
         three.setSchool(saintDominic);
+        Player four = new Player();
+        four.setName("test4");
+        four.setSchool(saintDominic);
+        Player five = new Player();
+        five.setName("test5");
+        five.setSchool(saintDominic);
         getPlayerDao().create(one);
         getPlayerDao().create(two);
         getPlayerDao().create(three);
+        getPlayerDao().create(four);
+        getPlayerDao().create(five);
     }
 
     private void initTournament() throws SQLException {
@@ -144,17 +150,17 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             return playerDao;
         }
     }
-    public Dao<Quater, Integer> getQuaterDao() throws SQLException {
+    public Dao<Quarter, Integer> getQuaterDao() throws SQLException {
         if(quatersDao==null){
-            quatersDao =  getDao(Quater.class);
+            quatersDao =  getDao(Quarter.class);
             return quatersDao;
         }else{
             return quatersDao;
         }
     }
-    public Dao<QuaterInfo, Integer> getQuaterInfoDao() throws SQLException {
+    public Dao<QuarterPlayerInfo, Integer> getQuaterInfoDao() throws SQLException {
         if(quaterInfoDao==null){
-            quaterInfoDao =  getDao(QuaterInfo.class);
+            quaterInfoDao =  getDao(QuarterPlayerInfo.class);
             return quaterInfoDao;
         }else{
             return quaterInfoDao;
@@ -168,9 +174,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             return matchDao;
         }
     }
-    public Dao<QuaterScoreSheet, Integer> getQuaterScoreSheetDao() throws SQLException {
+    public Dao<QuarterScoreSheet, Integer> getQuaterScoreSheetDao() throws SQLException {
         if(quaterScoreSheetDao==null){
-            quaterScoreSheetDao =  getDao(QuaterScoreSheet.class);
+            quaterScoreSheetDao =  getDao(QuarterScoreSheet.class);
             return quaterScoreSheetDao;
         }else{
             return quaterScoreSheetDao;

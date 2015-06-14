@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
-
 /**
  * Created by PorPaul on 17/3./2558.
  */
@@ -36,13 +35,15 @@ public class Match implements Serializable {
     private School schoolA;
     @DatabaseField(foreign = true)
     private School schoolB;
-    @DatabaseField (foreign = true,columnName = "tournament_id")
+    @DatabaseField(foreign = true, columnName = "tournament_id"  )
     private Tournament tournament;
+    @ForeignCollectionField()
+    private Collection<Quarter> quarter = null;
     @ForeignCollectionField
-    private Collection<Quater> quater = null;
+    private Collection<MatchPlayer> matchPlayers = null;
 
 
-    public Match(){
+    public Match() {
 
     }
 
@@ -134,11 +135,19 @@ public class Match implements Serializable {
         this.tournament = tournament;
     }
 
-    public Collection<Quater> getQuater() {
-        return quater;
+    public Collection<Quarter> getQuarter() {
+        return quarter;
     }
 
-    public void setQuater(Collection<Quater> quater) {
-        this.quater = quater;
+    public void setQuarter(Collection<Quarter> quarter) {
+        this.quarter = quarter;
+    }
+
+    public Collection<MatchPlayer> getMatchPlayers() {
+        return matchPlayers;
+    }
+
+    public void setMatchPlayers(Collection<MatchPlayer> matchPlayers) {
+        this.matchPlayers = matchPlayers;
     }
 }//end class

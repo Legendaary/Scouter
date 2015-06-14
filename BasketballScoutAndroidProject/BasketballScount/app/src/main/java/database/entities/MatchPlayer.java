@@ -25,9 +25,9 @@ public class MatchPlayer {
     private Boolean isStartPlayer;
     @DatabaseField
     private Integer schoolId;
-    @DatabaseField (foreign = true,columnName = "player_id")
+    @DatabaseField (foreign = true,columnName = "player_id",foreignAutoRefresh = true)
     private Player player;
-    @DatabaseField (foreign = true,columnName = "match_id")
+    @DatabaseField (foreign = true,columnName = "match_id",foreignAutoRefresh = true)
     private Match match;
 
     public int getId() {

@@ -1,21 +1,20 @@
 package database.entities;
 
-import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
-
-import java.util.Date;
 
 /**
  * Created by PorPaul on 23/3/2558.
  */
-public class Substitution {
-
+public class QuarterPlayerInfo
+{
     @DatabaseField(generatedId = true)
     private int id;
     @DatabaseField
-    private Date time;
+    private Integer scoreSummary;
     @DatabaseField
-    private String type;
+    private Integer timeSpent;
+    @DatabaseField
+    private Integer foulsSummary;
     @DatabaseField (foreign = true,columnName = "player_id")
     private Player player;
     @DatabaseField (foreign = true,columnName = "quarter_id")
@@ -29,20 +28,28 @@ public class Substitution {
         this.id = id;
     }
 
-    public Date getTime() {
-        return time;
+    public Integer getScoreSummary() {
+        return scoreSummary;
     }
 
-    public void setTime(Date time) {
-        this.time = time;
+    public void setScoreSummary(Integer scoreSummary) {
+        this.scoreSummary = scoreSummary;
     }
 
-    public String getType() {
-        return type;
+    public Integer getTimeSpent() {
+        return timeSpent;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTimeSpent(Integer timeSpent) {
+        this.timeSpent = timeSpent;
+    }
+
+    public Integer getFoulsSummary() {
+        return foulsSummary;
+    }
+
+    public void setFoulsSummary(Integer foulsSummary) {
+        this.foulsSummary = foulsSummary;
     }
 
     public Player getPlayer() {

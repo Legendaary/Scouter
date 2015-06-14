@@ -1,21 +1,15 @@
 package database.entities;
 
-import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
-
-import java.util.Date;
 
 /**
  * Created by PorPaul on 23/3/2558.
  */
-public class Substitution {
-
+public class QuarterScoreSheet {
     @DatabaseField(generatedId = true)
     private int id;
     @DatabaseField
-    private Date time;
-    @DatabaseField
-    private String type;
+    private Integer scoreCount;
     @DatabaseField (foreign = true,columnName = "player_id")
     private Player player;
     @DatabaseField (foreign = true,columnName = "quarter_id")
@@ -29,20 +23,12 @@ public class Substitution {
         this.id = id;
     }
 
-    public Date getTime() {
-        return time;
+    public Integer getScoreCount() {
+        return scoreCount;
     }
 
-    public void setTime(Date time) {
-        this.time = time;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    public void setScoreCount(Integer scoreCount) {
+        this.scoreCount = scoreCount;
     }
 
     public Player getPlayer() {

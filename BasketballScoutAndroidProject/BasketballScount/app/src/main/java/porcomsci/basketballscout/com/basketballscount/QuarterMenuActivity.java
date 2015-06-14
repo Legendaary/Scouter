@@ -69,10 +69,7 @@ public class QuarterMenuActivity extends ActionBarActivity {
 
                 }
                 else if(position == 5)
-                {
-                    Intent intent = new Intent(getApplicationContext(), QuarterChoosingActivity.class);
-                    startActivity(intent);
-                }
+                {    onBackPressed();    }
             }
         });
     }
