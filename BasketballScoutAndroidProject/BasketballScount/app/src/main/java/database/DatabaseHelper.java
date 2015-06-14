@@ -92,6 +92,31 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         getPlayerDao().create(five);
     }
 
+    private void initWatSuwanPlayer() throws SQLException {
+        School saintDominic = new School();
+        saintDominic.setId(1);
+        Player one = new Player();
+        one.setName("พิชิต พฤกษ์งาม");
+        one.setSchool(saintDominic);
+        Player two = new Player();
+        two.setName("ชาติ ชุมพล");
+        two.setSchool(saintDominic);
+        Player three = new Player();
+        three.setName("ชินวุฒิ  โพธิ์เงิน");
+        three.setSchool(saintDominic);
+        Player four = new Player();
+        four.setName("กมลวัฒน์ ลิ้มสกุล");
+        four.setSchool(saintDominic);
+        Player five = new Player();
+        five.setName("สมัคร สมาน");
+        five.setSchool(saintDominic);
+        getPlayerDao().create(one);
+        getPlayerDao().create(two);
+        getPlayerDao().create(three);
+        getPlayerDao().create(four);
+        getPlayerDao().create(five);
+    }
+
     private void initTournament() throws SQLException {
         tournamentDao = getTournamentDao();
         Tournament casualTour = new Tournament();
