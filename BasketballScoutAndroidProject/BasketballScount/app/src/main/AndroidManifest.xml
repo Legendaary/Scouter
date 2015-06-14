@@ -58,7 +58,7 @@
             android:label="@string/title_activity_quater_menu" >
         </activity>
         <activity
-            android:name=".MatchRecordActivity"
+            android:name=".MatchRecordingActivity"
             android:label="@string/title_activity_match_recording" >
         </activity>
     </application>
