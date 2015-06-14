@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,20 +18,20 @@ import database.DBSaveHelper;
 import database.DatabaseHelper;
 import database.entities.MatchPlayer;
 import database.entities.Player;
+import database.entities.Quarter;
+import database.entities.QuarterPlayerInfo;
 import database.entities.School;
-import porcomsci.basketballscout.com.basketballscount.utility.SegueHelper;
 
 
 public class MatchRecordingActivity extends ActionBarActivity {
 
     private DatabaseHelper databaseHelper = null;
 
+    Quarter quarter;
     List<MatchPlayer> team1MP;
     List<MatchPlayer> team2MP;
     List<Player> team1Players;
     List<Player> team2Players;
-    Map<Integer,Player> team1Playing = new HashMap<>();
-    Map<Integer,Player> team2Playing = new HashMap<>();
 
     int scoreTeam1 = 0;
     int scoreTeam2 = 0;
@@ -43,7 +44,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match_recording);
-
+        determineQuater();
         try {
             initializeBasicData();
         } catch (SQLException e) {
@@ -52,11 +53,39 @@ public class MatchRecordingActivity extends ActionBarActivity {
 
     }
 
+    private void determineQuater() {
+        int quarterNo = DBSaveHelper.quarterNumber;
+        if(1 == quarterNo){
+            quarter = DBSaveHelper.quarter1;
+        }else if(2 == quarterNo){
+            quarter = DBSaveHelper.quarter2;
+        }else if(3 == quarterNo){
+            quarter = DBSaveHelper.quarter3;
+        }else if(4 == quarterNo){
+            quarter = DBSaveHelper.quarter4;
+        }else if(5 == quarterNo){
+            quarter = DBSaveHelper.quarter5;
+        }
+    }
+
     private void initializeBasicData() throws SQLException {
         initEachTeamMP();
         initAllPlayersList();
-        getLineUpPlayer(team1Playing, team1MP);
-        getLineUpPlayer(team2Playing, team2MP);
+        createQuarterInfoRecord(team1Players, team2Players);
+        getLineUpPlayer(, team1MP);
+        getLineUpPlayer(, team2MP);
+    }
+
+    private void createQuarterInfoRecord(List<Player> team1Players, List<Player> team2Players) throws SQLException {
+            //join 2 players
+            team1Players.addAll(team2Players);
+            Dao<QuarterPlayerInfo, Integer> quarterInfoDao = getHelper().getQuarterPlayerInfoDao();
+            for (Player player : team1Players) {
+                QuarterPlayerInfo quarterPlayerInfo = new QuarterPlayerInfo();
+                quarterPlayerInfo.setQuarter(quarter);
+                quarterPlayerInfo.setPlayer(player);
+                quarterInfoDao.create(quarterPlayerInfo);
+            }
     }
 
     private void initEachTeamMP() throws SQLException {
@@ -93,18 +122,6 @@ public class MatchRecordingActivity extends ActionBarActivity {
             }
         }
     }//end get line up player
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -148,3 +165,4 @@ public class MatchRecordingActivity extends ActionBarActivity {
     }
 
 }
+

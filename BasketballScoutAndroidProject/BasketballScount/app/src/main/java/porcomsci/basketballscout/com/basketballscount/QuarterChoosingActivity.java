@@ -9,12 +9,17 @@ import android.view.View;
 import android.widget.Button;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
+
+import java.sql.SQLException;
 
 import database.DBSaveHelper;
 import database.DatabaseHelper;
+import database.entities.Quarter;
 
 
 public class QuarterChoosingActivity extends ActionBarActivity {
+
 
     private DatabaseHelper databaseHelper = null;
     private Button quaterButton1;
@@ -23,10 +28,17 @@ public class QuarterChoosingActivity extends ActionBarActivity {
     private Button quaterButton4;
     private Button quaterButton5;
 
+    Dao<Quarter, Integer> quarterDao = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("เลือก Quarter");
+        try {
+            quarterDao = getHelper().getQuaterDao();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
         setContentView(R.layout.activity_quater_choosing);
         initButton();
     }
@@ -44,6 +56,15 @@ public class QuarterChoosingActivity extends ActionBarActivity {
         quaterButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Quarter quarter = new Quarter();
+                quarter.setMatch(DBSaveHelper.match);
+                quarter.setQuaterNumber(1);
+                try {
+                    quarterDao.create(quarter);
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+                DBSaveHelper.quarter1 = quarter;
                 DBSaveHelper.quarterNumber = 1;
                 Intent intent = new Intent(getApplicationContext(), QuarterMenuActivity.class);
                 startActivity(intent);
@@ -52,6 +73,15 @@ public class QuarterChoosingActivity extends ActionBarActivity {
         quaterButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Quarter quarter = new Quarter();
+                quarter.setMatch(DBSaveHelper.match);
+                quarter.setQuaterNumber(2);
+                try {
+                    quarterDao.create(quarter);
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+                DBSaveHelper.quarter2 = quarter;
                 DBSaveHelper.quarterNumber = 2;
                 Intent intent = new Intent(getApplicationContext(), QuarterMenuActivity.class);
                 startActivity(intent);
@@ -60,6 +90,15 @@ public class QuarterChoosingActivity extends ActionBarActivity {
         quaterButton3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Quarter quarter = new Quarter();
+                quarter.setMatch(DBSaveHelper.match);
+                quarter.setQuaterNumber(3);
+                try {
+                    quarterDao.create(quarter);
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+                DBSaveHelper.quarter3 = quarter;
                 DBSaveHelper.quarterNumber = 3;
                 Intent intent = new Intent(getApplicationContext(), QuarterMenuActivity.class);
                 startActivity(intent);
@@ -68,6 +107,15 @@ public class QuarterChoosingActivity extends ActionBarActivity {
         quaterButton4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Quarter quarter = new Quarter();
+                quarter.setMatch(DBSaveHelper.match);
+                quarter.setQuaterNumber(4);
+                try {
+                    quarterDao.create(quarter);
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+                DBSaveHelper.quarter4 = quarter;
                 DBSaveHelper.quarterNumber = 4;
                 Intent intent = new Intent(getApplicationContext(), QuarterMenuActivity.class);
                 startActivity(intent);
@@ -76,6 +124,15 @@ public class QuarterChoosingActivity extends ActionBarActivity {
         quaterButton5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Quarter quarter = new Quarter();
+                quarter.setMatch(DBSaveHelper.match);
+                quarter.setQuaterNumber(5);
+                try {
+                    quarterDao.create(quarter);
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+                DBSaveHelper.quarter5 = quarter;
                 DBSaveHelper.quarterNumber = 5;
                 Intent intent = new Intent(getApplicationContext(), QuarterMenuActivity.class);
                 startActivity(intent);
