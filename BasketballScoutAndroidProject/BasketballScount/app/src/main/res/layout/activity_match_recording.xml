@@ -1,12 +1,82 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="porcomsci.basketballscout.com.basketballscount.MatchRecordingActivity">
+    android:layout_height="match_parent"
+    tools:context="porcomsci.basketballscout.com.basketballscount.MatchRecord"
+    android:orientation="vertical"
+    android:weightSum="1">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <TextView
+        android:textSize="12pt"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight="0.07"
+        android:gravity="center"
+        android:background="#79069ff2"
+        android:id="@+id/matchRecord_schoolLabel">
+    </TextView>
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.20"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:textSize="15pt"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="0.30"
+            android:gravity="center"
+            android:background="#ffb3f21d"
+            android:id="@+id/matchRecord_score1">
+        </TextView>
+
+        <Chronometer
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="0.40"
+            android:gravity="center"
+            android:textSize="20pt"
+            android:background="#bdef0068"
+            android:id="@+id/matchRecord_chronometer">
+        </Chronometer>
+
+        <TextView
+            android:textSize="15pt"
+            android:gravity="center"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="0.30"
+            android:background="#e1f2c50e"
+            android:id="@+id/matchRecord_score2">
+        </TextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.75">
+
+        <ListView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:background="#e1e8f22f"
+            android:id="@+id/matchRecord_list1">
+        </ListView>
+
+        <ListView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:background="#ff6be1bb"
+            android:id="@+id/matchRecord_list2">
+        </ListView>
+
+    </LinearLayout>
+
+
+</LinearLayout>
