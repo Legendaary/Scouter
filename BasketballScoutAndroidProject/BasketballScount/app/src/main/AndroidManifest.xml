@@ -61,6 +61,10 @@
             android:name=".MatchRecordActivity"
             android:label="@string/title_activity_match_record" >
         </activity>
+        <activity
+            android:name=".MatchRecord"
+            android:label="@string/title_activity_match_record" >
+        </activity>
     </application>
 
 </manifest>
