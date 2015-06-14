@@ -6,12 +6,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MatchRecordingActivity extends ActionBarActivity {
+public class MatchRecordActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_match_recording);
+        setContentView(R.layout.activity_match_record);
     }
 
     @Override
