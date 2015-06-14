@@ -32,6 +32,12 @@ public class MatchRecordingActivity extends ActionBarActivity {
     List<MatchPlayer> team2MP;
     List<Player> team1Players;
     List<Player> team2Players;
+    Player[] lineupTeam1 = new Player[5];
+    Player[] lineupTeam2 = new Player[5];
+    String[] lineupAdapter1  = new String[5];
+    String[] lineupAdapter2  = new String[5];
+
+
 
     int scoreTeam1 = 0;
     int scoreTeam2 = 0;
@@ -43,6 +49,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle("Quarter # " + DBSaveHelper.quarterNumber);
         setContentView(R.layout.activity_match_recording);
         determineQuater();
         try {
@@ -72,12 +79,16 @@ public class MatchRecordingActivity extends ActionBarActivity {
         initEachTeamMP();
         initAllPlayersList();
         createQuarterInfoRecord(team1Players, team2Players);
-        getLineUpPlayer(, team1MP);
-        getLineUpPlayer(, team2MP);
+        getLineUpPlayer( lineupTeam1 , team1MP);
+        getLineUpPlayer( lineupTeam2 , team2MP);
+        getPlayerNameAdapter(lineupTeam1, lineupAdapter1);
+        getPlayerNameAdapter(lineupTeam2 , lineupAdapter2);
+        initSubstitutionData(lineupTeam1);
+        initSubstitutionData(lineupTeam2);
     }
 
     private void createQuarterInfoRecord(List<Player> team1Players, List<Player> team2Players) throws SQLException {
-            //join 2 players
+            //join 2 player lists
             team1Players.addAll(team2Players);
             Dao<QuarterPlayerInfo, Integer> quarterInfoDao = getHelper().getQuarterPlayerInfoDao();
             for (Player player : team1Players) {
@@ -121,7 +132,35 @@ public class MatchRecordingActivity extends ActionBarActivity {
                 index++;
             }
         }
+        if(5 < index){
+            System.out.println("Something went wrong! Line up more than 5.");
+            System.exit(-1);
+        }
     }//end get line up player
+
+    private void getPlayerNameAdapter(Player[] lineupTeam, String[] lineupAdapter) {
+       for( int i = 0 ; i < lineupTeam.length ; i++){
+           lineupAdapter[i] = lineupTeam[i].getName();
+       }
+    }
+
+    /**
+     *
+     * TODO
+     * @param lineupTeam
+     */
+    private void initSubstitutionData(Player[] lineupTeam) {
+
+    }
+
+
+
+
+
+
+
+
+
 
 
 

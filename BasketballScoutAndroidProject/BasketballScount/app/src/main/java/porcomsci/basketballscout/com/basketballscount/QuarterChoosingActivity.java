@@ -22,11 +22,11 @@ public class QuarterChoosingActivity extends ActionBarActivity {
 
 
     private DatabaseHelper databaseHelper = null;
-    private Button quaterButton1;
-    private Button quaterButton2;
-    private Button quaterButton3;
-    private Button quaterButton4;
-    private Button quaterButton5;
+    private Button quarterButton1;
+    private Button quarterButton2;
+    private Button quarterButton3;
+    private Button quarterButton4;
+    private Button quarterButton5;
 
     Dao<Quarter, Integer> quarterDao = null;
 
@@ -44,16 +44,16 @@ public class QuarterChoosingActivity extends ActionBarActivity {
     }
 
     private void initButton() {
-        quaterButton1 = (Button)findViewById(R.id.quarter1);
-        quaterButton2 = (Button)findViewById(R.id.quarter2);
-        quaterButton3 = (Button)findViewById(R.id.quarter3);
-        quaterButton4 = (Button)findViewById(R.id.quarter4);
-        quaterButton5 = (Button)findViewById(R.id.quarter5);
+        quarterButton1 = (Button)findViewById(R.id.quarter1);
+        quarterButton2 = (Button)findViewById(R.id.quarter2);
+        quarterButton3 = (Button)findViewById(R.id.quarter3);
+        quarterButton4 = (Button)findViewById(R.id.quarter4);
+        quarterButton5 = (Button)findViewById(R.id.quarter5);
         setButtonListener();
     }
 
     private void setButtonListener() {
-        quaterButton1.setOnClickListener(new View.OnClickListener() {
+        quarterButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Quarter quarter = new Quarter();
@@ -66,11 +66,11 @@ public class QuarterChoosingActivity extends ActionBarActivity {
                 }
                 DBSaveHelper.quarter1 = quarter;
                 DBSaveHelper.quarterNumber = 1;
-                Intent intent = new Intent(getApplicationContext(), QuarterMenuActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MatchRecordingActivity.class);
                 startActivity(intent);
             }
         });
-        quaterButton2.setOnClickListener(new View.OnClickListener() {
+        quarterButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Quarter quarter = new Quarter();
@@ -83,11 +83,11 @@ public class QuarterChoosingActivity extends ActionBarActivity {
                 }
                 DBSaveHelper.quarter2 = quarter;
                 DBSaveHelper.quarterNumber = 2;
-                Intent intent = new Intent(getApplicationContext(), QuarterMenuActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MatchRecordingActivity.class);
                 startActivity(intent);
             }
         });
-        quaterButton3.setOnClickListener(new View.OnClickListener() {
+        quarterButton3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Quarter quarter = new Quarter();
@@ -100,11 +100,11 @@ public class QuarterChoosingActivity extends ActionBarActivity {
                 }
                 DBSaveHelper.quarter3 = quarter;
                 DBSaveHelper.quarterNumber = 3;
-                Intent intent = new Intent(getApplicationContext(), QuarterMenuActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MatchRecordingActivity.class);
                 startActivity(intent);
             }
         });
-        quaterButton4.setOnClickListener(new View.OnClickListener() {
+        quarterButton4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Quarter quarter = new Quarter();
@@ -117,11 +117,11 @@ public class QuarterChoosingActivity extends ActionBarActivity {
                 }
                 DBSaveHelper.quarter4 = quarter;
                 DBSaveHelper.quarterNumber = 4;
-                Intent intent = new Intent(getApplicationContext(), QuarterMenuActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MatchRecordingActivity.class);
                 startActivity(intent);
             }
         });
-        quaterButton5.setOnClickListener(new View.OnClickListener() {
+        quarterButton5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Quarter quarter = new Quarter();
@@ -134,7 +134,7 @@ public class QuarterChoosingActivity extends ActionBarActivity {
                 }
                 DBSaveHelper.quarter5 = quarter;
                 DBSaveHelper.quarterNumber = 5;
-                Intent intent = new Intent(getApplicationContext(), QuarterMenuActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MatchRecordingActivity.class);
                 startActivity(intent);
             }
         });
