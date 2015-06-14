@@ -1,6 +1,4 @@
 package database.entities;
-
-import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 
 import java.util.Date;
