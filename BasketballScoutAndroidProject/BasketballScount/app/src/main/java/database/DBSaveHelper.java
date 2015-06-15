@@ -1,6 +1,7 @@
 package database;
 
 import database.entities.Match;
+import database.entities.Quarter;
 import database.entities.School;
 import database.entities.Tournament;
 
@@ -16,7 +17,14 @@ public class DBSaveHelper {
     public static School school2;
     public static Match match;
     public static Tournament tournament;
-    public static int quarterNumber;
     public static String historyTournamentId;
+
+    public static int quarterNumber;
+    public static Quarter quarter1;
+    public static Quarter quarter2;
+    public static Quarter quarter3;
+    public static Quarter quarter4;
+    public static Quarter quarter5;
+
 
 }

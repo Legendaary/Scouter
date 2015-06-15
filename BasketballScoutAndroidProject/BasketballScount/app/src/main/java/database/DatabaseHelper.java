@@ -33,9 +33,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<MatchPlayer, Integer> matchPlayersDao = null;
     private Dao<School, Integer>  schoolDao = null;
     private Dao<Player, Integer> playerDao = null;
-    private Dao<Quarter, Integer> quatersDao = null;
-    private Dao<QuarterPlayerInfo, Integer> quaterInfoDao = null;
-    private Dao<QuarterScoreSheet, Integer> quaterScoreSheetDao = null;
+    private Dao<Quarter, Integer> quartersDao = null;
+    private Dao<QuarterPlayerInfo, Integer> quarterPlayerInfoDao = null;
+    private Dao<QuarterScoreSheet, Integer> quarterScoreSheetDao = null;
     private Dao<Substitution, Integer> substitutionDao = null;
 
 
@@ -151,19 +151,19 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
     }
     public Dao<Quarter, Integer> getQuaterDao() throws SQLException {
-        if(quatersDao==null){
-            quatersDao =  getDao(Quarter.class);
-            return quatersDao;
+        if(quartersDao ==null){
+            quartersDao =  getDao(Quarter.class);
+            return quartersDao;
         }else{
-            return quatersDao;
+            return quartersDao;
         }
     }
-    public Dao<QuarterPlayerInfo, Integer> getQuaterInfoDao() throws SQLException {
-        if(quaterInfoDao==null){
-            quaterInfoDao =  getDao(QuarterPlayerInfo.class);
-            return quaterInfoDao;
+    public Dao<QuarterPlayerInfo, Integer> getQuarterPlayerInfoDao() throws SQLException {
+        if(quarterPlayerInfoDao ==null){
+            quarterPlayerInfoDao =  getDao(QuarterPlayerInfo.class);
+            return quarterPlayerInfoDao;
         }else{
-            return quaterInfoDao;
+            return quarterPlayerInfoDao;
         }
     }
     public Dao<Match, Integer> getMatchDao() throws SQLException {
@@ -174,12 +174,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             return matchDao;
         }
     }
-    public Dao<QuarterScoreSheet, Integer> getQuaterScoreSheetDao() throws SQLException {
-        if(quaterScoreSheetDao==null){
-            quaterScoreSheetDao =  getDao(QuarterScoreSheet.class);
-            return quaterScoreSheetDao;
+    public Dao<QuarterScoreSheet, Integer> getQuarterScoreSheetDao() throws SQLException {
+        if(quarterScoreSheetDao ==null){
+            quarterScoreSheetDao =  getDao(QuarterScoreSheet.class);
+            return quarterScoreSheetDao;
         }else{
-            return quaterScoreSheetDao;
+            return quarterScoreSheetDao;
         }
     }
     public Dao<Substitution, Integer> getSubstitutionDao() throws SQLException {
