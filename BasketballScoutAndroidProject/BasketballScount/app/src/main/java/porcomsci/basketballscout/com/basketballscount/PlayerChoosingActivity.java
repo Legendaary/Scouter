@@ -28,6 +28,7 @@ import database.entities.Match;
 import database.entities.MatchPlayer;
 import database.entities.Player;
 import database.entities.School;
+import porcomsci.basketballscout.com.basketballscount.utility.DialogUtil;
 import porcomsci.basketballscout.com.basketballscount.utility.SegueHelper;
 
 
@@ -209,14 +210,14 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         }
 
         if (selectedPosition.size() < 5) {
-            showAlertDialog("กรุณาเลือกผู้เล่นตั้งแต่ 5 คนขึ้นไป");
+            DialogUtil.showOkDialog(this, "กรุณาเลือกผู้เล่นตั้งแต่ 5 คนขึ้นไป");
             selectedPosition.clear();
             return false;
         } else {
             for (int listPosition : selectedPosition) {
                 String playerNumberText = getPlayerNumberAtListPosition(listPosition);
                 if (playerNumberText.length() == 0) {
-                    showAlertDialog("กรุณากรอกหมายเลขผู้เล่นที่เลือกให้ครบ");
+                    DialogUtil.showOkDialog(this, "กรุณากรอกหมายเลขผู้เล่นที่เลือกให้ครบ");
                     selectedPosition.clear();
                     return false;
                 }
@@ -255,8 +256,8 @@ public class PlayerChoosingActivity extends ActionBarActivity {
 
     private void showStartUpPlayerPopUp() {
         String[] playerName = getSelectedPlayerName();
-        final ArrayList<Integer> selectedItems = new ArrayList();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final ArrayList<Integer> selectedItems = new ArrayList<>();
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("เลือก 5 ผู้เล่นตัวจริง")
                 .setMultiChoiceItems(playerName, null, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
@@ -283,7 +284,7 @@ public class PlayerChoosingActivity extends ActionBarActivity {
                                         startActivity(intent);
                                     }
                                 } else {
-                                    showAlertDialog("กรุณาเลือก 5 ผู้เล่นตัวจริง");
+                                    DialogUtil.showOkDialog( builder.getContext(), "กรุณาเลือก 5 ผู้เล่นตัวจริง" );
                                 }//end check selectedItem size
                             }//end on click
                         })
@@ -347,20 +348,6 @@ public class PlayerChoosingActivity extends ActionBarActivity {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    private void showAlertDialog(String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(message);
-        builder.setPositiveButton(R.string.ok,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
     @Override

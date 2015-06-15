@@ -50,7 +50,8 @@ public class QuarterMenuActivity extends ActionBarActivity {
                  */
                 if(position == 0)
                 {
-
+                    Intent intent = new Intent(getApplicationContext(), MatchRecordingActivity.class);
+                    startActivity(intent);
                 }
                 else if(position == 1)
                 {
