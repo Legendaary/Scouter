@@ -27,7 +27,7 @@ import database.entities.School;
 public class ManageSchoolInfoActivity extends ActionBarActivity {
 
     ListView listView;
-    ArrayAdapter adapter;
+    ArrayAdapter<String> adapter;
     List<String> schoolList;
     EditText editText;
     private DatabaseHelper databaseHelper = null;
@@ -88,7 +88,7 @@ public class ManageSchoolInfoActivity extends ActionBarActivity {
 
     private void refreshListView(){
 
-        adapter = new ArrayAdapter(this,
+        adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, schoolList);
         listView.setAdapter(adapter);
     }

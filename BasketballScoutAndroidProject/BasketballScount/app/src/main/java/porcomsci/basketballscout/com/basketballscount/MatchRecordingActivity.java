@@ -1,18 +1,22 @@
 package porcomsci.basketballscout.com.basketballscount;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import database.DBSaveHelper;
 import database.DatabaseHelper;
@@ -36,8 +40,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
     Player[] lineupTeam2 = new Player[5];
     String[] lineupAdapter1  = new String[5];
     String[] lineupAdapter2  = new String[5];
-
-
+    ListView listViewTeam1, listViewTeam2;
 
     int scoreTeam1 = 0;
     int scoreTeam2 = 0;
@@ -57,7 +60,20 @@ public class MatchRecordingActivity extends ActionBarActivity {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        listViewTeam1 = (ListView) findViewById(R.id.matchRecord_list1);
+        listViewTeam2 = (ListView) findViewById(R.id.matchRecord_list2);
 
+        printOutAllList(lineupAdapter1);
+        printOutAllList(lineupAdapter2);
+        initListView( listViewTeam1, lineupAdapter1 );
+        initListView( listViewTeam2, lineupAdapter2 );
+    }
+
+    private void printOutAllList(String[] lineupAdapter2) {
+
+        for (String s : lineupAdapter2) {
+            System.out.println("Player name : "+s);
+        }
     }
 
     private void determineQuater() {
@@ -82,7 +98,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
         getLineUpPlayer( lineupTeam1 , team1MP);
         getLineUpPlayer( lineupTeam2 , team2MP);
         getPlayerNameAdapter(lineupTeam1, lineupAdapter1);
-        getPlayerNameAdapter(lineupTeam2 , lineupAdapter2);
+        getPlayerNameAdapter(lineupTeam2, lineupAdapter2);
         initSubstitutionData(lineupTeam1);
         initSubstitutionData(lineupTeam2);
     }
@@ -105,7 +121,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
     }
 
     private List<MatchPlayer> retrievedMatchPlayerOfSchoolId(School schoolID) throws SQLException {
-        return getHelper().getMatchPlayerDao().queryBuilder().where().eq("match_id", DBSaveHelper.match.getId()).and().eq("school_id", schoolID).query();
+        return getHelper().getMatchPlayerDao().queryBuilder().where().eq("match_id", DBSaveHelper.match.getId()).and().eq("schoolId", schoolID).query();
     }
 
     private void initAllPlayersList() {
@@ -154,15 +170,60 @@ public class MatchRecordingActivity extends ActionBarActivity {
     }
 
 
+    // call this method to init the both ListView
+    /**
+     * Set content which is the line up players list to a ListView
+     * @param listView which you want the content to display
+     * @param lineupAdapter string array that contains line up players list
+     */
+    private void initListView( ListView listView, String[] lineupAdapter )
+    {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>( this, android.R.layout.simple_list_item_1, lineupAdapter);
+        listView.setAdapter( adapter );
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //@Por
+                // you can get the selected position of ListView item here
+                showManagePlayersMenuPopUp();
+            }
+        });
+    }
 
+    private void showManagePlayersMenuPopUp()
+    {
+        String[] menu = {"1 แต้ม", "2 แต้ม","3 แต้ม", "ฟาวล์" ,"เปลี่ยนตัว", "ยกเลิก"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, menu);
 
-
-
-
-
-
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+            @Override//@Por implement the cases
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case 0:
+                        //+1 point
+                        break;
+                    case 1:
+                        //+2
+                        break;
+                    case 3:
+                        //+3
+                        break;
+                    case 4:
+                        //foul
+                        break;
+                    case 5:
+                        //change
+                        break;
+                    case 6:
+                        //cancel
+                        break;
+                }
+            }
+        });
+        builder.create().show();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
