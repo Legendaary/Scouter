@@ -16,7 +16,7 @@ public class School implements Serializable{
     private String name;
     @DatabaseField
     private String logoFilePath;
-    @DatabaseField (foreign = true,columnName = "match_id")
+    @DatabaseField (foreign = true,columnName = "match_id",foreignAutoRefresh = true)
     private Match match;
 
     public int getId() {

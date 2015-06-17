@@ -11,12 +11,12 @@ public class Substitution {
     @DatabaseField(generatedId = true)
     private int id;
     @DatabaseField
-    private Date time;
+    private String time;
     @DatabaseField
     private String type;
-    @DatabaseField (foreign = true,columnName = "player_id")
+    @DatabaseField (foreign = true,columnName = "player_id",foreignAutoRefresh = true)
     private Player player;
-    @DatabaseField (foreign = true,columnName = "quarter_id")
+    @DatabaseField (foreign = true,columnName = "quarter_id",foreignAutoRefresh = true)
     private Quarter quarter;
 
     public int getId() {
@@ -27,11 +27,11 @@ public class Substitution {
         this.id = id;
     }
 
-    public Date getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(String time) {
         this.time = time;
     }
 

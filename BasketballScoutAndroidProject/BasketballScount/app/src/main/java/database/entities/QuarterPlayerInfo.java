@@ -13,11 +13,11 @@ public class QuarterPlayerInfo
     private Integer scoreSummary;
     @DatabaseField
     private Integer timeSpent;
-    @DatabaseField
+    @DatabaseField(defaultValue = "0")
     private Integer foulsSummary;
-    @DatabaseField (foreign = true,columnName = "player_id")
+    @DatabaseField (foreign = true,columnName = "player_id",foreignAutoRefresh = true)
     private Player player;
-    @DatabaseField (foreign = true,columnName = "quarter_id")
+    @DatabaseField (foreign = true,columnName = "quarter_id",foreignAutoRefresh = true)
     private Quarter quarter;
 
     public int getId() {

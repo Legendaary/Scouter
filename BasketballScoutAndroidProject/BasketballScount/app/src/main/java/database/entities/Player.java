@@ -13,7 +13,7 @@ public class Player {
     private String name;
     @DatabaseField
     private String position;
-    @DatabaseField(foreign = true,columnName = "school_id")
+    @DatabaseField(foreign = true,columnName = "school_id",foreignAutoRefresh = true)
     private School school;
 
     public School getSchool() {

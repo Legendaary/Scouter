@@ -10,9 +10,9 @@ public class QuarterScoreSheet {
     private int id;
     @DatabaseField
     private Integer scoreCount;
-    @DatabaseField (foreign = true,columnName = "player_id")
+    @DatabaseField (foreign = true,columnName = "player_id",foreignAutoRefresh = true)
     private Player player;
-    @DatabaseField (foreign = true,columnName = "quarter_id")
+    @DatabaseField (foreign = true,columnName = "quarter_id",foreignAutoRefresh = true)
     private Quarter quarter;
 
     public int getId() {

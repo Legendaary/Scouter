@@ -200,9 +200,7 @@ public class PlayerChoosingActivity extends ActionBarActivity {
 
     private boolean isPassAllConditions() {
         selectedPosition.clear();
-        for (int i = 0; i < listView.getCount(); i++)
-
-        {
+        for (int i = 0; i < listView.getCount(); i++) {
             CheckBox checkBox = (CheckBox) listView.getChildAt(i).findViewById(R.id.player_name_and_number_list_item_checkBox);
             if (checkBox.isChecked()) {
                 selectedPosition.add(i);

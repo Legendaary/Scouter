@@ -3,6 +3,7 @@ package porcomsci.basketballscout.com.basketballscount;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -84,11 +85,17 @@ public class TournamentActivity extends ActionBarActivity {
         EditText tournamentTextBox = (EditText) findViewById(R.id.tournament_tournament_name_editText);
         EditText numOfMatchesTextBox = (EditText) findViewById(R.id.tournament_number_of_matches_editText);
 
-        if(tournamentTextBox.getText()!=null){
-            tournament.setCompetitionName( tournamentTextBox.getText().toString());
+        Editable text = tournamentTextBox.getText();
+        String tournamentName = text.toString();
+
+        Editable text2 = numOfMatchesTextBox.getText();
+        String numText = text2.toString();
+
+        if(!tournamentName.equalsIgnoreCase("")) {
+            tournament.setCompetitionName( tournamentName);
         }
-        if(numOfMatchesTextBox.getText()!=null) {
-            tournament.setMatchNumber(Integer.valueOf(numOfMatchesTextBox.getText().toString()));
+        if(!numText.equalsIgnoreCase("")) {
+            tournament.setMatchNumber(Integer.valueOf(numText));
         }
     }
 

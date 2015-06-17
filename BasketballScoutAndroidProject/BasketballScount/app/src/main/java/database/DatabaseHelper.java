@@ -61,6 +61,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, Substitution.class);
             initSchool();
             initSaintDominicPlayer();
+            initSriwigrom();
             initTournament();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -80,11 +81,36 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         three.setName("เจตนิพัธท์  พบสุข์");
         three.setSchool(saintDominic);
         Player four = new Player();
-        four.setName("test4");
+        four.setName("ธนัตถ์ โลกเจริญลาภ");
         four.setSchool(saintDominic);
         Player five = new Player();
-        five.setName("test5");
+        five.setName("ภูวนัตถ์ โลกเจริญลาภ");
         five.setSchool(saintDominic);
+        getPlayerDao().create(one);
+        getPlayerDao().create(two);
+        getPlayerDao().create(three);
+        getPlayerDao().create(four);
+        getPlayerDao().create(five);
+    }
+
+    private void initSriwigrom() throws SQLException {
+        School sriwigorn = new School();
+        sriwigorn.setId(2);
+        Player one = new Player();
+        one.setName("TEST1");
+        one.setSchool(sriwigorn);
+        Player two = new Player();
+        two.setName("TEST2");
+        two.setSchool(sriwigorn);
+        Player three = new Player();
+        three.setName("TEST3");
+        three.setSchool(sriwigorn);
+        Player four = new Player();
+        four.setName("TEST4");
+        four.setSchool(sriwigorn);
+        Player five = new Player();
+        five.setName("TEST5");
+        five.setSchool(sriwigorn);
         getPlayerDao().create(one);
         getPlayerDao().create(two);
         getPlayerDao().create(three);
@@ -101,7 +127,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     public void initSchool() throws SQLException {
         insertSchoolByName("เซนต์ดอมินิก");
-        insertSchoolByName("วัดสุวรรณ");
+        insertSchoolByName("ศรีวิกรม์");
         insertSchoolByName("อัสสัมชัญกรุงเทพ");
         insertSchoolByName("กรุงเทพคริสเตียน");
         insertSchoolByName("สุเหร่า คลองจั่น");

@@ -11,17 +11,17 @@ public class MatchPlayer {
     private int id;
     @DatabaseField
     private Integer playerNumber;
-    @DatabaseField
+    @DatabaseField(defaultValue = "0")
     private Integer playerFouls;
     @DatabaseField
     private Integer timeSpent;
-    @DatabaseField
+    @DatabaseField(defaultValue = "0")
     private Integer score;
-    @DatabaseField
+    @DatabaseField(defaultValue = "0")
     private Integer rebound;
-    @DatabaseField
+    @DatabaseField(defaultValue = "0")
     private Integer steal;
-    @DatabaseField
+    @DatabaseField(defaultValue = "false")
     private Boolean isStartPlayer;
     @DatabaseField
     private Integer schoolId;

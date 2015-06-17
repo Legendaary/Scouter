@@ -35,7 +35,7 @@ public class Match implements Serializable {
     private School schoolA;
     @DatabaseField(foreign = true)
     private School schoolB;
-    @DatabaseField(foreign = true, columnName = "tournament_id"  )
+    @DatabaseField(foreign = true, columnName = "tournament_id" ,foreignAutoRefresh = true )
     private Tournament tournament;
     @ForeignCollectionField()
     private Collection<Quarter> quarter = null;
