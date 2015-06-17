@@ -3,6 +3,7 @@ package porcomsci.basketballscout.com.basketballscount;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,7 +69,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("Quarter # " + DBSaveHelper.quarterNumber);
         setContentView(R.layout.activity_match_recording);
-        initViewCompponents();
+        initViewComponents();
         determineQuater();
         try {
             initDao();
@@ -83,14 +84,47 @@ public class MatchRecordingActivity extends ActionBarActivity {
         initListViewTeam2(listViewTeam2, lineupAdapter2);
     }
 
-    private void initViewCompponents() {
+    private void initViewComponents() {
 
         score1TextView = (TextView)findViewById(R.id.matchRecord_score1);
         score2TextView = (TextView)findViewById(R.id.matchRecord_score2);
         score1TextView.setText(String.valueOf(scoreTeam1));
         score2TextView.setText(String.valueOf(scoreTeam2));
         timeClock      = (Chronometer)findViewById(R.id.matchRecord_chronometer);
+        timeClock.setText("00:00");
+        timeClock.setOnClickListener(ChronoMeterOnClick);
     }
+
+    boolean tick = false;
+    View.OnClickListener ChronoMeterOnClick = new View.OnClickListener() {
+        public void onClick(View v) {
+            if(tick){
+                stopTime();
+                tick = false;
+            }else{
+                startTime();
+                tick = true;
+            }
+        }
+    };
+
+    private void startTime() {
+        int stoppedMilliseconds = 0;
+
+        String chronometerText = timeClock.getText().toString();
+        String array[] = chronometerText.split(":");
+        if (array.length == 2) {
+            stoppedMilliseconds = Integer.parseInt(array[0]) * 60 * 1000
+                    + Integer.parseInt(array[1]) * 1000;
+        }
+        timeClock.setBase(SystemClock.elapsedRealtime() - stoppedMilliseconds);
+        timeClock.start();
+    }
+
+    private void stopTime() {
+        timeClock.stop();
+    }
+
 
     private void initDao() throws SQLException {
         quarterInfoDao = getHelper().getQuarterPlayerInfoDao();
@@ -188,7 +222,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
         for (Player player : lineupTeam) {
             Substitution substitution = new Substitution();
             substitution.setQuarter(quarter);
-            substitution.setTime("10:00");
+            substitution.setTime("00:00");
             substitution.setType(SubstitutionType.IN.name());
             substitution.setPlayer(player);
             substitutionsDao.create(substitution);
@@ -266,7 +300,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
                         break;
                     case 4:
                         //change
-                        
+
 
 
                         break;
