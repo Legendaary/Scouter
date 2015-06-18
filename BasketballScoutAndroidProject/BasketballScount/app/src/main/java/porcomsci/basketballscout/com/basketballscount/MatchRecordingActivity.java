@@ -265,7 +265,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
 
     private void showManagePlayersMenuPopUpTeam1(int pos)
     {
-        String[] menu = {"1 ��ṹ", "2 ��ṹ","3 ��ṹ", "�����" ,"����¹��Ǽ�����", "¡��ԡ"};
+        String[] menu = {"1 คะแนน", "2 คะแนน","3 คะแนน", "ฟาล์ว" ,"เปลี่ยนตัวผู้เล่น", "ยกเลิก"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, menu);
         final int selectPos = pos;
         System.out.println("selected pos :"+selectPos);
@@ -300,9 +300,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
                         break;
                     case 4:
                         //change
-
-
-
+                        substitute(selectPos, 1);
                         break;
                     case 5:
                         //cancel
@@ -316,7 +314,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
 
     private void showManagePlayersMenuPopUpTeam2(int pos)
     {
-        String[] menu = {"1 ��ṹ", "2 ��ṹ","3 ��ṹ", "�����" ,"����¹��Ǽ�����", "¡��ԡ"};
+        String[] menu = {"1 คะแนน", "2 คะแนน","3 คะแนน", "ฟาล์ว" ,"เปลี่ยนตัวผู้เล่น", "ยกเลิก"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, menu);
         final int selectPos = pos;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -349,6 +347,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
                         break;
                     case 4:
                         //change
+                        System.out.println(timeClock.getText());
                         break;
                     case 5:
                         //cancel
@@ -388,16 +387,6 @@ public class MatchRecordingActivity extends ActionBarActivity {
             actionPlayer = lineupTeam2[selectPos];
         }
         try {
-            List<MatchPlayer> matchPlayerWantedToUpdate = matchPlayerDao.queryBuilder().where().eq("match_id",DBSaveHelper.match.getId()).and().eq("player_id",actionPlayer.getId()).query();
-            if(1 != matchPlayerWantedToUpdate.size()){
-                System.out.println("Query error!");
-                System.exit(-1);
-            }
-            MatchPlayer matchPlayer = matchPlayerWantedToUpdate.get(0);
-            matchPlayerDao.refresh(matchPlayer);
-            matchPlayer.setPlayerFouls(matchPlayer.getPlayerFouls()+1);
-            matchPlayerDao.update(matchPlayer);
-
             List<QuarterPlayerInfo> quarterPlayerInfos = quarterInfoDao.queryBuilder().where().eq("quarter_id",quarter.getId()).and().eq("player_id",actionPlayer.getId()).query();
             if(1 != quarterPlayerInfos.size()){
                 System.out.println("Query error!");
@@ -413,26 +402,133 @@ public class MatchRecordingActivity extends ActionBarActivity {
         }
     }
 
+    private void substitute(int selectPos, int team) {
+
+        List<Player> playerSubAdapter = null;
+        Player actionPlayer = null;
+        if(1 == team){
+            actionPlayer = lineupTeam1[selectPos];
+            playerSubAdapter = team1Players;
+        }else{
+            actionPlayer = lineupTeam2[selectPos];
+            playerSubAdapter = team2Players;
+        }
+
+        /**
+         * Todo Gift pop up the list using playerSubAdapter.  Also swap the lineUp.
+         */
+
+    }
+
+    private void substitutionSaving(Player currentPlayer , Player newPlayer ){
+
+        String time = (String) timeClock.getText();
+        Substitution currentOut = new Substitution();
+        currentOut.setPlayer(currentPlayer);
+        currentOut.setType(SubstitutionType.OUT.name());
+        currentOut.setQuarter(quarter);
+        currentOut.setTime(time);
+
+        Substitution newIn = new Substitution();
+        newIn.setPlayer(newPlayer);
+        newIn.setType(SubstitutionType.IN.name());
+        newIn.setQuarter(quarter);
+        newIn.setTime(time);
+
+        try {
+            substitutionsDao.create(currentOut);
+            substitutionsDao.create(newIn);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Substitution insert error!");
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_match_recording, menu);
+        getMenuInflater().inflate(R.menu.menu_competitor_choosing, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.button_ToNextActivity) {
+           summarizeAllData();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void summarizeAllData() {
+
+        finishLastPlayersSetSub();
+        summarizeSubstitutionToQuarterInfo();
+        savefoulsAndTimeFromQuarterPlayerInfoAndsaveScoreSheetToMatchPlayer();
+        saveQuarterInfo();
+    }
+
+
+    /**
+     * create substitution records for all last set of players
+     */
+    private void finishLastPlayersSetSub() {
+        String time = (String) timeClock.getText();
+        Substitution lastSet = null;
+        for (Player player : lineupTeam1) {
+            lastSet = new Substitution();
+            lastSet.setPlayer(player);
+            lastSet.setType(SubstitutionType.OUT.name());
+            lastSet.setQuarter(quarter);
+            lastSet.setTime(time);
+        }
+
+        for (Player player : lineupTeam2) {
+            lastSet = new Substitution();
+            lastSet.setPlayer(player);
+            lastSet.setType(SubstitutionType.OUT.name());
+            lastSet.setQuarter(quarter);
+            lastSet.setTime(time);
+        }
+    }
+
+    /**
+     * summarize and calculate time spent.
+     */
+    private void summarizeSubstitutionToQuarterInfo() {
+
+        for (Player team1Player : team1Players) {
+            try {
+                List<Substitution> eachSub = substitutionsDao.queryBuilder().where().eq("player_id",team1Player.getId()).and().eq("quarter_id",quarter.getId()).query();
+
+
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+
+        }
+
+
+
+    }
+
+    /**
+     * Summarize all data in scoresheet to get score and update in matchplayer.
+     * get FoulsSummary in quarterPlayerInfo and update MatchPlayer.
+     */
+    private void savefoulsAndTimeFromQuarterPlayerInfoAndsaveScoreSheetToMatchPlayer() {
+
+    }
+
+    /**
+     * Collect all data and set to this Quarter.
+     */
+    private void saveQuarterInfo() {
+
+
     }
 
     @Override
