@@ -11,7 +11,7 @@ public class QuarterPlayerInfo
     private int id;
     @DatabaseField
     private Integer scoreSummary;
-    @DatabaseField
+    @DatabaseField(defaultValue = "0")
     private Integer timeSpent;
     @DatabaseField(defaultValue = "0")
     private Integer foulsSummary;

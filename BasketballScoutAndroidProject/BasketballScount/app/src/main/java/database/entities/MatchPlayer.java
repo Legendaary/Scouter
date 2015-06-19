@@ -13,7 +13,7 @@ public class MatchPlayer {
     private Integer playerNumber;
     @DatabaseField(defaultValue = "0")
     private Integer playerFouls;
-    @DatabaseField
+    @DatabaseField(defaultValue = "0")
     private Integer timeSpent;
     @DatabaseField(defaultValue = "0")
     private Integer score;
