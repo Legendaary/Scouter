@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import database.DBSaveHelper;
 import database.DatabaseHelper;
 import database.entities.Quarter;
+import porcomsci.basketballscout.com.basketballscount.utility.SegueHelper;
 
 
 public class QuarterChoosingActivity extends ActionBarActivity {
@@ -43,12 +44,37 @@ public class QuarterChoosingActivity extends ActionBarActivity {
         initButton();
     }
 
+    private void checkAvailability() {
+        if(SegueHelper.quarter1IsPlayed){
+            quarterButton2.setEnabled(true);
+        }
+        if(SegueHelper.quarter2IsPlayed){
+            quarterButton3.setEnabled(true);
+        }
+        if(SegueHelper.quarter3IsPlayed){
+            quarterButton4.setEnabled(true);
+        }
+        if(SegueHelper.quarter4IsPlayed){
+            quarterButton5.setEnabled(true);
+        }
+    }
+
     private void initButton() {
         quarterButton1 = (Button)findViewById(R.id.quarter1);
+
         quarterButton2 = (Button)findViewById(R.id.quarter2);
+        quarterButton2.setEnabled(false);
+
         quarterButton3 = (Button)findViewById(R.id.quarter3);
+        quarterButton3.setEnabled(false);
+
         quarterButton4 = (Button)findViewById(R.id.quarter4);
+        quarterButton4.setEnabled(false);
+
         quarterButton5 = (Button)findViewById(R.id.quarter5);
+        quarterButton5.setEnabled(false);
+
+        checkAvailability();
         setButtonListener();
     }
 
@@ -140,6 +166,8 @@ public class QuarterChoosingActivity extends ActionBarActivity {
         });
 
     }
+
+
 
 
     @Override

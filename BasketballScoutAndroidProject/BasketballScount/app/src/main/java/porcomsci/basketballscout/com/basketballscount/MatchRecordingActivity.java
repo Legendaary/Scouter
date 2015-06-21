@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.DeleteBuilder;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -71,7 +72,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
         getSupportActionBar().setTitle("Quarter # " + DBSaveHelper.quarterNumber);
         setContentView(R.layout.activity_match_recording);
         initViewComponents();
-        determineQuater();
+        determineQuarter();
         try {
             initDao();
             initializeBasicData();
@@ -133,7 +134,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
         quarterScoreSheetDao = getHelper().getQuarterScoreSheetDao();
     }
 
-    private void determineQuater() {
+    private void determineQuarter() {
         int quarterNo = DBSaveHelper.quarterNumber;
         if (1 == quarterNo) {
             quarter = DBSaveHelper.quarter1;
@@ -151,25 +152,14 @@ public class MatchRecordingActivity extends ActionBarActivity {
     private void initializeBasicData() throws SQLException {
         initEachTeamMP();
         initAllPlayersList();
-        createQuarterInfoRecord(team1Players, team2Players);
+        createQuarterInfoRecord(team1Players);
+        createQuarterInfoRecord(team2Players);
         getLineUpPlayer(lineupTeam1, team1MP);
         getLineUpPlayer(lineupTeam2, team2MP);
         getPlayerNameAdapter(lineupTeam1, lineupAdapter1);
         getPlayerNameAdapter(lineupTeam2, lineupAdapter2);
         initSubstitutionData(lineupTeam1);
         initSubstitutionData(lineupTeam2);
-    }
-
-    private void createQuarterInfoRecord(List<Player> team1Players, List<Player> team2Players) throws SQLException {
-        //join 2 player lists
-        List<Player> playerList = team1Players.subList(0, team1Players.size());
-        playerList.addAll(team2Players);
-        for (Player player : playerList) {
-            QuarterPlayerInfo quarterPlayerInfo = new QuarterPlayerInfo();
-            quarterPlayerInfo.setQuarter(quarter);
-            quarterPlayerInfo.setPlayer(player);
-            quarterInfoDao.create(quarterPlayerInfo);
-        }
     }
 
     private void initEachTeamMP() throws SQLException {
@@ -193,6 +183,17 @@ public class MatchRecordingActivity extends ActionBarActivity {
             playerList.add(matchPlayer.getPlayer());
         }
         return playerList;
+    }
+
+
+    private void createQuarterInfoRecord(List<Player> exPlayerList) throws SQLException {
+
+        for (Player player : exPlayerList) {
+            QuarterPlayerInfo quarterPlayerInfo = new QuarterPlayerInfo();
+            quarterPlayerInfo.setQuarter(quarter);
+            quarterPlayerInfo.setPlayer(player);
+            quarterInfoDao.create(quarterPlayerInfo);
+        }
     }
 
     private void getLineUpPlayer(Player[] lineupPlayerArrays, List<MatchPlayer> matchPlayerList) {
@@ -297,7 +298,6 @@ public class MatchRecordingActivity extends ActionBarActivity {
                     case 3:
                         //foul
                         foulsCountTeam1++;
-                        //save player fouls in MatchPlayer
                         increasePlayerFouls(selectPos, 1);
                         break;
                     case 4:
@@ -397,6 +397,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
             quarterInfoDao.refresh(quarterPlayerInfo);
             quarterPlayerInfo.setFoulsSummary(quarterPlayerInfo.getFoulsSummary() + 1);
             quarterInfoDao.update(quarterPlayerInfo);
+            quarterInfoDao.refresh(quarterPlayerInfo);
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -445,6 +446,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
         }
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -452,6 +454,11 @@ public class MatchRecordingActivity extends ActionBarActivity {
         return true;
     }
 
+    /**
+     * save
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -461,7 +468,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
             summarizeAllData();
             setSegue();
             //go back to quarter
-
+            super.onBackPressed();
         }
 
         return super.onOptionsItemSelected(item);
@@ -471,18 +478,23 @@ public class MatchRecordingActivity extends ActionBarActivity {
         switch (quarter.getQuaterNumber()) {
             case 1:
                 SegueHelper.quarter1IsPlayed = true;
+                System.out.println("quarter 1 is played");
                 break;
             case 2:
                 SegueHelper.quarter2IsPlayed = true;
+                System.out.println("quarter 2 is played");
                 break;
             case 3:
                 SegueHelper.quarter3IsPlayed = true;
+                System.out.println("quarter 3 is played");
                 break;
             case 4:
                 SegueHelper.quarter4IsPlayed = true;
+                System.out.println("quarter 4 is played");
                 break;
             case 5:
                 SegueHelper.quarter5IsPlayed = true;
+                System.out.println("quarter 5 is played");
                 break;
         }
     }
@@ -490,9 +502,13 @@ public class MatchRecordingActivity extends ActionBarActivity {
     private void summarizeAllData() {
 
         finishLastPlayersSetSub();
+        System.out.println("insert last set of player sub");
         summarizeSubstitutionToQuarterInfo();
+        System.out.println("get all substitute done");
         saveFoulsAndTimeFromQuarterPlayerInfoAndsaveScoreSheetToMatchPlayer();
+        System.out.println("summarize all to match player");
         saveQuarterInfo();
+        System.out.println("summarize to quarter info");
     }
 
 
@@ -540,7 +556,8 @@ public class MatchRecordingActivity extends ActionBarActivity {
             int totalPlayTimeSecond = 0;
             try {
                 List<Substitution> eachSub = substitutionsDao.queryBuilder().where().eq("player_id", player.getId()).and().eq("quarter_id", quarter.getId()).query();
-                if (eachSub.size() == 0) {
+                System.out.println("sub size for each : "+eachSub.size());
+                if (eachSub.size() == 0 ) {
                     continue;
                 } else if (eachSub.size() % 2 != 0) {
                     System.out.println("Substitution data error");
@@ -549,8 +566,8 @@ public class MatchRecordingActivity extends ActionBarActivity {
                     for (int i = 0; i < eachSub.size(); i += 2) {
                         Substitution thisSubstitutionIn = eachSub.get(i);
                         Substitution thisSubstitutionOut = eachSub.get(i + 1);
-                        if (thisSubstitutionIn.getType() != SubstitutionType.IN.name() || thisSubstitutionOut.getType() != SubstitutionType.OUT.name()) {
-                            System.out.println("Substitution data error");
+                        if (! (thisSubstitutionIn.getType().equals(SubstitutionType.IN.name()))  || ! (thisSubstitutionOut.getType().equals(SubstitutionType.OUT.name()))) {
+                            System.out.println("Substitution data error IN/OUT not match");
                             System.exit(-1);
                         }
                         int inFieldTimeSecond = 0;
@@ -571,6 +588,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
                         System.exit(-1);
                     }
                     QuarterPlayerInfo quarterPlayerInfo = quarterPlayerInfos.get(0);
+                    quarterInfoDao.refresh(quarterPlayerInfo);
                     quarterPlayerInfo.setTimeSpent(totalPlayTimeSecond);
                     quarterInfoDao.update(quarterPlayerInfo);
                 }
@@ -595,6 +613,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
         for (Player player : allPlayer) {
 
             int scoreSum = 0;
+
             int foulSum = 0;
             int timeSpentSec = 0;
             try {
@@ -608,17 +627,31 @@ public class MatchRecordingActivity extends ActionBarActivity {
                     quarterInfoDao.refresh(quarterPlayerInfo);
                     foulSum = quarterPlayerInfo.getFoulsSummary();
                     timeSpentSec = quarterPlayerInfo.getTimeSpent();
-
-
                 }
                 List<QuarterScoreSheet> quarterScoreSheetList = quarterScoreSheetDao.queryBuilder().where().eq("quarter_id", quarter.getId()).and().eq("player_id", player.getId()).query();
-                if (quarterScoreSheetList.size() == 0) {
+                if (quarterScoreSheetList.size() <= 0) {
                     continue;
                 } else {
-
-
+                    for (QuarterScoreSheet eachScore : quarterScoreSheetList) {
+                        scoreSum+=eachScore.getScoreCount();
+                    }
                 }
 
+                //save to match player
+                List<MatchPlayer> matchPlayerList = matchPlayerDao.queryBuilder().where().eq("match_id", DBSaveHelper.match.getId()).and().eq("player_id", player.getId()).query();
+                if(matchPlayerList.size()!=1){
+                    System.out.println("Match player query fail");
+                    System.exit(-1);
+                }else{
+
+                    MatchPlayer matchPlayer = matchPlayerList.get(0);
+                    matchPlayerDao.refresh(matchPlayer);
+                    matchPlayer.setPlayerFouls(matchPlayer.getPlayerFouls() + foulSum);
+                    matchPlayer.setTimeSpent(matchPlayer.getTimeSpent() + timeSpentSec);
+                    matchPlayer.setScore(matchPlayer.getScore() + scoreSum);
+                    matchPlayerDao.update(matchPlayer);
+                    matchPlayerDao.refresh(matchPlayer);
+                }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
@@ -639,6 +672,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
         quarter.setScoreB(scoreTeam2);
         try {
             quarterDao.update(quarter);
+            quarterDao.refresh(quarter);
         } catch (SQLException e) {
             System.out.println("update quarter after save has some error!");
             System.out.println(e.getMessage());
@@ -663,5 +697,27 @@ public class MatchRecordingActivity extends ActionBarActivity {
         return databaseHelper;
     }
 
+    @Override
+    public void onBackPressed() {
+
+        try {
+            DeleteBuilder<QuarterPlayerInfo, Integer> quarterPlayerInfoIntegerDeleteBuilder = quarterInfoDao.deleteBuilder();
+            quarterPlayerInfoIntegerDeleteBuilder.where().eq("quarter_id", quarter.getId());
+            quarterPlayerInfoIntegerDeleteBuilder.delete();
+
+            DeleteBuilder<Substitution, Integer> substitutionIntegerDeleteBuilder = substitutionsDao.deleteBuilder();
+            substitutionIntegerDeleteBuilder.where().eq("quarter_id", quarter.getId());
+            substitutionIntegerDeleteBuilder.delete();
+
+            DeleteBuilder<QuarterScoreSheet, Integer> quarterScoreSheetIntegerDeleteBuilder = quarterScoreSheetDao.deleteBuilder();
+            quarterScoreSheetIntegerDeleteBuilder.where().eq("quarter_id", quarter.getId());
+            quarterPlayerInfoIntegerDeleteBuilder.delete();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println("delete fail on back pressed");
+        }
+        super.onBackPressed();
+    }
 }
 

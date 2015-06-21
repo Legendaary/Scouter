@@ -86,8 +86,9 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
             System.out.println(e.getMessage());
         }
 
-    }
 
+        
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -108,12 +109,31 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
 
             if(SegueHelper.team1Chosen&& SegueHelper.team2Chosen){
 
-                Intent intent = new Intent(getApplicationContext(),PlayerChoosingActivity.class);
-                SegueHelper.playerChoosingSequence = 1;
-                //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                SegueHelper.team1Chosen = false;
-                SegueHelper.team2Chosen = false;
-                startActivity(intent);
+                try {
+                    getHelper().getSchoolDao().refresh(school1);
+                    getHelper().getSchoolDao().refresh(school2);
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+
+                if(school1.getId()!=school2.getId()){
+
+                    Intent intent = new Intent(getApplicationContext(),PlayerChoosingActivity.class);
+                    SegueHelper.playerChoosingSequence = 1;
+                    SegueHelper.team1Chosen = false;
+                    SegueHelper.team2Chosen = false;
+                    startActivity(intent);
+                }else{
+                    new AlertDialog.Builder(this)
+                            .setTitle("Alert")
+                            .setMessage("โรงเรียนที่แข่งซ้ำกัน!").setNegativeButton("ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    })
+                            .show();
+
+                }
 
             }else
                {

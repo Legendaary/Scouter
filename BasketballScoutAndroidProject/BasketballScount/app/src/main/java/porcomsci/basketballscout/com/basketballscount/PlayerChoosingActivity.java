@@ -67,9 +67,9 @@ public class PlayerChoosingActivity extends ActionBarActivity {
      */
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         deleteExistingRecords();
         SegueHelper.playerChoosingSequence--;
+        super.onBackPressed();
     }
 
 
