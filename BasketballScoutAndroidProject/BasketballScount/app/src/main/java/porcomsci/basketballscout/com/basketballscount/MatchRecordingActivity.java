@@ -42,10 +42,12 @@ public class MatchRecordingActivity extends ActionBarActivity {
     List<MatchPlayer> team2MP;
     List<Player> team1Players;
     List<Player> team2Players;
+    List<Player> reservedPlayers1 = new ArrayList<>();
+    List<Player> reservedPlayers2 = new ArrayList<>();
     Player[] lineupTeam1 = new Player[5];
     Player[] lineupTeam2 = new Player[5];
-    String[] lineupAdapter1 = new String[5];
-    String[] lineupAdapter2 = new String[5];
+    String[] lineupName1 = new String[5];
+    String[] lineupName2 = new String[5];
     ListView listViewTeam1, listViewTeam2;
     TextView score1TextView, score2TextView;
     Chronometer timeClock;
@@ -82,8 +84,8 @@ public class MatchRecordingActivity extends ActionBarActivity {
         listViewTeam1 = (ListView) findViewById(R.id.matchRecord_list1);
         listViewTeam2 = (ListView) findViewById(R.id.matchRecord_list2);
 
-        initListViewTeam1(listViewTeam1, lineupAdapter1);
-        initListViewTeam2(listViewTeam2, lineupAdapter2);
+        initListViewTeam1(listViewTeam1, lineupName1);
+        initListViewTeam2(listViewTeam2, lineupName2);
     }
 
     private void initViewComponents() {
@@ -156,8 +158,8 @@ public class MatchRecordingActivity extends ActionBarActivity {
         createQuarterInfoRecord(team2Players);
         getLineUpPlayer(lineupTeam1, team1MP);
         getLineUpPlayer(lineupTeam2, team2MP);
-        getPlayerNameAdapter(lineupTeam1, lineupAdapter1);
-        getPlayerNameAdapter(lineupTeam2, lineupAdapter2);
+        getLineupPlayersName(lineupTeam1, lineupName1);
+        getLineupPlayersName(lineupTeam2, lineupName2);
         initSubstitutionData(lineupTeam1);
         initSubstitutionData(lineupTeam2);
     }
@@ -212,10 +214,20 @@ public class MatchRecordingActivity extends ActionBarActivity {
         }
     }//end get line up player
 
-    private void getPlayerNameAdapter(Player[] lineupTeam, String[] lineupAdapter) {
+    private void getLineupPlayersName(Player[] lineupTeam, String[] lineupAdapter) {
         for (int i = 0; i < lineupTeam.length; i++) {
             lineupAdapter[i] = lineupTeam[i].getName();
         }
+    }
+
+    private List<String> getPlayersName(List<Player> playersList)
+    {
+        List<String> playersName = new ArrayList<>();
+        for(Player player : playersList)
+        {
+            playersName.add(player.getName());
+        }
+        return playersName;
     }
 
     private void initSubstitutionData(Player[] lineupTeam) throws SQLException {
@@ -348,7 +360,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
                         break;
                     case 4:
                         //change
-                        System.out.println(timeClock.getText());
+                        substitute(selectPos, 2);
                         break;
                     case 5:
                         //cancel
@@ -404,22 +416,93 @@ public class MatchRecordingActivity extends ActionBarActivity {
         }
     }
 
-    private void substitute(int selectPos, int team) {
+    //TODO substitute
+    private void substitute( final int lineupPos, final int teamNumber) {
+        getReservedPlayers(teamNumber);
+        List<String> reservedPlayersName;
+        if(teamNumber == 1)
+            reservedPlayersName = getPlayersName(reservedPlayers1);
+        else
+            reservedPlayersName = getPlayersName(reservedPlayers2);
 
-        List<Player> playerSubAdapter = null;
-        Player actionPlayer = null;
-        if (1 == team) {
-            actionPlayer = lineupTeam1[selectPos];
-            playerSubAdapter = team1Players;
-        } else {
-            actionPlayer = lineupTeam2[selectPos];
-            playerSubAdapter = team2Players;
+        ArrayAdapter<String> adapter = createListViewAdapter(reservedPlayersName);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                swapPlayers(lineupPos, teamNumber, which);
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
+    private void getReservedPlayers(int teamNumber)
+    {
+        if(teamNumber == 1)
+        {
+            if(!reservedPlayers1.isEmpty())
+                reservedPlayers1.clear();
+            for(Player player : team1Players)
+            {
+                reservedPlayers1.add(player);
+            }
+            for( Player lineup : lineupTeam1)
+            {
+                reservedPlayers1.remove(lineup);
+            }
         }
+        else
+        {
+            if(!reservedPlayers2.isEmpty())
+                reservedPlayers2.clear();
+            for(Player player : team2Players)
+            {
+                reservedPlayers2.add(player);
+            }
+            for( Player lineup : lineupTeam2)
+            {
+                reservedPlayers2.remove(lineup);
+            }
+        }
+    }
 
-        /**
-         * Todo Gift pop up the list using playerSubAdapter.  Also swap the lineUp.
-         */
+    private ArrayAdapter<String> createListViewAdapter( List<String> dataList )
+    {
+        return new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dataList);
+    }
 
+    private ArrayAdapter<String> createListViewAdapter( String[] dataString )
+    {
+        return new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dataString);
+    }
+
+    private void swapPlayers(int lineupPos, int teamNumber, int reservedPos)
+    {
+        String[] lineupPlayersName = new String[5];
+        if( teamNumber == 1)
+        {
+            Player currentPlayer = lineupTeam1[lineupPos];
+            Player newPlayer = reservedPlayers1.get(reservedPos);
+            lineupTeam1[lineupPos] = newPlayer;
+            getLineupPlayersName(lineupTeam1, lineupPlayersName);
+            listViewTeam1.setAdapter(createListViewAdapter(lineupPlayersName));
+            substitutionSaving(currentPlayer, newPlayer);
+        }
+        else
+        {
+            Player currentPlayer = lineupTeam2[lineupPos];
+            Player newPlayer = reservedPlayers2.get(reservedPos);
+            lineupTeam2[lineupPos] = newPlayer;
+            getLineupPlayersName(lineupTeam2, lineupPlayersName);
+            listViewTeam2.setAdapter(createListViewAdapter(lineupPlayersName));
+            substitutionSaving(currentPlayer, newPlayer );
+        }
     }
 
     private void substitutionSaving(Player currentPlayer, Player newPlayer) {
@@ -450,7 +533,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_competitor_choosing, menu);
+        getMenuInflater().inflate(R.menu.menu_match_recording, menu);
         return true;
     }
 
