@@ -3,8 +3,8 @@ package porcomsci.basketballscout.com.basketballscount;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,21 +13,14 @@ import android.widget.Button;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import database.DBSaveHelper;
 import database.DatabaseHelper;
-import database.entities.Match;
-import database.entities.School;
 import porcomsci.basketballscout.com.basketballscount.utility.SegueHelper;
 
 public class CompetitorChoosingActivity extends ActionBarActivity {
 
-    private Match match = DBSaveHelper.match;
     private DatabaseHelper databaseHelper = null;
-    private School school1 = DBSaveHelper.school1;
-    private School school2 = DBSaveHelper.school2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,47 +40,11 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
         buttonTeamB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),SchoolListActivity.class);
-                intent.putExtra("chooseTeam","2");
+                Intent intent = new Intent(getApplicationContext(), SchoolListActivity.class);
+                intent.putExtra("chooseTeam", "2");
                 startActivity(intent);
             }
         });
-        try {
-            checkReadyToGo();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private void checkReadyToGo() throws Exception {
-        String comeFromTeam = getIntent().getStringExtra("teamChosen");
-        try {
-        if(comeFromTeam!=null) {
-            if (comeFromTeam.equalsIgnoreCase("1")) {
-                SegueHelper.team1Chosen = true;
-                match.setSchoolA(DBSaveHelper.school1);
-                int rowUpdated = getHelper().getMatchDao().update(match);
-                getHelper().getMatchDao().refresh(match);
-                if( 1 != rowUpdated){
-                    throw new Exception("Update School in Match Error");
-                }
-
-            } else if (comeFromTeam.equalsIgnoreCase("2")) {
-                SegueHelper.team2Chosen = true;
-                match.setSchoolB(DBSaveHelper.school2);
-                int rowUpdated = getHelper().getMatchDao().update(match);
-                if( 1 != rowUpdated){
-                    throw new Exception("Update School in Match Error");
-                }
-                getHelper().getMatchDao().refresh(match);
-            }
-                }//end check not null
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-
-
-        
     }
 
     @Override
@@ -106,18 +63,15 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.button_ToNextActivity) {
-
             if(SegueHelper.team1Chosen&& SegueHelper.team2Chosen){
+                if(DBSaveHelper.school1Id != DBSaveHelper.school2Id){
 
-                try {
-                    getHelper().getSchoolDao().refresh(school1);
-                    getHelper().getSchoolDao().refresh(school2);
-                } catch (SQLException e) {
-                    System.out.println(e.getMessage());
-                }
-
-                if(school1.getId()!=school2.getId()){
-
+                    try {
+                        getHelper().getSchoolDao().refresh(DBSaveHelper.school1);
+                        getHelper().getSchoolDao().refresh(DBSaveHelper.school2);
+                    } catch (SQLException e) {
+                        System.out.println("refresh error!");
+                    }
                     Intent intent = new Intent(getApplicationContext(),PlayerChoosingActivity.class);
                     SegueHelper.playerChoosingSequence = 1;
                     SegueHelper.team1Chosen = false;
@@ -132,9 +86,7 @@ public class CompetitorChoosingActivity extends ActionBarActivity {
                         }
                     })
                             .show();
-
                 }
-
             }else
                {
                 new AlertDialog.Builder(this)

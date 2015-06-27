@@ -19,7 +19,9 @@ import java.util.List;
 
 import database.DBSaveHelper;
 import database.DatabaseHelper;
+import database.entities.Match;
 import database.entities.School;
+import porcomsci.basketballscout.com.basketballscount.utility.SegueHelper;
 
 
 public class SchoolListActivity extends ActionBarActivity {
@@ -56,25 +58,43 @@ public class SchoolListActivity extends ActionBarActivity {
         schoolListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                clickAtSchoolName(position);
+                try {
+                    clickAtSchoolName(position);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
             }
         });
     }
 
-    public void clickAtSchoolName(int pos){
+    public void clickAtSchoolName(int pos) throws Exception {
         int schoolId = schoolIdList.get(pos).getId();
-        Intent intent = new Intent(getApplicationContext(),CompetitorChoosingActivity.class);
+        Match match = DBSaveHelper.match;
+
         if(getIntent().getStringExtra("chooseTeam").equalsIgnoreCase("1")){
             DBSaveHelper.school1Id = schoolId;
             DBSaveHelper.school1 = schoolIdList.get(pos);
-            System.out.println("*********************schoolId for 1 : "+schoolId);
+            System.out.println("Choosing schoolId for school 1  : "+schoolId);
+            SegueHelper.team1Chosen = true;
+            match.setSchoolA(DBSaveHelper.school1);
+            int rowUpdated = getHelper().getMatchDao().update(match);
+            getHelper().getMatchDao().refresh(match);
+            if( 1 != rowUpdated){
+                throw new Exception("Update School in Match Error");
+            }
         }else if(getIntent().getStringExtra("chooseTeam").equalsIgnoreCase("2")){
             DBSaveHelper.school2Id = schoolId;
             DBSaveHelper.school2 = schoolIdList.get(pos);
-            System.out.println("*********************schoolId for 2 : "+schoolId);
+            System.out.println("Choosing schoolId for school 2  : "+schoolId);
+            SegueHelper.team2Chosen = true;
+            match.setSchoolB(DBSaveHelper.school2);
+            int rowUpdated = getHelper().getMatchDao().update(match);
+            getHelper().getMatchDao().refresh(match);
+            if( 1 != rowUpdated){
+                throw new Exception("Update School in Match Error");
+            }
         }
-        intent.putExtra("teamChosen",getIntent().getStringExtra("chooseTeam"));
-        startActivity(intent);
+        this.onBackPressed();
     }
 
     @Override
