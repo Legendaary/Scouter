@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Chronometer;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
@@ -537,24 +538,26 @@ public class MatchRecordingActivity extends ActionBarActivity {
         return true;
     }
 
-    /**
-     * save
-     * @param item
-     * @return
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+    public void saveDataFinishRecording(MenuItem item) {
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(MatchRecordingActivity.this);
+        builder.setMessage("บันทึกข้อมูลการบันทึกการแข่งขัน?");
+        builder.setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                summarizeAllData();
+                setSegue();
+                //go back to quarter
+                back();
+            }
+        });
+        builder.setNegativeButton("ยกเลิก", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.button_ToNextActivity) {
-            summarizeAllData();
-            setSegue();
-            //go back to quarter
-            super.onBackPressed();
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private void setSegue() {
@@ -639,7 +642,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
             int totalPlayTimeSecond = 0;
             try {
                 List<Substitution> eachSub = substitutionsDao.queryBuilder().where().eq("player_id", player.getId()).and().eq("quarter_id", quarter.getId()).query();
-                System.out.println("sub size for each : "+eachSub.size());
+                System.out.println("sub size for each : " + eachSub.size());
                 if (eachSub.size() == 0 ) {
                     continue;
                 } else if (eachSub.size() % 2 != 0) {
@@ -741,8 +744,6 @@ public class MatchRecordingActivity extends ActionBarActivity {
 
 
         }
-
-
     }
 
     /**
@@ -783,6 +784,29 @@ public class MatchRecordingActivity extends ActionBarActivity {
     @Override
     public void onBackPressed() {
 
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(MatchRecordingActivity.this);
+        builder.setMessage("การย้อนกลับจะยกเลิกข้อมูลของควอเตอร์นี้ทั้งหมด?");
+        builder.setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                deleteQuarterData();
+                back();
+            }
+        });
+        builder.setNegativeButton("ยกเลิก", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    private void back() {
+        super.onBackPressed();
+    }
+
+    private void deleteQuarterData() {
         try {
             DeleteBuilder<QuarterPlayerInfo, Integer> quarterPlayerInfoIntegerDeleteBuilder = quarterInfoDao.deleteBuilder();
             quarterPlayerInfoIntegerDeleteBuilder.where().eq("quarter_id", quarter.getId());
@@ -795,12 +819,11 @@ public class MatchRecordingActivity extends ActionBarActivity {
             DeleteBuilder<QuarterScoreSheet, Integer> quarterScoreSheetIntegerDeleteBuilder = quarterScoreSheetDao.deleteBuilder();
             quarterScoreSheetIntegerDeleteBuilder.where().eq("quarter_id", quarter.getId());
             quarterPlayerInfoIntegerDeleteBuilder.delete();
-
+            System.out.println("delete all quarter info. complete");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.out.println("delete fail on back pressed");
         }
-        super.onBackPressed();
     }
 }
 

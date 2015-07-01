@@ -1,16 +1,19 @@
 package porcomsci.basketballscout.com.basketballscount.menu;
+
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
+import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -34,9 +37,8 @@ public class MainActivity extends ActionBarActivity {
         final ListView menuListView = (ListView) findViewById(R.id.listView);
         String[] menu = {"ทัวร์นาเม้นท์", "แมทช์", "ประวัติ", "จัดการข้อมูล โรงเรียน&ผู้เล่น", "ตั้งค่า"};
         ArrayList<String> stringArrayList = new ArrayList<>();
-        for( int i = 0; i < menu.length ; i++ )
-        {
-            stringArrayList.add(menu[ i ]);
+        for (int i = 0; i < menu.length; i++) {
+            stringArrayList.add(menu[i]);
         }
         final ArrayAdapter adapter = new ArrayAdapter(this,
                 android.R.layout.simple_list_item_1, stringArrayList);
@@ -50,13 +52,10 @@ public class MainActivity extends ActionBarActivity {
                  * 2 is history.
                  * 3 is manage.
                  */
-                if(position == 0)
-                {
+                if (position == 0) {
                     Intent intent = new Intent(getApplicationContext(), TournamentActivity.class);
                     startActivity(intent);
-                }
-                else if(position == 1)
-                {
+                } else if (position == 1) {
                     try {
                         Tournament casual = getHelper().getTournamentDao().queryForId(1);
                         DBSaveHelper.tournament = casual;
@@ -65,26 +64,24 @@ public class MainActivity extends ActionBarActivity {
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
-                }
-                else if(position == 2)
-                {
+                } else if (position == 2) {
                     Intent intent = new Intent(getApplicationContext(), TournamentHistoryActivity.class);
                     startActivity(intent);
-                }
-                else if(position == 3)
-                {
+                } else if (position == 3) {
                     Intent intent = new Intent(getApplicationContext(), ManageSchoolInfoActivity.class);
                     startActivity(intent);
                 }
             }
         });
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 // Handle action bar item clicks here. The action bar will
@@ -97,6 +94,7 @@ public class MainActivity extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

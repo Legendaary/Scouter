@@ -61,14 +61,8 @@ public class TournamentHistoryActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), MatchHistoryActivity.class);
-                String tournamentId = "";
                 try {
-                    /*List<Tournament> retrievedList = tournamentDao.queryBuilder().where().
-                            eq("competitionName", tournamentList.get(position)).query();
-                    tournamentId =  String.valueOf(retrievedList.get(0).getId());*/
-                    tournamentId = String.valueOf(tournamentIdList.get(position));
-                    DBSaveHelper.historyTournamentId = tournamentId;
-
+                    HistorySegue.historyTournamentId = String.valueOf(tournamentIdList.get(position));
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }

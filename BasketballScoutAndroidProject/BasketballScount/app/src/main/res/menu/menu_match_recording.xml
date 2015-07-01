@@ -2,10 +2,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="porcomsci.basketballscout.com.basketballscount.MatchRecordingActivity">
-    <item android:id="@+id/menu_match_recording_stat1" android:title="stat1"
-        android:orderInCategory="1" app:showAsAction="collapseActionView" />
-    <item android:id="@+id/menu_match_recording_stat2" android:title="stat2"
-        android:orderInCategory="2" app:showAsAction="collapseActionView" />
-    <item android:id="@+id/menu_match_recording_stat3" android:title="stat3"
-        android:orderInCategory="3" app:showAsAction="collapseActionView" />
+    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+        android:orderInCategory="100" app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/quarterInfoMenu"
+                android:orderInCategory="100"
+                android:title="ข้อมูลควอเตอร์"
+                app:showAsAction="always"/>
+            <item
+                android:id="@+id/quarterScoreMenu"
+                android:orderInCategory="100"
+                android:title="ข้อมูลการทำคะแนน"
+                app:showAsAction="always"/>
+            <item
+                android:id="@+id/quarterSubstitueMenu"
+                android:orderInCategory="100"
+                android:title="-ข้อมูลการเปลี่ยนตัว"
+                app:showAsAction="always"/>
+            <item
+                android:id="@+id/action_edit_friends"
+                android:orderInCategory="100"
+                android:title="เสร็จสิ้นการแข่ง"
+                android:onClick="saveDataFinishRecording"
+                app:showAsAction="always"/>
+        </menu>
+    </item>
 </menu>

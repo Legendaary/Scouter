@@ -44,17 +44,35 @@ public class QuarterChoosingActivity extends ActionBarActivity {
         initButton();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        checkAvailability();
+    }
+
     private void checkAvailability() {
+
+        System.out.println("checking avail ++++");
         if(SegueHelper.quarter1IsPlayed){
+            quarterButton1.setEnabled(false);
             quarterButton2.setEnabled(true);
         }
         if(SegueHelper.quarter2IsPlayed){
+            quarterButton1.setEnabled(false);
+            quarterButton2.setEnabled(false);
             quarterButton3.setEnabled(true);
         }
         if(SegueHelper.quarter3IsPlayed){
+            quarterButton1.setEnabled(false);
+            quarterButton2.setEnabled(false);
+            quarterButton3.setEnabled(false);
             quarterButton4.setEnabled(true);
         }
         if(SegueHelper.quarter4IsPlayed){
+            quarterButton1.setEnabled(false);
+            quarterButton2.setEnabled(false);
+            quarterButton3.setEnabled(false);
+            quarterButton4.setEnabled(false);
             quarterButton5.setEnabled(true);
         }
     }
@@ -74,7 +92,6 @@ public class QuarterChoosingActivity extends ActionBarActivity {
         quarterButton5 = (Button)findViewById(R.id.quarter5);
         quarterButton5.setEnabled(false);
 
-        checkAvailability();
         setButtonListener();
     }
 
