@@ -1,5 +1,7 @@
 package porcomsci.basketballscout.com.basketballscount;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.widget.Button;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.DeleteBuilder;
 
 import java.sql.SQLException;
 
@@ -49,6 +52,41 @@ public class QuarterChoosingActivity extends ActionBarActivity {
         super.onStart();
         checkAvailability();
     }
+
+    @Override
+    public void onBackPressed() {
+
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(QuarterChoosingActivity.this);
+        builder.setMessage("ยกเลิกการบันทึกข้อมูลทั้งหมด?");
+        builder.setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+                deleteAllQuarterAndBack();
+            }
+        });
+        builder.setNegativeButton("ยกเลิก", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+
+    }
+
+    private void deleteAllQuarterAndBack() {
+
+        DeleteBuilder<Quarter, Integer> quarterIntegerDeleteBuilder = quarterDao.deleteBuilder();
+        try {
+            quarterIntegerDeleteBuilder.where().eq("match_id", DBSaveHelper.match.getId());
+            quarterIntegerDeleteBuilder.delete();
+        } catch (SQLException e) {
+            System.out.println("delete all quarter error");
+        }
+        super.onBackPressed();
+    }
+
 
     private void checkAvailability() {
 

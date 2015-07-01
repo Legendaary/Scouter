@@ -557,7 +557,6 @@ public class MatchRecordingActivity extends ActionBarActivity {
             }
         });
         builder.show();
-
     }
 
     private void setSegue() {
