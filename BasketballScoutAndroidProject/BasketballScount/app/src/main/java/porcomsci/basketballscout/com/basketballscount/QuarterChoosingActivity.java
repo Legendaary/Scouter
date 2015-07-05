@@ -77,6 +77,13 @@ public class QuarterChoosingActivity extends ActionBarActivity {
 
     private void deleteAllQuarterAndBack() {
 
+        SegueHelper.quarter1IsPlayed = false;
+        SegueHelper.quarter2IsPlayed = false;
+        SegueHelper.quarter3IsPlayed = false;
+        SegueHelper.quarter4IsPlayed = false;
+        SegueHelper.quarter5IsPlayed = false;
+
+
         DeleteBuilder<Quarter, Integer> quarterIntegerDeleteBuilder = quarterDao.deleteBuilder();
         try {
             quarterIntegerDeleteBuilder.where().eq("match_id", DBSaveHelper.match.getId());
@@ -95,6 +102,8 @@ public class QuarterChoosingActivity extends ActionBarActivity {
             quarterButton1.setEnabled(false);
             quarterButton2.setEnabled(true);
         }
+
+
         if(SegueHelper.quarter2IsPlayed){
             quarterButton1.setEnabled(false);
             quarterButton2.setEnabled(false);
