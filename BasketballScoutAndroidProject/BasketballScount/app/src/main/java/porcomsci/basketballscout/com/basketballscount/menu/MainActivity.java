@@ -6,24 +6,22 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
-import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import database.DBSaveHelper;
 import database.DatabaseHelper;
 import database.entities.Tournament;
-import porcomsci.basketballscout.com.basketballscount.ManageSchoolInfoActivity;
-import porcomsci.basketballscout.com.basketballscount.MatchActivity;
+import porcomsci.basketballscout.com.basketballscount.mainflow.ManageSchoolInfoActivity;
+import porcomsci.basketballscout.com.basketballscount.mainflow.MatchActivity;
 import porcomsci.basketballscout.com.basketballscount.R;
-import porcomsci.basketballscout.com.basketballscount.TournamentActivity;
+import porcomsci.basketballscout.com.basketballscount.mainflow.TournamentActivity;
 import porcomsci.basketballscout.com.basketballscount.history.TournamentHistoryActivity;
 
 public class MainActivity extends ActionBarActivity {
