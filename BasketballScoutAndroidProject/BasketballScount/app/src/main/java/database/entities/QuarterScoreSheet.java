@@ -10,9 +10,11 @@ public class QuarterScoreSheet {
     private int id;
     @DatabaseField
     private Integer scoreCount;
-    @DatabaseField (foreign = true,columnName = "player_id",foreignAutoRefresh = true)
+    @DatabaseField
+    private String time;
+    @DatabaseField(foreign = true, columnName = "player_id", foreignAutoRefresh = true)
     private Player player;
-    @DatabaseField (foreign = true,columnName = "quarter_id",foreignAutoRefresh = true)
+    @DatabaseField(foreign = true, columnName = "quarter_id", foreignAutoRefresh = true)
     private Quarter quarter;
 
     public int getId() {
@@ -25,6 +27,14 @@ public class QuarterScoreSheet {
 
     public Integer getScoreCount() {
         return scoreCount;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public void setScoreCount(Integer scoreCount) {
