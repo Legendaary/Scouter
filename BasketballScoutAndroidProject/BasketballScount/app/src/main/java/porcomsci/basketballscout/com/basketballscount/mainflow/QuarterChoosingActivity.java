@@ -253,8 +253,32 @@ public class QuarterChoosingActivity extends ActionBarActivity {
             boolean quarter4IsPlayed = SegueHelper.quarter4IsPlayed;
             if(quarter1IsPlayed&&quarter2IsPlayed&&quarter3IsPlayed&&quarter4IsPlayed){
 
+                AlertDialog.Builder builder =
+                        new AlertDialog.Builder(QuarterChoosingActivity.this);
+                builder.setMessage("ยืนยันการบันทึกการเล่นทั้งหมด?");
+                builder.setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(getApplicationContext(), SummaryQuarterActivity.class);
+                        startActivity(intent);
+                    }
+                });
+                builder.setNegativeButton("ยกเลิก", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
+            }else{
+                AlertDialog.Builder builder =
+                        new AlertDialog.Builder(QuarterChoosingActivity.this);
+                builder.setMessage("กรุณาบันทึกการเล่นให้ครบทุก Quarter ก่อน?");
+                builder.setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+                builder.show();
             }
-
         }
 
         return super.onOptionsItemSelected(item);
