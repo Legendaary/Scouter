@@ -382,10 +382,17 @@ public class MatchRecordingActivity extends ActionBarActivity {
             actionPlayer = lineupTeam2[selectPos];
         }
 
+        String time = (String) timeClock.getText();
         QuarterScoreSheet quarterScoreSheet = new QuarterScoreSheet();
         quarterScoreSheet.setQuarter(quarter);
         quarterScoreSheet.setPlayer(actionPlayer);
         quarterScoreSheet.setScoreCount(score);
+        quarterScoreSheet.setTime(time);
+        if(1==team){
+            quarterScoreSheet.setSchoolId(DBSaveHelper.school1Id);
+        }else{
+            quarterScoreSheet.setSchoolId(DBSaveHelper.school2Id);
+        }
         try {
             quarterScoreSheetDao.create(quarterScoreSheet);
         } catch (SQLException e) {
@@ -493,7 +500,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
             lineupTeam1[lineupPos] = newPlayer;
             getLineupPlayersName(lineupTeam1, lineupPlayersName);
             listViewTeam1.setAdapter(createListViewAdapter(lineupPlayersName));
-            substitutionSaving(currentPlayer, newPlayer);
+            substitutionSaving(currentPlayer, newPlayer , DBSaveHelper.school1Id);
         }
         else
         {
@@ -502,11 +509,11 @@ public class MatchRecordingActivity extends ActionBarActivity {
             lineupTeam2[lineupPos] = newPlayer;
             getLineupPlayersName(lineupTeam2, lineupPlayersName);
             listViewTeam2.setAdapter(createListViewAdapter(lineupPlayersName));
-            substitutionSaving(currentPlayer, newPlayer );
+            substitutionSaving(currentPlayer, newPlayer,DBSaveHelper.school2Id );
         }
     }
 
-    private void substitutionSaving(Player currentPlayer, Player newPlayer) {
+    private void substitutionSaving(Player currentPlayer, Player newPlayer, int schoolId) {
 
         String time = (String) timeClock.getText();
         Substitution currentOut = new Substitution();
@@ -514,13 +521,14 @@ public class MatchRecordingActivity extends ActionBarActivity {
         currentOut.setType(SubstitutionType.OUT.name());
         currentOut.setQuarter(quarter);
         currentOut.setTime(time);
+        currentOut.setSchoolId(schoolId);
 
         Substitution newIn = new Substitution();
         newIn.setPlayer(newPlayer);
         newIn.setType(SubstitutionType.IN.name());
         newIn.setQuarter(quarter);
         newIn.setTime(time);
-
+        newIn.setSchoolId(schoolId);
         try {
             substitutionsDao.create(currentOut);
             substitutionsDao.create(newIn);
