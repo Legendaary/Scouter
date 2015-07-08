@@ -14,6 +14,8 @@ public class Substitution {
     private String time;
     @DatabaseField
     private String type;
+    @DatabaseField
+    private Integer schoolId;
     @DatabaseField (foreign = true,columnName = "player_id",foreignAutoRefresh = true)
     private Player player;
     @DatabaseField (foreign = true,columnName = "quarter_id",foreignAutoRefresh = true)
@@ -57,5 +59,13 @@ public class Substitution {
 
     public void setQuarter(Quarter quarter) {
         this.quarter = quarter;
+    }
+
+    public Integer getSchoolId() {
+        return schoolId;
+    }
+
+    public void setSchoolId(Integer schoolId) {
+        this.schoolId = schoolId;
     }
 }
