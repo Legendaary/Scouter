@@ -1,4 +1,4 @@
-package porcomsci.basketballscout.com.basketballscount;
+package porcomsci.basketballscout.com.basketballscount.mainflow;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import database.DBSaveHelper;
 import database.DatabaseHelper;
 import database.entities.Quarter;
+import porcomsci.basketballscout.com.basketballscount.R;
 import porcomsci.basketballscout.com.basketballscount.utility.SegueHelper;
 
 
@@ -74,6 +75,7 @@ public class QuarterChoosingActivity extends ActionBarActivity {
         builder.show();
 
     }
+
 
     private void deleteAllQuarterAndBack() {
 
@@ -234,27 +236,31 @@ public class QuarterChoosingActivity extends ActionBarActivity {
 
 
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_quater_choosing, menu);
+        getMenuInflater().inflate(R.menu.menu_competitor_choosing, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        if (id == R.id.button_ToNextActivity) {
+            boolean quarter1IsPlayed = SegueHelper.quarter1IsPlayed;
+            boolean quarter2IsPlayed = SegueHelper.quarter2IsPlayed;
+            boolean quarter3IsPlayed = SegueHelper.quarter3IsPlayed;
+            boolean quarter4IsPlayed = SegueHelper.quarter4IsPlayed;
+            if(quarter1IsPlayed&&quarter2IsPlayed&&quarter3IsPlayed&&quarter4IsPlayed){
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            }
+
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

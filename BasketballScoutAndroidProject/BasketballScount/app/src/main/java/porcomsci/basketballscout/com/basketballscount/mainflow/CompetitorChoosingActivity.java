@@ -1,4 +1,4 @@
-package porcomsci.basketballscout.com.basketballscount;
+package porcomsci.basketballscout.com.basketballscount.mainflow;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -16,6 +16,7 @@ import java.sql.SQLException;
 
 import database.DBSaveHelper;
 import database.DatabaseHelper;
+import porcomsci.basketballscout.com.basketballscount.R;
 import porcomsci.basketballscout.com.basketballscount.utility.SegueHelper;
 
 public class CompetitorChoosingActivity extends ActionBarActivity {

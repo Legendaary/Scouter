@@ -1,4 +1,4 @@
-package porcomsci.basketballscout.com.basketballscount;
+package porcomsci.basketballscout.com.basketballscount.mainflow;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -22,6 +22,7 @@ import java.util.List;
 
 import database.DatabaseHelper;
 import database.entities.School;
+import porcomsci.basketballscout.com.basketballscount.R;
 
 
 public class ManageSchoolInfoActivity extends ActionBarActivity {

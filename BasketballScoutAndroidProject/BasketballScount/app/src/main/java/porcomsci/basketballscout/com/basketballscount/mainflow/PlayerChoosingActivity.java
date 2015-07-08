@@ -1,4 +1,4 @@
-package porcomsci.basketballscout.com.basketballscount;
+package porcomsci.basketballscout.com.basketballscount.mainflow;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -28,6 +28,7 @@ import database.entities.Match;
 import database.entities.MatchPlayer;
 import database.entities.Player;
 import database.entities.School;
+import porcomsci.basketballscout.com.basketballscount.R;
 import porcomsci.basketballscout.com.basketballscount.utility.DialogUtil;
 import porcomsci.basketballscout.com.basketballscount.utility.SegueHelper;
 

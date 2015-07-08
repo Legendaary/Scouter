@@ -1,4 +1,4 @@
-package porcomsci.basketballscout.com.basketballscount;
+package porcomsci.basketballscout.com.basketballscount.mainflow;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +21,7 @@ import database.DBSaveHelper;
 import database.DatabaseHelper;
 import database.entities.Match;
 import database.entities.School;
+import porcomsci.basketballscout.com.basketballscount.R;
 import porcomsci.basketballscout.com.basketballscount.utility.SegueHelper;
 
 

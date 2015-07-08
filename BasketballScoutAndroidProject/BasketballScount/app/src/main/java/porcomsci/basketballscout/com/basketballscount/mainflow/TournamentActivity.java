@@ -1,4 +1,4 @@
-package porcomsci.basketballscout.com.basketballscount;
+package porcomsci.basketballscout.com.basketballscount.mainflow;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import database.DBSaveHelper;
 import database.DatabaseHelper;
 import database.entities.Tournament;
+import porcomsci.basketballscout.com.basketballscount.R;
 
 
 public class TournamentActivity extends ActionBarActivity {

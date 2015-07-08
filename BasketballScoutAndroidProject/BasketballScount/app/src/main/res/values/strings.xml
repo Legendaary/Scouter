@@ -41,5 +41,6 @@
     <string name="add_new_player_name">เพิ่มผู้เล่น</string>
     <string name="add_new_player_number">ป้อนหมายเลขผู้เล่น</string>
     <string name="title_activity_match_recording">MatchRecordingActivity</string>
+    <string name="title_activity_summary_quarter">SummaryQuarterActivity</string>
 
 </resources>

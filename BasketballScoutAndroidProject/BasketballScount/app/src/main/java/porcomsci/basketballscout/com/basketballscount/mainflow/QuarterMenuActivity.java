@@ -1,4 +1,4 @@
-package porcomsci.basketballscout.com.basketballscount;
+package porcomsci.basketballscout.com.basketballscount.mainflow;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import database.DBSaveHelper;
 import database.DatabaseHelper;
+import porcomsci.basketballscout.com.basketballscount.R;
 
 
 public class QuarterMenuActivity extends ActionBarActivity {

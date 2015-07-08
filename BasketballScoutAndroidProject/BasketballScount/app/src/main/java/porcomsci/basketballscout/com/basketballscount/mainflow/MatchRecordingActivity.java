@@ -1,4 +1,4 @@
-package porcomsci.basketballscout.com.basketballscount;
+package porcomsci.basketballscout.com.basketballscount.mainflow;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -30,6 +30,7 @@ import database.entities.Quarter;
 import database.entities.QuarterPlayerInfo;
 import database.entities.QuarterScoreSheet;
 import database.entities.Substitution;
+import porcomsci.basketballscout.com.basketballscount.R;
 import porcomsci.basketballscout.com.basketballscount.utility.SegueHelper;
 
 
