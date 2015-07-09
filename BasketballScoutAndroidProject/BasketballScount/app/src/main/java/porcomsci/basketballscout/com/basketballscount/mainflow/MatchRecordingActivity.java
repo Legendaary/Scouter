@@ -572,7 +572,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
         List<Substitution> school1SubList = substitutionsDao.queryBuilder().where().eq("schoolId", DBSaveHelper.school1Id).and().eq("quarter_id", quarter.getId()).query();
         List<Substitution> school2SubList = substitutionsDao.queryBuilder().where().eq("schoolId", DBSaveHelper.school2Id).and().eq("quarter_id", quarter.getId()).query();
         int sub1Size = school1SubList.size();
-        int sub2Size = school1SubList.size();
+        int sub2Size = school2SubList.size();
 
         String[] school1PlayerNumberArray = new String[sub1Size];
         String[] school1TimeArray = new String[sub1Size];
