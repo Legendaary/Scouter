@@ -16,13 +16,13 @@ public class SubstitutionAdapter extends BaseAdapter {
 
     private Context context;
     private String[] playerNo;
-    private String[] point;
+    private String[] flag;
     private String[] time;
 
-    public SubstitutionAdapter(Context context, String[] playerNo, String[] point, String[] time) {
+    public SubstitutionAdapter(Context context, String[] playerNo, String[] flag, String[] time) {
         this.context = context;
         this.playerNo = playerNo;
-        this.point = point;
+        this.flag = flag;
         this.time = time;
     }
 
@@ -56,7 +56,7 @@ public class SubstitutionAdapter extends BaseAdapter {
         timeView.setText(time[position]);
 
         TextView flagView = (TextView)convertView.findViewById(R.id.sub_player_flag);
-        flagView.setText(point[position]);
+        flagView.setText(flag[position]);
 
         return convertView;
     }
@@ -77,12 +77,12 @@ public class SubstitutionAdapter extends BaseAdapter {
         this.playerNo = playerNo;
     }
 
-    public String[] getPoint() {
-        return point;
+    public String[] getFlag() {
+        return flag;
     }
 
-    public void setPoint(String[] point) {
-        this.point = point;
+    public void setFlag(String[] flag) {
+        this.flag = flag;
     }
 
     public String[] getTime() {

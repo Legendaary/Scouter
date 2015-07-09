@@ -1,6 +1,7 @@
 package porcomsci.basketballscout.com.basketballscount.mainflow;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -575,30 +576,49 @@ public class MatchRecordingActivity extends ActionBarActivity {
         String[] school1PlayerNumberArray = new String[sub1Size];
         String[] school1TimeArray = new String[sub1Size];
         String[] school1FlagArray = new String[sub1Size];
-
-        getPlayerNumberFromMatchPlayer(school1SubList,school1PlayerNumberArray);
         String[] school2PlayerNumberArray = new String[sub2Size];
         String[] school2TimeArray = new String[sub2Size];
         String[] school2FlagArray = new String[sub2Size];
+
+        getPlayerNumberFromMatchPlayer(school1SubList,school1PlayerNumberArray);
         getPlayerNumberFromMatchPlayer(school2SubList,school2PlayerNumberArray);
+        getTimeAndFlagFromSubstitutionList(school1SubList, school1TimeArray, school1FlagArray);
+        getTimeAndFlagFromSubstitutionList(school2SubList,school2TimeArray,school2FlagArray);
 
+        SubstitutionAdapter school1Adapter = new SubstitutionAdapter(getApplicationContext(),school1PlayerNumberArray,school1FlagArray,school1TimeArray);
+        SubstitutionAdapter school2Adapter = new SubstitutionAdapter(getApplicationContext(),school2PlayerNumberArray,school2FlagArray,school2TimeArray);
 
+        final Dialog dialog = new Dialog(getApplicationContext());
+        dialog.setContentView(R.layout.substitution_dialog);
+        dialog.setTitle("ข้อมูลการเปลี่ยนตัว");
 
-
-        SubstitutionAdapter school1Adapter;
-
+        ListView listViewTeam1 = (ListView) dialog.findViewById(R.id.substitution_dialog_list1);
+        ListView listViewTeam2 = (ListView) dialog.findViewById(R.id.substitution_dialog_list2);
+        listViewTeam1.setAdapter(school1Adapter);
+        listViewTeam2.setAdapter(school2Adapter);
+        dialog.show();
 
 
     }
 
     private void getPlayerNumberFromMatchPlayer(List<Substitution> schoolSubList, String[] schoolPlayerNumberArray) throws SQLException {
-
-        for (Substitution substitution : schoolSubList) {
-            matchPlayerDao.queryBuilder().where().eq("match_id", DBSaveHelper.match.getId()).and().eq("player_id", substitution.getPlayer().getId()).query();
+        for (int i = 0; i < schoolSubList.size(); i++) {
+            Substitution substitution = schoolSubList.get(i);
+            List<MatchPlayer> matchPlayers = matchPlayerDao.queryBuilder().where().eq("match_id", DBSaveHelper.match.getId()).and().eq("player_id", substitution.getPlayer().getId()).query();
+            MatchPlayer matchPlayer = matchPlayers.get(0);
+            matchPlayerDao.refresh(matchPlayer);
+            schoolPlayerNumberArray[i] = String.valueOf(matchPlayer.getPlayerNumber());
         }
+    }
 
-
-
+    private void getTimeAndFlagFromSubstitutionList(List<Substitution> schoolSubList, String[] schoolTimeArray, String[] schoolFlagArray) {
+        for (int i = 0; i < schoolSubList.size(); i++) {
+            Substitution substitution = schoolSubList.get(i);
+            String time = substitution.getTime();
+            String type = substitution.getType();
+            schoolTimeArray[i] = time;
+            schoolFlagArray[i] = type;
+        }
     }
 
     /**
