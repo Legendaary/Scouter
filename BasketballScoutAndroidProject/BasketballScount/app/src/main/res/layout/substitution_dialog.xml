@@ -12,13 +12,21 @@
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="0.5"
-            android:id="@+id/substitution_dialog_text1"/>
+            android:id="@+id/substitution_dialog_text1"
+            android:text="TEAM1"
+            android:gravity="center"
+            android:textSize="14pt"
+            android:background="#ffff2a11" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="0.5"
-            android:id="@+id/substitution_dialog_text2"/>
+            android:id="@+id/substitution_dialog_text2"
+            android:text="TEAM2"
+            android:gravity="center"
+            android:textSize="14pt"
+            android:background="#ff4020ff" />
 
     </LinearLayout>
 
