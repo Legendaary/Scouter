@@ -259,9 +259,8 @@ public class MatchRecordingActivity extends ActionBarActivity {
      * @param lineupAdapter1 string array that contains line up players list
      */
     private void initListViewTeam1(ListView listView, String[] lineupAdapter1) {
-        LineUpAdapter adapter = new LineUpAdapter(this, lineupAdapter1);
+        LineUpAdapter adapter = new LineUpAdapter(getApplicationContext(), lineupAdapter1);
         listView.setAdapter(adapter);
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -273,7 +272,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
     }
 
     private void initListViewTeam2(ListView listView, String[] lineupAdapter2) {
-        LineUpAdapter adapter = new LineUpAdapter(this, lineupAdapter2);
+        LineUpAdapter adapter = new LineUpAdapter(getApplicationContext(), lineupAdapter2);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
