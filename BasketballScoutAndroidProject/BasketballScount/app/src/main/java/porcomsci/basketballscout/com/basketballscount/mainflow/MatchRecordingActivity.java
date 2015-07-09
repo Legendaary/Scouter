@@ -31,6 +31,7 @@ import database.entities.QuarterPlayerInfo;
 import database.entities.QuarterScoreSheet;
 import database.entities.Substitution;
 import porcomsci.basketballscout.com.basketballscount.R;
+import porcomsci.basketballscout.com.basketballscount.adapter.SubstitutionAdapter;
 import porcomsci.basketballscout.com.basketballscount.utility.SegueHelper;
 
 
@@ -66,6 +67,8 @@ public class MatchRecordingActivity extends ActionBarActivity {
     private Dao<Quarter, Integer> quarterDao;
     private Dao<Substitution, Integer> substitutionsDao;
     private Dao<QuarterScoreSheet, Integer> quarterScoreSheetDao;
+
+
 
     private enum SubstitutionType {IN, OUT}
 
@@ -382,6 +385,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
             actionPlayer = lineupTeam2[selectPos];
         }
 
+
         String time = (String) timeClock.getText();
         QuarterScoreSheet quarterScoreSheet = new QuarterScoreSheet();
         quarterScoreSheet.setQuarter(quarter);
@@ -424,7 +428,6 @@ public class MatchRecordingActivity extends ActionBarActivity {
         }
     }
 
-    //TODO substitute
     private void substitute( final int lineupPos, final int teamNumber) {
         getReservedPlayers(teamNumber);
         List<String> reservedPlayersName;
@@ -546,6 +549,59 @@ public class MatchRecordingActivity extends ActionBarActivity {
         return true;
     }
 
+
+    /**
+     * MenuMethod
+     * @param item
+     */
+    public void showScoreDialog(MenuItem item) {
+
+
+
+
+    }
+
+    /**
+     * MenuMethod
+     * @param item
+     */
+    public void showSubstituteDialog(MenuItem item) throws SQLException {
+
+        List<Substitution> school1SubList = substitutionsDao.queryBuilder().where().eq("schoolId", DBSaveHelper.school1Id).and().eq("quarter_id", quarter.getId()).query();
+        List<Substitution> school2SubList = substitutionsDao.queryBuilder().where().eq("schoolId", DBSaveHelper.school2Id).and().eq("quarter_id", quarter.getId()).query();
+        int sub1Size = school1SubList.size();
+        int sub2Size = school1SubList.size();
+
+        String[] school1PlayerNumberArray = new String[sub1Size];
+        String[] school1TimeArray = new String[sub1Size];
+        String[] school1FlagArray = new String[sub1Size];
+
+        getPlayerNumberFromMatchPlayer(school1SubList,school1PlayerNumberArray);
+        String[] school2PlayerNumberArray = new String[sub2Size];
+        String[] school2TimeArray = new String[sub2Size];
+        String[] school2FlagArray = new String[sub2Size];
+        getPlayerNumberFromMatchPlayer(school2SubList,school2PlayerNumberArray);
+
+
+
+
+        SubstitutionAdapter school1Adapter;
+
+
+
+    }
+
+    private void getPlayerNumberFromMatchPlayer(List<Substitution> schoolSubList, String[] schoolPlayerNumberArray) {
+
+         matchPlayerDao.queryBuilder().where().eq("match_id", DBSaveHelper.match.getId()).and().eq("schoolId", schoolID).query();
+
+
+    }
+
+    /**
+     * MenuMethod
+     * @param item
+     */
     public void saveDataFinishRecording(MenuItem item) {
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(MatchRecordingActivity.this);
