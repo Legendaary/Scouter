@@ -591,9 +591,12 @@ public class MatchRecordingActivity extends ActionBarActivity {
 
     }
 
-    private void getPlayerNumberFromMatchPlayer(List<Substitution> schoolSubList, String[] schoolPlayerNumberArray) {
+    private void getPlayerNumberFromMatchPlayer(List<Substitution> schoolSubList, String[] schoolPlayerNumberArray) throws SQLException {
 
-         matchPlayerDao.queryBuilder().where().eq("match_id", DBSaveHelper.match.getId()).and().eq("schoolId", schoolID).query();
+        for (Substitution substitution : schoolSubList) {
+            matchPlayerDao.queryBuilder().where().eq("match_id", DBSaveHelper.match.getId()).and().eq("player_id", substitution.getPlayer().getId()).query();
+        }
+
 
 
     }
