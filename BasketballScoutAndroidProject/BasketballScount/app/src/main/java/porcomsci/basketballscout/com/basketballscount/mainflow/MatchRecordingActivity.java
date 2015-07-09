@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Chronometer;
@@ -588,17 +589,15 @@ public class MatchRecordingActivity extends ActionBarActivity {
         SubstitutionAdapter school1Adapter = new SubstitutionAdapter(getApplicationContext(),school1PlayerNumberArray,school1FlagArray,school1TimeArray);
         SubstitutionAdapter school2Adapter = new SubstitutionAdapter(getApplicationContext(),school2PlayerNumberArray,school2FlagArray,school2TimeArray);
 
-        final Dialog dialog = new Dialog(getApplicationContext());
-        dialog.setContentView(R.layout.substitution_dialog);
+        final Dialog dialog = new Dialog(MatchRecordingActivity.this);
         dialog.setTitle("ข้อมูลการเปลี่ยนตัว");
-
+        dialog.setContentView(R.layout.substitution_dialog);
+        dialog.setCancelable(true);
         ListView listViewTeam1 = (ListView) dialog.findViewById(R.id.substitution_dialog_list1);
         ListView listViewTeam2 = (ListView) dialog.findViewById(R.id.substitution_dialog_list2);
         listViewTeam1.setAdapter(school1Adapter);
         listViewTeam2.setAdapter(school2Adapter);
         dialog.show();
-
-
     }
 
     private void getPlayerNumberFromMatchPlayer(List<Substitution> schoolSubList, String[] schoolPlayerNumberArray) throws SQLException {
