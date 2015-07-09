@@ -14,11 +14,13 @@
                 android:id="@+id/quarterScoreMenu"
                 android:orderInCategory="100"
                 android:title="ข้อมูลการทำคะแนน"
+                android:onClick="showScoreDialog"
                 app:showAsAction="always"/>
             <item
                 android:id="@+id/quarterSubstitueMenu"
                 android:orderInCategory="100"
                 android:title="-ข้อมูลการเปลี่ยนตัว"
+                android:onClick="showSubstituteDialog"
                 app:showAsAction="always"/>
             <item
                 android:id="@+id/action_edit_friends"
