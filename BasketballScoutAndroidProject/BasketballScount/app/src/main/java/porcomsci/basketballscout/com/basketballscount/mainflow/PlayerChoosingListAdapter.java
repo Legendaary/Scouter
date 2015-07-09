@@ -1,5 +1,6 @@
 package porcomsci.basketballscout.com.basketballscount.mainflow;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import porcomsci.basketballscout.com.basketballscount.R;
+import porcomsci.basketballscout.com.basketballscount.mainflow.PlayerChoosingItem;
 
 /**
  * Created by Opal on 4/1/15 AD.
@@ -20,10 +22,6 @@ public class PlayerChoosingListAdapter extends ArrayAdapter<PlayerChoosingItem> 
 
     Context context;
     ArrayList<PlayerChoosingItem> listItem;
-
-    private static LayoutInflater inflater = null;
-
-    Button playerNumberButton;
 
     PlayerChoosingListAdapter(Context context, ArrayList<PlayerChoosingItem> listItem)
     {
@@ -34,13 +32,16 @@ public class PlayerChoosingListAdapter extends ArrayAdapter<PlayerChoosingItem> 
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.player_name_and_number_list_item, parent, false);
-        TextView playerNameCheckbox = (TextView) view.findViewById(R.id.player_name_and_number_list_item_checkBox);
-        final EditText playerNumberEditText = (EditText) view.findViewById(R.id.player_name_and_number_list_item_player_number_editText);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        convertView = inflater.inflate(R.layout.player_name_and_number_list_item, parent, false);
+
+        TextView playerNameCheckbox = (TextView) convertView.findViewById(R.id.player_name_and_number_list_item_checkBox);
+        EditText playerNumberEditText = (EditText) convertView.findViewById(R.id.player_name_and_number_list_item_player_number_editText);
+
         playerNameCheckbox.setText(this.listItem.get(position).getPlayerName());
         playerNumberEditText.setText(this.listItem.get(position).getPlayerNumber());
-        return view;
+
+        return convertView;
     }
 
 }

@@ -31,6 +31,7 @@ import database.entities.QuarterPlayerInfo;
 import database.entities.QuarterScoreSheet;
 import database.entities.Substitution;
 import porcomsci.basketballscout.com.basketballscount.R;
+import porcomsci.basketballscout.com.basketballscount.adapter.LineUpAdapter;
 import porcomsci.basketballscout.com.basketballscount.adapter.SubstitutionAdapter;
 import porcomsci.basketballscout.com.basketballscount.utility.SegueHelper;
 
@@ -256,7 +257,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
      * @param lineupAdapter1 string array that contains line up players list
      */
     private void initListViewTeam1(ListView listView, String[] lineupAdapter1) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, lineupAdapter1);
+        LineUpAdapter adapter = new LineUpAdapter(this, lineupAdapter1);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -270,7 +271,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
     }
 
     private void initListViewTeam2(ListView listView, String[] lineupAdapter2) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, lineupAdapter2);
+        LineUpAdapter adapter = new LineUpAdapter(this, lineupAdapter2);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
