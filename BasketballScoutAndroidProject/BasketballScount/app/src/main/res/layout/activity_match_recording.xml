@@ -9,7 +9,7 @@
         android:textSize="12pt"
         android:layout_height="0dp"
         android:layout_width="match_parent"
-        android:layout_weight="0.10"
+        android:layout_weight="0.14"
         android:gravity="center"
         android:background="@drawable/vs"
         android:id="@+id/matchRecord_schoolLabel">
