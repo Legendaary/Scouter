@@ -76,7 +76,6 @@ public class MatchRecordingActivity extends ActionBarActivity {
     private Dao<QuarterScoreSheet, Integer> quarterScoreSheetDao;
 
 
-
     private enum SubstitutionType {IN, OUT}
 
     @Override
@@ -232,18 +231,19 @@ public class MatchRecordingActivity extends ActionBarActivity {
 //    }
 
     private void getLineupPlayersNumber(Player[] lineupTeam, String[] lineupAdapter, List<MatchPlayer> teamMP) {
-        for (int i = 0; i < lineupTeam.length; i++) {
-            MatchPlayer matchPlayer = teamMP.get(i);
+        for (MatchPlayer matchPlayer : teamMP) {
             try {
                 matchPlayerDao.refresh(matchPlayer);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            if(matchPlayer.getPlayer().getId() == lineupTeam[i].getId())
-            {
-                lineupAdapter[i] =  String.valueOf(matchPlayer.getPlayerNumber() );
+            for (int i = 0; i < lineupTeam.length; i++) {
+                if(lineupTeam[i].getId() == matchPlayer.getPlayer().getId()) {
+                    lineupAdapter[i] = String.valueOf(matchPlayer.getPlayerNumber());
+                }
             }
         }
+
     }
 
 //    private List<String> getPlayersNumber(List<Player> playersList)
@@ -256,13 +256,11 @@ public class MatchRecordingActivity extends ActionBarActivity {
 //        return playersName;
 //    }
 
-    private List<String> getPlayersNumber(List<Player> playersList, List<MatchPlayer> teamMP)
-    {
+    private List<String> getPlayersNumber(List<Player> playersList, List<MatchPlayer> teamMP) {
         List<String> playersNumber = new ArrayList<>();
-        for( int i=0; i<playersList.size(); i++)
-        {
-            if(teamMP.get(i).getPlayer().getId() == playersList.get(i).getId())
-            playersNumber.add( String.valueOf(teamMP.get(i).getPlayerNumber()) );
+        for (int i = 0; i < playersList.size(); i++) {
+            if (teamMP.get(i).getPlayer().getId() == playersList.get(i).getId())
+                playersNumber.add(String.valueOf(teamMP.get(i).getPlayerNumber()));
         }
         return playersNumber;
     }
@@ -424,9 +422,9 @@ public class MatchRecordingActivity extends ActionBarActivity {
         quarterScoreSheet.setPlayer(actionPlayer);
         quarterScoreSheet.setScoreCount(score);
         quarterScoreSheet.setTime(time);
-        if(1==team){
+        if (1 == team) {
             quarterScoreSheet.setSchoolId(DBSaveHelper.school1Id);
-        }else{
+        } else {
             quarterScoreSheet.setSchoolId(DBSaveHelper.school2Id);
         }
         try {
@@ -460,10 +458,10 @@ public class MatchRecordingActivity extends ActionBarActivity {
         }
     }
 
-    private void substitute( final int lineupPos, final int teamNumber) {
+    private void substitute(final int lineupPos, final int teamNumber) {
         getReservedPlayers(teamNumber);
         List<String> reservedPlayersName;
-        if(teamNumber == 1)
+        if (teamNumber == 1)
             reservedPlayersName = getPlayersNumber(reservedPlayers1, team1MP);
         else
             reservedPlayersName = getPlayersNumber(reservedPlayers2, team2MP);
@@ -485,66 +483,52 @@ public class MatchRecordingActivity extends ActionBarActivity {
         builder.create().show();
     }
 
-    private void getReservedPlayers(int teamNumber)
-    {
-        if(teamNumber == 1)
-        {
-            if(!reservedPlayers1.isEmpty())
+    private void getReservedPlayers(int teamNumber) {
+        if (teamNumber == 1) {
+            if (!reservedPlayers1.isEmpty())
                 reservedPlayers1.clear();
-            for(Player player : team1Players)
-            {
+            for (Player player : team1Players) {
                 reservedPlayers1.add(player);
             }
-            for( Player lineup : lineupTeam1)
-            {
+            for (Player lineup : lineupTeam1) {
                 reservedPlayers1.remove(lineup);
             }
-        }
-        else
-        {
-            if(!reservedPlayers2.isEmpty())
+        } else {
+            if (!reservedPlayers2.isEmpty())
                 reservedPlayers2.clear();
-            for(Player player : team2Players)
-            {
+            for (Player player : team2Players) {
                 reservedPlayers2.add(player);
             }
-            for( Player lineup : lineupTeam2)
-            {
+            for (Player lineup : lineupTeam2) {
                 reservedPlayers2.remove(lineup);
             }
         }
     }
 
-    private ArrayAdapter<String> createListViewAdapter( List<String> dataList )
-    {
+    private ArrayAdapter<String> createListViewAdapter(List<String> dataList) {
         return new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dataList);
     }
 
-    private ArrayAdapter<String> createListViewAdapter( String[] dataString )
-    {
+    private ArrayAdapter<String> createListViewAdapter(String[] dataString) {
         return new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dataString);
     }
 
-    private void swapPlayers(int lineupPos, int teamNumber, int reservedPos)
-    {
+    private void swapPlayers(int lineupPos, int teamNumber, int reservedPos) {
         String[] lineupPlayersNumber = new String[5];
-        if( teamNumber == 1)
-        {
+        if (teamNumber == 1) {
             Player currentPlayer = lineupTeam1[lineupPos];
             Player newPlayer = reservedPlayers1.get(reservedPos);
             lineupTeam1[lineupPos] = newPlayer;
             getLineupPlayersNumber(lineupTeam1, lineupPlayersNumber, team1MP);
             listViewTeam1.setAdapter(createListViewAdapter(lineupPlayersNumber));
-            substitutionSaving(currentPlayer, newPlayer , DBSaveHelper.school1Id);
-        }
-        else
-        {
+            substitutionSaving(currentPlayer, newPlayer, DBSaveHelper.school1Id);
+        } else {
             Player currentPlayer = lineupTeam2[lineupPos];
             Player newPlayer = reservedPlayers2.get(reservedPos);
             lineupTeam2[lineupPos] = newPlayer;
             getLineupPlayersNumber(lineupTeam2, lineupPlayersNumber, team2MP);
             listViewTeam2.setAdapter(createListViewAdapter(lineupPlayersNumber));
-            substitutionSaving(currentPlayer, newPlayer,DBSaveHelper.school2Id );
+            substitutionSaving(currentPlayer, newPlayer, DBSaveHelper.school2Id);
         }
     }
 
@@ -584,6 +568,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
 
     /**
      * MenuMethod
+     *
      * @param item
      */
     public void showScoreDialog(MenuItem item) throws SQLException {
@@ -605,8 +590,8 @@ public class MatchRecordingActivity extends ActionBarActivity {
         getPlayerNumberFromMatchPlayerWithQS(school2ScoreList, school2PlayerNumberArray);
         getTimeAndPointFromQuarterScoreList(school2ScoreList, school2TimeArray, school2PointArray);
 
-        ScorerAdapter school1Adapter = new ScorerAdapter(getApplicationContext(),school1PlayerNumberArray,school1TimeArray,school1PointArray);
-        ScorerAdapter school2Adapter = new ScorerAdapter(getApplicationContext(),school2PlayerNumberArray,school2TimeArray,school2PointArray);
+        ScorerAdapter school1Adapter = new ScorerAdapter(getApplicationContext(), school1PlayerNumberArray, school1TimeArray, school1PointArray);
+        ScorerAdapter school2Adapter = new ScorerAdapter(getApplicationContext(), school2PlayerNumberArray, school2TimeArray, school2PointArray);
 
         final Dialog dialog = new Dialog(MatchRecordingActivity.this);
         dialog.setTitle("ข้อมูลการทำคะแนน");
@@ -626,7 +611,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
             List<MatchPlayer> matchPlayers = matchPlayerDao.queryBuilder().where().eq("match_id", DBSaveHelper.match.getId()).and().eq("player_id", scoreSheet.getPlayer().getId()).query();
             MatchPlayer matchPlayer = matchPlayers.get(0);
             matchPlayerDao.refresh(matchPlayer);
-            schoolPlayerNumberArray[i] = String.valueOf("  No."+matchPlayer.getPlayerNumber());
+            schoolPlayerNumberArray[i] = String.valueOf("  No." + matchPlayer.getPlayerNumber());
         }
     }
 
@@ -636,12 +621,13 @@ public class MatchRecordingActivity extends ActionBarActivity {
             String time = scoreSheet.getTime();
             String point = String.valueOf(scoreSheet.getScoreCount());
             schoolTimeArray[i] = time;
-            schoolPointArray[i] = point+" pts";
+            schoolPointArray[i] = point + " pts";
         }
     }
 
     /**
      * MenuMethod
+     *
      * @param item
      */
     public void showSubstituteDialog(MenuItem item) throws SQLException {
@@ -654,18 +640,18 @@ public class MatchRecordingActivity extends ActionBarActivity {
         String[] school1PlayerNumberArray = new String[sub1Size];
         String[] school1TimeArray = new String[sub1Size];
         String[] school1FlagArray = new String[sub1Size];
-        getPlayerNumberFromMatchPlayer(school1SubList,school1PlayerNumberArray);
+        getPlayerNumberFromMatchPlayer(school1SubList, school1PlayerNumberArray);
         getTimeAndFlagFromSubstitutionList(school1SubList, school1TimeArray, school1FlagArray);
 
 
         String[] school2PlayerNumberArray = new String[sub2Size];
         String[] school2TimeArray = new String[sub2Size];
         String[] school2FlagArray = new String[sub2Size];
-        getPlayerNumberFromMatchPlayer(school2SubList,school2PlayerNumberArray);
-        getTimeAndFlagFromSubstitutionList(school2SubList,school2TimeArray,school2FlagArray);
+        getPlayerNumberFromMatchPlayer(school2SubList, school2PlayerNumberArray);
+        getTimeAndFlagFromSubstitutionList(school2SubList, school2TimeArray, school2FlagArray);
 
-        SubstitutionAdapter school1Adapter = new SubstitutionAdapter(getApplicationContext(),school1PlayerNumberArray,school1FlagArray,school1TimeArray);
-        SubstitutionAdapter school2Adapter = new SubstitutionAdapter(getApplicationContext(),school2PlayerNumberArray,school2FlagArray,school2TimeArray);
+        SubstitutionAdapter school1Adapter = new SubstitutionAdapter(getApplicationContext(), school1PlayerNumberArray, school1FlagArray, school1TimeArray);
+        SubstitutionAdapter school2Adapter = new SubstitutionAdapter(getApplicationContext(), school2PlayerNumberArray, school2FlagArray, school2TimeArray);
 
         final Dialog dialog = new Dialog(MatchRecordingActivity.this);
         dialog.setTitle("ข้อมูลการเปลี่ยนตัว");
@@ -684,7 +670,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
             List<MatchPlayer> matchPlayers = matchPlayerDao.queryBuilder().where().eq("match_id", DBSaveHelper.match.getId()).and().eq("player_id", substitution.getPlayer().getId()).query();
             MatchPlayer matchPlayer = matchPlayers.get(0);
             matchPlayerDao.refresh(matchPlayer);
-            schoolPlayerNumberArray[i] = String.valueOf("  No."+matchPlayer.getPlayerNumber());
+            schoolPlayerNumberArray[i] = String.valueOf("  No." + matchPlayer.getPlayerNumber());
         }
     }
 
@@ -700,6 +686,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
 
     /**
      * MenuMethod
+     *
      * @param item
      */
     public void saveDataFinishRecording(MenuItem item) {
@@ -806,7 +793,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
             try {
                 List<Substitution> eachSub = substitutionsDao.queryBuilder().where().eq("player_id", player.getId()).and().eq("quarter_id", quarter.getId()).query();
                 System.out.println("sub size for each : " + eachSub.size());
-                if (eachSub.size() == 0 ) {
+                if (eachSub.size() == 0) {
                     continue;
                 } else if (eachSub.size() % 2 != 0) {
                     System.out.println("Substitution data error");
@@ -815,7 +802,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
                     for (int i = 0; i < eachSub.size(); i += 2) {
                         Substitution thisSubstitutionIn = eachSub.get(i);
                         Substitution thisSubstitutionOut = eachSub.get(i + 1);
-                        if (! (thisSubstitutionIn.getType().equals(SubstitutionType.IN.name()))  || ! (thisSubstitutionOut.getType().equals(SubstitutionType.OUT.name()))) {
+                        if (!(thisSubstitutionIn.getType().equals(SubstitutionType.IN.name())) || !(thisSubstitutionOut.getType().equals(SubstitutionType.OUT.name()))) {
                             System.out.println("Substitution data error IN/OUT not match");
                             System.exit(-1);
                         }
@@ -882,16 +869,16 @@ public class MatchRecordingActivity extends ActionBarActivity {
                     continue;
                 } else {
                     for (QuarterScoreSheet eachScore : quarterScoreSheetList) {
-                        scoreSum+=eachScore.getScoreCount();
+                        scoreSum += eachScore.getScoreCount();
                     }
                 }
 
                 //save to match player
                 List<MatchPlayer> matchPlayerList = matchPlayerDao.queryBuilder().where().eq("match_id", DBSaveHelper.match.getId()).and().eq("player_id", player.getId()).query();
-                if(matchPlayerList.size()!=1){
+                if (matchPlayerList.size() != 1) {
                     System.out.println("Match player query fail");
                     System.exit(-1);
-                }else{
+                } else {
 
                     MatchPlayer matchPlayer = matchPlayerList.get(0);
                     matchPlayerDao.refresh(matchPlayer);
