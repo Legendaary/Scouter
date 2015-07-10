@@ -113,11 +113,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         getPlayerDao().create(five);
         getPlayerDao().create(six);
         getPlayerDao().create(seven);
-        getPlayerDao().create(eight);
-        getPlayerDao().create(nine);
-        getPlayerDao().create(ten);
-        getPlayerDao().create(eleven);
-        getPlayerDao().create(twelve);
+//        getPlayerDao().create(eight);
+//        getPlayerDao().create(nine);
+//        getPlayerDao().create(ten);
+//        getPlayerDao().create(eleven);
+//        getPlayerDao().create(twelve);
     }
 
     private void initTournament() throws SQLException {

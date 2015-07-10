@@ -17,28 +17,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TournamentActivity"
+            android:name=".mainflow.TournamentActivity"
             android:label="@string/title_activity_tournament" >
         </activity>
         <activity
-            android:name=".MatchActivity"
+            android:name=".mainflow.MatchActivity"
             android:label="@string/title_activity_match" >
         </activity>
         <activity
-            android:name=".CompetitorChoosingActivity"
+            android:name=".mainflow.CompetitorChoosingActivity"
             android:label="@string/title_activity_competitor_choosing" >
         </activity>
         <activity
-            android:name=".SchoolListActivity"
+            android:name=".mainflow.SchoolListActivity"
             android:label="@string/title_activity_school_list" >
         </activity>
         <activity
-            android:name=".PlayerChoosingActivity"
+            android:name=".mainflow.PlayerChoosingActivity"
             android:label="@string/title_activity_player_choosing"
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
-            android:name=".ManageSchoolInfoActivity"
+            android:name=".mainflow.ManageSchoolInfoActivity"
             android:label="@string/title_activity_manage_school_info" >
         </activity>
         <activity
@@ -50,16 +50,20 @@
             android:label="@string/title_activity_match_history" >
         </activity>
         <activity
-            android:name=".QuarterChoosingActivity"
+            android:name=".mainflow.QuarterChoosingActivity"
             android:label="@string/title_activity_quater_choosing" >
         </activity>
         <activity
-            android:name=".QuarterMenuActivity"
+            android:name=".mainflow.QuarterMenuActivity"
             android:label="@string/title_activity_quater_menu" >
         </activity>
         <activity
-            android:name=".MatchRecordingActivity"
+            android:name=".mainflow.MatchRecordingActivity"
             android:label="@string/title_activity_match_recording" >
+        </activity>
+        <activity
+            android:name=".mainflow.SummaryQuarterActivity"
+            android:label="@string/title_activity_summary_quarter" >
         </activity>
     </application>
 

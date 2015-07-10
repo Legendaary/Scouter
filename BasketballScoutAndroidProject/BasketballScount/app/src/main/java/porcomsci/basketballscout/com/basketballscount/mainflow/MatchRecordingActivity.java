@@ -233,9 +233,15 @@ public class MatchRecordingActivity extends ActionBarActivity {
 
     private void getLineupPlayersNumber(Player[] lineupTeam, String[] lineupAdapter, List<MatchPlayer> teamMP) {
         for (int i = 0; i < lineupTeam.length; i++) {
-            if(teamMP.get(i).getPlayer().getId() == lineupTeam[i].getId())
+            MatchPlayer matchPlayer = teamMP.get(i);
+            try {
+                matchPlayerDao.refresh(matchPlayer);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if(matchPlayer.getPlayer().getId() == lineupTeam[i].getId())
             {
-                lineupAdapter[i] =  String.valueOf( teamMP.get(i).getPlayerNumber() );
+                lineupAdapter[i] =  String.valueOf(matchPlayer.getPlayerNumber() );
             }
         }
     }
@@ -620,7 +626,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
             List<MatchPlayer> matchPlayers = matchPlayerDao.queryBuilder().where().eq("match_id", DBSaveHelper.match.getId()).and().eq("player_id", scoreSheet.getPlayer().getId()).query();
             MatchPlayer matchPlayer = matchPlayers.get(0);
             matchPlayerDao.refresh(matchPlayer);
-            schoolPlayerNumberArray[i] = String.valueOf(matchPlayer.getPlayerNumber());
+            schoolPlayerNumberArray[i] = String.valueOf("  No."+matchPlayer.getPlayerNumber());
         }
     }
 
@@ -630,7 +636,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
             String time = scoreSheet.getTime();
             String point = String.valueOf(scoreSheet.getScoreCount());
             schoolTimeArray[i] = time;
-            schoolPointArray[i] = point;
+            schoolPointArray[i] = point+" pts";
         }
     }
 
@@ -678,7 +684,7 @@ public class MatchRecordingActivity extends ActionBarActivity {
             List<MatchPlayer> matchPlayers = matchPlayerDao.queryBuilder().where().eq("match_id", DBSaveHelper.match.getId()).and().eq("player_id", substitution.getPlayer().getId()).query();
             MatchPlayer matchPlayer = matchPlayers.get(0);
             matchPlayerDao.refresh(matchPlayer);
-            schoolPlayerNumberArray[i] = String.valueOf(matchPlayer.getPlayerNumber());
+            schoolPlayerNumberArray[i] = String.valueOf("  No."+matchPlayer.getPlayerNumber());
         }
     }
 
