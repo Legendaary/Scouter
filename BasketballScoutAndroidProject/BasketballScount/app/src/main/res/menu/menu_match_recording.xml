@@ -19,7 +19,7 @@
             <item
                 android:id="@+id/quarterSubstitueMenu"
                 android:orderInCategory="100"
-                android:title="-ข้อมูลการเปลี่ยนตัว"
+                android:title="ข้อมูลการเปลี่ยนตัว"
                 android:onClick="showSubstituteDialog"
                 app:showAsAction="always"/>
             <item

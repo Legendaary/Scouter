@@ -31,7 +31,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<Match, Integer> matchDao = null;
     private Dao<Tournament, Integer> tournamentDao = null;
     private Dao<MatchPlayer, Integer> matchPlayersDao = null;
-    private Dao<School, Integer>  schoolDao = null;
+    private Dao<School, Integer> schoolDao = null;
     private Dao<Player, Integer> playerDao = null;
     private Dao<Quarter, Integer> quartersDao = null;
     private Dao<QuarterPlayerInfo, Integer> quarterPlayerInfoDao = null;
@@ -44,7 +44,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     }
 
     @Override
-    public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource)  {
+    public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
 
         /**
          * Default database creation and added default data for some tables.
@@ -61,7 +61,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, Substitution.class);
             initSchool();
             initSaintDominicPlayer();
-            initSriwigrom();
             initTournament();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -72,67 +71,66 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         School saintDominic = new School();
         saintDominic.setId(1);
         Player one = new Player();
-        one.setName("อาชัญ เอี่ยมจุ้ย");
+        one.setName("ธนภูมิ  บุญธีรวร");
         one.setSchool(saintDominic);
         Player two = new Player();
-        two.setName("ธนธัช บุญอนุวัฒน์");
+        two.setName("กาญจน์  กาญจนอัศว์");
         two.setSchool(saintDominic);
         Player three = new Player();
-        three.setName("เจตนิพัธท์  พบสุข์");
+        three.setName("ศุภวิชญ์  ทนงศักดิ์");
         three.setSchool(saintDominic);
         Player four = new Player();
-        four.setName("ธนัตถ์ โลกเจริญลาภ");
+        four.setName("สวิตต์  วิรุฬห์บรรเทิง");
         four.setSchool(saintDominic);
         Player five = new Player();
-        five.setName("ภูวนัตถ์ โลกเจริญลาภ");
+        five.setName("ณัฐวัฒน์  พุฒิบูรณวัฒน์");
         five.setSchool(saintDominic);
+        Player six = new Player();
+        six.setName("ภูมิ  เตชะทัศนสุนทร");
+        six.setSchool(saintDominic);
+        Player seven = new Player();
+        seven.setName("วรากร  สิทธเนตรสกุล์");
+        seven.setSchool(saintDominic);
+        Player eight = new Player();
+        eight.setName("ณฐกฤต  อารยะสัจพงษ์");
+        eight.setSchool(saintDominic);
+        Player nine = new Player();
+        nine.setName("ธนโชติ  กวิลเติมทรัพย์");
+        nine.setSchool(saintDominic);
+        Player ten = new Player();
+        ten.setName("พิเชฐ  ตั้งชัยสิน์");
+        ten.setSchool(saintDominic);
+        Player eleven = new Player();
+        eleven.setName("สุธีร์  กิจนาบูรณ์");
+        eleven.setSchool(saintDominic);
+        Player twelve = new Player();
+        twelve.setName("ณัฐธัญ  สีหาทัพ์");
+        twelve.setSchool(saintDominic);
         getPlayerDao().create(one);
         getPlayerDao().create(two);
         getPlayerDao().create(three);
         getPlayerDao().create(four);
         getPlayerDao().create(five);
-    }
-
-    private void initSriwigrom() throws SQLException {
-        School sriwigorn = new School();
-        sriwigorn.setId(2);
-        Player one = new Player();
-        one.setName("TEST1");
-        one.setSchool(sriwigorn);
-        Player two = new Player();
-        two.setName("TEST2");
-        two.setSchool(sriwigorn);
-        Player three = new Player();
-        three.setName("TEST3");
-        three.setSchool(sriwigorn);
-        Player four = new Player();
-        four.setName("TEST4");
-        four.setSchool(sriwigorn);
-        Player five = new Player();
-        five.setName("TEST5");
-        five.setSchool(sriwigorn);
-        getPlayerDao().create(one);
-        getPlayerDao().create(two);
-        getPlayerDao().create(three);
-        getPlayerDao().create(four);
-        getPlayerDao().create(five);
+        getPlayerDao().create(six);
+        getPlayerDao().create(seven);
+        getPlayerDao().create(eight);
+        getPlayerDao().create(nine);
+        getPlayerDao().create(ten);
+        getPlayerDao().create(eleven);
+        getPlayerDao().create(twelve);
     }
 
     private void initTournament() throws SQLException {
         tournamentDao = getTournamentDao();
         Tournament casualTour = new Tournament();
-        casualTour.setCompetitionName("casual");
+        casualTour.setCompetitionName("การแข่งขันทั่วไป");
         tournamentDao.create(casualTour);
     }
 
     public void initSchool() throws SQLException {
         insertSchoolByName("เซนต์ดอมินิก");
-        insertSchoolByName("ศรีวิกรม์");
+        insertSchoolByName("สาธิต มศว");
         insertSchoolByName("อัสสัมชัญกรุงเทพ");
-        insertSchoolByName("กรุงเทพคริสเตียน");
-        insertSchoolByName("สุเหร่า คลองจั่น");
-        insertSchoolByName("ศึกษานารี");
-        insertSchoolByName("ทิวไผ่งาม");
     }
 
     public void insertSchoolByName(String schoolName) throws SQLException {
@@ -144,75 +142,82 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 
     public Dao<Tournament, Integer> getTournamentDao() throws SQLException {
-        if(tournamentDao==null){
-            tournamentDao =  getDao(Tournament.class);
+        if (tournamentDao == null) {
+            tournamentDao = getDao(Tournament.class);
             return tournamentDao;
-        }else{
+        } else {
             return tournamentDao;
         }
     }
+
     public Dao<MatchPlayer, Integer> getMatchPlayerDao() throws SQLException {
-        if(matchPlayersDao==null){
-            matchPlayersDao =  getDao(MatchPlayer.class);
+        if (matchPlayersDao == null) {
+            matchPlayersDao = getDao(MatchPlayer.class);
             return matchPlayersDao;
-        }else{
+        } else {
             return matchPlayersDao;
         }
     }
 
     public Dao<School, Integer> getSchoolDao() throws SQLException {
-        if(schoolDao==null){
-            schoolDao =  getDao(School.class);
+        if (schoolDao == null) {
+            schoolDao = getDao(School.class);
             return schoolDao;
-        }else{
+        } else {
             return schoolDao;
         }
     }
+
     public Dao<Player, Integer> getPlayerDao() throws SQLException {
-        if(playerDao==null){
-            playerDao =  getDao(Player.class);
+        if (playerDao == null) {
+            playerDao = getDao(Player.class);
             return playerDao;
-        }else{
+        } else {
             return playerDao;
         }
     }
+
     public Dao<Quarter, Integer> getQuaterDao() throws SQLException {
-        if(quartersDao ==null){
-            quartersDao =  getDao(Quarter.class);
+        if (quartersDao == null) {
+            quartersDao = getDao(Quarter.class);
             return quartersDao;
-        }else{
+        } else {
             return quartersDao;
         }
     }
+
     public Dao<QuarterPlayerInfo, Integer> getQuarterPlayerInfoDao() throws SQLException {
-        if(quarterPlayerInfoDao ==null){
-            quarterPlayerInfoDao =  getDao(QuarterPlayerInfo.class);
+        if (quarterPlayerInfoDao == null) {
+            quarterPlayerInfoDao = getDao(QuarterPlayerInfo.class);
             return quarterPlayerInfoDao;
-        }else{
+        } else {
             return quarterPlayerInfoDao;
         }
     }
+
     public Dao<Match, Integer> getMatchDao() throws SQLException {
-        if(matchDao==null){
-            matchDao =  getDao(Match.class);
+        if (matchDao == null) {
+            matchDao = getDao(Match.class);
             return matchDao;
-        }else{
+        } else {
             return matchDao;
         }
     }
+
     public Dao<QuarterScoreSheet, Integer> getQuarterScoreSheetDao() throws SQLException {
-        if(quarterScoreSheetDao ==null){
-            quarterScoreSheetDao =  getDao(QuarterScoreSheet.class);
+        if (quarterScoreSheetDao == null) {
+            quarterScoreSheetDao = getDao(QuarterScoreSheet.class);
             return quarterScoreSheetDao;
-        }else{
+        } else {
             return quarterScoreSheetDao;
         }
     }
+
     public Dao<Substitution, Integer> getSubstitutionDao() throws SQLException {
-        if(substitutionDao==null){
-            substitutionDao =  getDao(Substitution.class);
+        if (substitutionDao == null) {
+            substitutionDao = getDao(Substitution.class);
             return substitutionDao;
-        }else{
+        } else {
             return substitutionDao;
         }
     }
@@ -221,6 +226,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion) {
 
     }
+
     @Override
     public void close() {
         super.close();
