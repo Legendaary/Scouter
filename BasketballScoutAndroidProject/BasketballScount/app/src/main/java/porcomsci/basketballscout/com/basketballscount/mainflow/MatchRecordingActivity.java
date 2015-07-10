@@ -2,17 +2,19 @@ package porcomsci.basketballscout.com.basketballscount.mainflow;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Chronometer;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -26,6 +28,7 @@ import java.util.List;
 
 import database.DBSaveHelper;
 import database.DatabaseHelper;
+import database.entities.Match;
 import database.entities.MatchPlayer;
 import database.entities.Player;
 import database.entities.Quarter;
@@ -34,6 +37,7 @@ import database.entities.QuarterScoreSheet;
 import database.entities.Substitution;
 import porcomsci.basketballscout.com.basketballscount.R;
 import porcomsci.basketballscout.com.basketballscount.adapter.LineUpAdapter;
+import porcomsci.basketballscout.com.basketballscount.adapter.ScorerAdapter;
 import porcomsci.basketballscout.com.basketballscount.adapter.SubstitutionAdapter;
 import porcomsci.basketballscout.com.basketballscount.utility.SegueHelper;
 
@@ -165,8 +169,8 @@ public class MatchRecordingActivity extends ActionBarActivity {
         createQuarterInfoRecord(team2Players);
         getLineUpPlayer(lineupTeam1, team1MP);
         getLineUpPlayer(lineupTeam2, team2MP);
-        getLineupPlayersName(lineupTeam1, lineupName1);
-        getLineupPlayersName(lineupTeam2, lineupName2);
+        getLineupPlayersNumber(lineupTeam1, lineupName1, team1MP);
+        getLineupPlayersNumber(lineupTeam2, lineupName2, team2MP);
         initSubstitutionData(lineupTeam1);
         initSubstitutionData(lineupTeam2);
     }
@@ -221,20 +225,40 @@ public class MatchRecordingActivity extends ActionBarActivity {
         }
     }//end get line up player
 
-    private void getLineupPlayersName(Player[] lineupTeam, String[] lineupAdapter) {
+//    private void getLineupPlayersName(Player[] lineupTeam, String[] lineupAdapter) {
+//        for (int i = 0; i < lineupTeam.length; i++) {
+//            lineupAdapter[i] = lineupTeam[i].getName();
+//        }
+//    }
+
+    private void getLineupPlayersNumber(Player[] lineupTeam, String[] lineupAdapter, List<MatchPlayer> teamMP) {
         for (int i = 0; i < lineupTeam.length; i++) {
-            lineupAdapter[i] = lineupTeam[i].getName();
+            if(teamMP.get(i).getPlayer().getId() == lineupTeam[i].getId())
+            {
+                lineupAdapter[i] =  String.valueOf( teamMP.get(i).getPlayerNumber() );
+            }
         }
     }
 
-    private List<String> getPlayersName(List<Player> playersList)
+//    private List<String> getPlayersNumber(List<Player> playersList)
+//    {
+//        List<String> playersName = new ArrayList<>();
+//        for(Player player : playersList)
+//        {
+//            playersName.add(player.getName());
+//        }
+//        return playersName;
+//    }
+
+    private List<String> getPlayersNumber(List<Player> playersList, List<MatchPlayer> teamMP)
     {
-        List<String> playersName = new ArrayList<>();
-        for(Player player : playersList)
+        List<String> playersNumber = new ArrayList<>();
+        for( int i=0; i<playersList.size(); i++)
         {
-            playersName.add(player.getName());
+            if(teamMP.get(i).getPlayer().getId() == playersList.get(i).getId())
+            playersNumber.add( String.valueOf(teamMP.get(i).getPlayerNumber()) );
         }
-        return playersName;
+        return playersNumber;
     }
 
     private void initSubstitutionData(Player[] lineupTeam) throws SQLException {
@@ -434,9 +458,9 @@ public class MatchRecordingActivity extends ActionBarActivity {
         getReservedPlayers(teamNumber);
         List<String> reservedPlayersName;
         if(teamNumber == 1)
-            reservedPlayersName = getPlayersName(reservedPlayers1);
+            reservedPlayersName = getPlayersNumber(reservedPlayers1, team1MP);
         else
-            reservedPlayersName = getPlayersName(reservedPlayers2);
+            reservedPlayersName = getPlayersNumber(reservedPlayers2, team2MP);
 
         ArrayAdapter<String> adapter = createListViewAdapter(reservedPlayersName);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -497,14 +521,14 @@ public class MatchRecordingActivity extends ActionBarActivity {
 
     private void swapPlayers(int lineupPos, int teamNumber, int reservedPos)
     {
-        String[] lineupPlayersName = new String[5];
+        String[] lineupPlayersNumber = new String[5];
         if( teamNumber == 1)
         {
             Player currentPlayer = lineupTeam1[lineupPos];
             Player newPlayer = reservedPlayers1.get(reservedPos);
             lineupTeam1[lineupPos] = newPlayer;
-            getLineupPlayersName(lineupTeam1, lineupPlayersName);
-            listViewTeam1.setAdapter(createListViewAdapter(lineupPlayersName));
+            getLineupPlayersNumber(lineupTeam1, lineupPlayersNumber, team1MP);
+            listViewTeam1.setAdapter(createListViewAdapter(lineupPlayersNumber));
             substitutionSaving(currentPlayer, newPlayer , DBSaveHelper.school1Id);
         }
         else
@@ -512,8 +536,8 @@ public class MatchRecordingActivity extends ActionBarActivity {
             Player currentPlayer = lineupTeam2[lineupPos];
             Player newPlayer = reservedPlayers2.get(reservedPos);
             lineupTeam2[lineupPos] = newPlayer;
-            getLineupPlayersName(lineupTeam2, lineupPlayersName);
-            listViewTeam2.setAdapter(createListViewAdapter(lineupPlayersName));
+            getLineupPlayersNumber(lineupTeam2, lineupPlayersNumber, team2MP);
+            listViewTeam2.setAdapter(createListViewAdapter(lineupPlayersNumber));
             substitutionSaving(currentPlayer, newPlayer,DBSaveHelper.school2Id );
         }
     }
@@ -556,11 +580,58 @@ public class MatchRecordingActivity extends ActionBarActivity {
      * MenuMethod
      * @param item
      */
-    public void showScoreDialog(MenuItem item) {
+    public void showScoreDialog(MenuItem item) throws SQLException {
 
+        List<QuarterScoreSheet> school1ScoreList = quarterScoreSheetDao.queryBuilder().where().eq("schoolId", DBSaveHelper.school1Id).and().eq("quarter_id", quarter.getId()).query();
+        List<QuarterScoreSheet> school2ScoreList = quarterScoreSheetDao.queryBuilder().where().eq("schoolId", DBSaveHelper.school2Id).and().eq("quarter_id", quarter.getId()).query();
+        int score1Size = school1ScoreList.size();
+        int score2Size = school2ScoreList.size();
 
+        String[] school1PlayerNumberArray = new String[score1Size];
+        String[] school1PointArray = new String[score1Size];
+        String[] school1TimeArray = new String[score1Size];
+        getPlayerNumberFromMatchPlayerWithQS(school1ScoreList, school1PlayerNumberArray);
+        getTimeAndPointFromQuarterScoreList(school1ScoreList, school1TimeArray, school1PointArray);
 
+        String[] school2PlayerNumberArray = new String[score2Size];
+        String[] school2PointArray = new String[score2Size];
+        String[] school2TimeArray = new String[score2Size];
+        getPlayerNumberFromMatchPlayerWithQS(school2ScoreList, school2PlayerNumberArray);
+        getTimeAndPointFromQuarterScoreList(school2ScoreList, school2TimeArray, school2PointArray);
 
+        ScorerAdapter school1Adapter = new ScorerAdapter(getApplicationContext(),school1PlayerNumberArray,school1TimeArray,school1PointArray);
+        ScorerAdapter school2Adapter = new ScorerAdapter(getApplicationContext(),school2PlayerNumberArray,school2TimeArray,school2PointArray);
+
+        final Dialog dialog = new Dialog(MatchRecordingActivity.this);
+        dialog.setTitle("ข้อมูลการทำคะแนน");
+        dialog.setContentView(R.layout.substitution_dialog);
+        dialog.setCancelable(true);
+        ListView listViewTeam1 = (ListView) dialog.findViewById(R.id.substitution_dialog_list1);
+        ListView listViewTeam2 = (ListView) dialog.findViewById(R.id.substitution_dialog_list2);
+        listViewTeam1.setAdapter(school1Adapter);
+        listViewTeam2.setAdapter(school2Adapter);
+        dialog.show();
+
+    }
+
+    private void getPlayerNumberFromMatchPlayerWithQS(List<QuarterScoreSheet> schoolScoreList, String[] schoolPlayerNumberArray) throws SQLException {
+        for (int i = 0; i < schoolScoreList.size(); i++) {
+            QuarterScoreSheet scoreSheet = schoolScoreList.get(i);
+            List<MatchPlayer> matchPlayers = matchPlayerDao.queryBuilder().where().eq("match_id", DBSaveHelper.match.getId()).and().eq("player_id", scoreSheet.getPlayer().getId()).query();
+            MatchPlayer matchPlayer = matchPlayers.get(0);
+            matchPlayerDao.refresh(matchPlayer);
+            schoolPlayerNumberArray[i] = String.valueOf(matchPlayer.getPlayerNumber());
+        }
+    }
+
+    private void getTimeAndPointFromQuarterScoreList(List<QuarterScoreSheet> schoolScoreList, String[] schoolTimeArray, String[] schoolPointArray) {
+        for (int i = 0; i < schoolScoreList.size(); i++) {
+            QuarterScoreSheet scoreSheet = schoolScoreList.get(i);
+            String time = scoreSheet.getTime();
+            String point = String.valueOf(scoreSheet.getScoreCount());
+            schoolTimeArray[i] = time;
+            schoolPointArray[i] = point;
+        }
     }
 
     /**
@@ -577,13 +648,14 @@ public class MatchRecordingActivity extends ActionBarActivity {
         String[] school1PlayerNumberArray = new String[sub1Size];
         String[] school1TimeArray = new String[sub1Size];
         String[] school1FlagArray = new String[sub1Size];
+        getPlayerNumberFromMatchPlayer(school1SubList,school1PlayerNumberArray);
+        getTimeAndFlagFromSubstitutionList(school1SubList, school1TimeArray, school1FlagArray);
+
+
         String[] school2PlayerNumberArray = new String[sub2Size];
         String[] school2TimeArray = new String[sub2Size];
         String[] school2FlagArray = new String[sub2Size];
-
-        getPlayerNumberFromMatchPlayer(school1SubList,school1PlayerNumberArray);
         getPlayerNumberFromMatchPlayer(school2SubList,school2PlayerNumberArray);
-        getTimeAndFlagFromSubstitutionList(school1SubList, school1TimeArray, school1FlagArray);
         getTimeAndFlagFromSubstitutionList(school2SubList,school2TimeArray,school2FlagArray);
 
         SubstitutionAdapter school1Adapter = new SubstitutionAdapter(getApplicationContext(),school1PlayerNumberArray,school1FlagArray,school1TimeArray);

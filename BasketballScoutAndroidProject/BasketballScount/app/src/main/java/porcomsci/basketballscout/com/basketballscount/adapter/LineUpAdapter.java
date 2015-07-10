@@ -47,8 +47,8 @@ public class LineUpAdapter extends BaseAdapter {
         if(convertView == null)
             convertView = mInflater.inflate(R.layout.lineup_item, parent, false);
 
-        convertView.setLayoutParams(new ListView.LayoutParams());
-        convertView.setlayoutparams(new Listview.setlayoutparams(width, height));
+//        convertView.setLayoutParams(new ListView.LayoutParams());
+//        convertView.setlayoutparams(new Listview.setlayoutparams(width, height));
 
         TextView lineUpNumTextView = (TextView) convertView.findViewById(R.id.lineup_number);
         lineUpNumTextView.setText(this.playerNum[position]);

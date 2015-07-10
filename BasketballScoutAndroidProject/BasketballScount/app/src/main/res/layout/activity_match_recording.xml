@@ -62,7 +62,7 @@
 
         <ListView
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:background="#e1e9f290"
             android:id="@+id/matchRecord_list1">
@@ -70,7 +70,7 @@
 
         <ListView
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:background="#ff97e1db"
             android:id="@+id/matchRecord_list2">
