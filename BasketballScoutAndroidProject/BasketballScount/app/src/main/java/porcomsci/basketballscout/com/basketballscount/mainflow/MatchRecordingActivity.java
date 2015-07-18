@@ -259,8 +259,14 @@ public class MatchRecordingActivity extends ActionBarActivity {
     private List<String> getPlayersNumber(List<Player> playersList, List<MatchPlayer> teamMP) {
         List<String> playersNumber = new ArrayList<>();
         for (int i = 0; i < playersList.size(); i++) {
-            if (teamMP.get(i).getPlayer().getId() == playersList.get(i).getId())
-                playersNumber.add(String.valueOf(teamMP.get(i).getPlayerNumber()));
+            MatchPlayer matchPlayer = teamMP.get(i);
+            try {
+                matchPlayerDao.refresh(matchPlayer);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (matchPlayer.getPlayer().getId() == playersList.get(i).getId())
+                playersNumber.add(String.valueOf(matchPlayer.getPlayerNumber()));
         }
         return playersNumber;
     }
@@ -292,8 +298,6 @@ public class MatchRecordingActivity extends ActionBarActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //@Por
-                // you can get the selected position of ListView item here
                 showManagePlayersMenuPopUpTeam1(position);
             }
         });
@@ -306,8 +310,6 @@ public class MatchRecordingActivity extends ActionBarActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //@Por
-                // you can get the selected position of ListView item here
                 showManagePlayersMenuPopUpTeam2(position);
             }
         });
@@ -358,8 +360,6 @@ public class MatchRecordingActivity extends ActionBarActivity {
         });
         builder.create().show();
     }
-
-
     private void showManagePlayersMenuPopUpTeam2(int pos) {
         String[] menu = {"1 คะแนน", "2 คะแนน", "3 คะแนน", "ฟาล์ว", "เปลี่ยนตัวผู้เล่น", "ยกเลิก"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, menu);
@@ -404,8 +404,6 @@ public class MatchRecordingActivity extends ActionBarActivity {
         });
         builder.create().show();
     }
-
-
     private void saveScoreSheet(int selectPos, int score, int team) {
 
         Player actionPlayer = null;
@@ -433,7 +431,6 @@ public class MatchRecordingActivity extends ActionBarActivity {
             System.out.println(e.getMessage());
         }
     }
-
     private void increasePlayerFouls(int selectPos, int team) {
         Player actionPlayer = null;
         if (1 == team) {
@@ -457,7 +454,6 @@ public class MatchRecordingActivity extends ActionBarActivity {
             System.out.println(e.getMessage());
         }
     }
-
     private void substitute(final int lineupPos, final int teamNumber) {
         getReservedPlayers(teamNumber);
         List<String> reservedPlayersName;
